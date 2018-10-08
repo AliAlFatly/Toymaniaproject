@@ -1,0 +1,28 @@
+﻿@model IEnumerable < Toymania.Models.Categories>
+
+@{
+    ViewBag.Title = "Index";
+
+}
+<!--
+<h2>Index</h2>
+-->
+<div class="container" style="widows:60%;margin-top:2%">
+    @if (Model != null)
+    {
+        <table class="table table-striped">
+            <tr>
+                <th>Category</th>
+            </tr>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.ActionLink(item.CName, "Browse", new { Category = item.CName })</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+</div>

@@ -1,0 +1,33 @@
+﻿@model Toymania.Models.Toy
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Item:@Model.ToysName</h2>
+
+<p>
+    <img alt="=@Model.ToysName"
+         src="@Model.ItemArtUrl" />
+</p>
+<div id="album-details">
+    <p>
+        <em>Category:</em>
+        @Model.Categories.CName
+    </p>
+    <p>
+        <em>Producer:</em>
+        @Model.Producers.Name
+    </p>
+    <p>
+        <em>Price:</em>
+        @string.Format("0:F",Model.Price)
+    </p>
+    <p class="button">
+        @Html.ActionLink("Add to cart", "ATC", "ShoppingCart", new { id = Model.ToysId }, "")
+    </p>
+
+
+
+</div>
