@@ -1,0 +1,34 @@
+﻿@model Toymania.ViewModels.OrdersViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<body>
+    <table>
+        <tr>
+            <th>
+                Order number
+            </th>
+            <th>
+                Price total
+
+            </th>
+        </tr>
+        @foreach (var item in Model.Order)
+        {
+            <tr id="row-@item.OrderId">
+                <td>
+
+                    @Html.ActionLink(item.OrderId.ToString(), "Detail", new { id = item.OrderId })
+                </td>
+                <td>
+                    @item.Total
+                </td>
+
+            </tr>
+        }
+    </table>
+</body>
+
+

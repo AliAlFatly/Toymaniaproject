@@ -1,0 +1,66 @@
+﻿@model Toymania.ViewModels.BrowsePartial
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container container-body">
+    @foreach (var item in Model.C)
+    {
+        <ul>
+            <li>@Html.ActionLink(item.CName, "index", new { C = item.CName })</li>
+        </ul>
+    }
+</div>
+
+@if (Model.SC != null)
+{
+    <div>
+        @foreach (var item in Model.SC)
+        {
+            <li>
+                @Html.ActionLink(item.SCName, "index", new { C = ViewData["Category"], SC = item.SCName })
+            </li>
+        }
+    </div>
+}
+
+<div>
+    <li>
+        @Html.ActionLink("00.01 - 9,99 euro", "Index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PriceCategory = 1 })
+        @Html.ActionLink("10,00 - 19,99 euro", "index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PriceCategory = 2 })
+        @Html.ActionLink("20,00 - 49,99 euro", "index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PriceCategory = 3 })
+        @Html.ActionLink("50,00 - 99,99 euro", "index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PriceCategory = 4 })
+        @Html.ActionLink("100,00 - 499,99 euro", "index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PriceCategory = 5 })
+        @Html.ActionLink("500,00+ euro", "index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PriceCategory = 6 })
+    </li>
+
+</div>
+@*<img src="~/Content/img/home.jpg" />*@
+
+@if (Model.T != null)
+{
+    <divclass="toymenu">
+        @foreach (var item in Model.T)
+        {
+            <p>
+                @*href="@Url.Action(item.ToysName, "Details", new { id = item.ToysId })"*@
+                <img src="@Url.Content("~/Content/img/"+item.ItemArtUrl)"
+            </p>
+            <p>
+                @Html.ActionLink(item.ToysName, "Details", new { id = item.ToysId })
+            </p>
+            <p>
+                <em>Price:</em>
+                @String.Format("{0:F} Euro", item.Price)
+            </p>
+
+                @*<li>
+                        @Html.ActionLink(item.ToysName, "Details", new { id = item.ToysId })
+                    </li>*@
+            
+        }
+    </divclass="toymenu">
+}
+

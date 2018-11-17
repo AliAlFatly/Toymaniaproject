@@ -1,0 +1,36 @@
+﻿@model Toymania.ViewModels.WishlistViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<body>
+    <table>
+        <tr>
+            <th>
+                Item Name
+            </th>
+            <th>
+                Price (each)
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model.WT)
+        {
+            <tr id="row-@item.WishlistId">
+                <td>
+                    @Html.ActionLink(item.Toy.ToysName, "Details", "Store", new { id = item.Toy.ToysId }, null)
+                </td>
+                <td>
+                    @item.Toy.Price
+                </td>
+                <td>
+                    @Html.ActionLink("Remove", "IndexR", new { RecordToRemoveId = item.WishlistId })
+                </td>
+                <td>
+                    @Html.ActionLink("Add to cart", "ATC", "ShoppingCart", new { id = item.Toy.ToysId }, "")
+                </td>
+            </tr>
+        }
+    </table>
+</body>

@@ -1,0 +1,163 @@
+body{
+    padding-top: 100px;
+    font-family: 'Londrina Solid', cursive;
+    color: black;
+    background-image: url("img/background.jpg");
+}
+
+.container-body{
+    padding-top: 100px;
+    background-color:rgba(255, 255, 255, 0.73) 
+}
+
+
+.navbar-default {
+    background-color: #FFFF00 !important;
+    /*border-radius: 20px;*/
+    border: 3px solid black;
+    margin-top: 50px;
+    margin: 0 auto;
+    color: black;
+    font-size: 13px;
+}
+
+.Createmarg{
+    margin-top: 75px;
+}
+
+.navbar-inverse {
+    background-color: #FFFF00 !important;
+    /*border-radius: 20px;*/
+    border: 3px solid black;
+    margin-top: 50px;
+    margin: 0 auto;
+    color: black;
+    font-size: 13px;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: black;
+}
+
+#zoeken{
+    margin-top:5px;
+    margin-bottom:5px;
+    border-radius: 20px;
+    border: 3px solid black;
+    padding-left: 5px;
+}
+
+.overons{
+
+    font-size: 26px;
+}
+
+.shopping_cart{
+    text-align: right;
+    font-size: 26px;
+    color: black;
+}
+.shopping_cart a{
+
+    color: black;
+}
+
+.prijs{
+    text-align: center;
+}
+.prijs{
+    color: lightgreen;
+}
+
+.product_foto{
+    max-width: 75%;
+    margin: auto;    
+    display: block;
+}
+
+.product_titel{
+    text-align: center;
+}
+
+.reclame{
+    background-color: yellow;
+    border: 3px solid black;
+}
+.reclame_foto{
+    width: 75%;
+}
+
+.footer_icons{
+    color: black;
+    font-size: 26px;
+}
+
+.inlog_form{
+    text-align: center;
+}
+
+.inlog_form label{
+    font-size: 26px;
+    text-align: center;
+}
+
+.inlog_form button{
+    width: 100%;
+    background-color: yellow;
+    border-bottom-color: #F0F400;
+}
+
+.geschiedenis_foto{
+    width: 100%;
+    border-right: 5px solid black;
+    border-bottom: 5px solid black;
+}
+
+a.logo_img{
+    background: url(../Content/img/IconB.jpeg) no-repeat top left;
+    display: block;
+    text-indent: -9999px;
+    width: 80px; 
+    height: 80px;
+}
+
+
+
+
+
+
+
+/*ul.tabs {
+    margin: 0px;
+    /*padding: opx;
+    list-style: none;
+    background-color: brown;*/
+}
+
+/*ul.tabs li {
+    background: none;
+    color: red;
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: green;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}*/
+
+/*ul.tabs li.current {
+    background: white;
+    color: blue;
+    background-color: yellow;
+}*/
+
+/*.tab-content {
+    display: none;
+    background: white;
+    padding: 15px;
+}*/
+
+/*.tab-content.current {
+    display: inherit;
+    border: 1px;
+    border-color: green;
+}*/
