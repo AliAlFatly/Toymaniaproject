@@ -14,8 +14,6 @@ namespace Toymania.Models
     public class Orders
     {
         TSE15 db = new TSE15();
-        string OI { get; set; } //OrderId
-        List<int> OIDLI { get; set; }  //OrderIdList
 
 
         public int LastRecordO()
@@ -36,14 +34,45 @@ namespace Toymania.Models
             return LOD;
         }
 
-        public int LastRecordH()
-        {
 
-            IQueryable<int> HILIQ = db.History.Select(x => x.HistoryId); //HistoryIdList IQueryable
-            List<int> HL = new List<int> { };   //HistoryIdList
-            foreach (int LOI in HILIQ) { HL.Add(LOI); }
-            int LH = HL.Last();
-            return LH;
+
+
+        public List<Order> GOS(HttpContextBase c, string S) //get Orders
+        {
+            var Order = new Order();
+            IQueryable<Order> OQ = from o in db.Order
+                                   where o.Username == c.User.Identity.Name
+                                   select (Order)o;
+            List<Order> OL = new List<Order>();   //HistoryIdList
+            foreach (Order O in OQ) { OL.Add(O); }
+            List<Order> FOL = new List<Order>();
+            foreach (var I in OL)
+            {
+                if (I.OrderDetails != null)
+                {
+                    var OD = new List<OrderDetails>(I.OrderDetails);
+                    foreach (var J in OD)
+                    {
+                        if (FOL.Find(x => x.OrderId == I.OrderId) == null && J.Status == S)
+                        {
+                            FOL.Add(I);
+                        }
+                    }
+                }
+
+            }
+            return FOL;
+        }
+
+        public ICollection<OrderDetails> GDS(int id, string S) //get OrdersDetails
+        {
+            var OD = new OrderDetails();
+            var ODQ = from o in db.OrderDetails
+                      where o.Order.OrderId == id && o.Status == S
+                      select o;
+            List<OrderDetails> OL = new List<OrderDetails> { };
+            foreach (OrderDetails I in ODQ) { OL.Add(I); }
+            return OL;
         }
 
         public List<Order> GO(HttpContextBase c) //get Orders
@@ -60,12 +89,15 @@ namespace Toymania.Models
         public ICollection<OrderDetails> GD(int id) //get OrdersDetails
         {
             var OD = new OrderDetails();
-            IQueryable<ICollection<OrderDetails>> ODQ = from o in db.Order
-                                                where o.OrderId == id
-                                                select o.OrderDetails;
-            ICollection<OrderDetails> O = ODQ.First();
-            return O;
+            var ODQ = from o in db.OrderDetails
+                      where o.Order.OrderId == id
+                      select o;
+            List<OrderDetails> OL = new List<OrderDetails> { };
+            foreach (OrderDetails I in ODQ) { OL.Add(I); }
+            return OL;
         }
+
+
 
         public void OToH(Order O, HttpContextBase c) // order to history
         {      
@@ -125,6 +157,15 @@ namespace Toymania.Models
                     FirstName = O.FirstName,
                     LastName = O.LastName,
                     Address = O.Address,
+                    year = O.year,
+                    month = O.month,
+                    day = O.day,
+                    
+                    minute = O.minute,
+                    second = O.second,
+                    hour = O.hour,
+                    week = O.week,
+                    
                     City = O.City,
                     State = O.State,
                     PostalCode = O.PostalCode,

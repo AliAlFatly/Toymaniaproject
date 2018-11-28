@@ -11,15 +11,9 @@ namespace Toymania.Models
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class Balance
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Balance()
-        {
-            this.History = new HashSet<History>();
-        }
-    
         public string Email { get; set; }
         public Nullable<double> Balance1 { get; set; }
         public string FirstName { get; set; }
@@ -30,8 +24,5 @@ namespace Toymania.Models
         public string PostalCode { get; set; }
         public string Country { get; set; }
         public Nullable<int> profileTrue { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<History> History { get; set; }
     }
 }

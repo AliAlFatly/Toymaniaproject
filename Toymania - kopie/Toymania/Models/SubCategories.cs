@@ -11,13 +11,9 @@ namespace Toymania.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
-    using Toymania.Models;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Web.Mvc;
 
     public partial class SubCategories
     {
@@ -27,8 +23,6 @@ namespace Toymania.Models
             this.Toy = new HashSet<Toy>();
         }
 
-        [DisplayName("Subcategory")]
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int SubCategoryId { get; set; }
         [DisplayName("Subcategory")]
         public string SCName { get; set; }

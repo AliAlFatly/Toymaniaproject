@@ -200,6 +200,9 @@ namespace Toymania.Models
 
             foreach (var Toy in CT)                 
             {
+                double w = DateTime.Now.DayOfYear / 7;
+                var week = (int)Math.Ceiling(w);
+
                 var OD = new OrderDetails           //alles wat in de cart zit wordt toegevoegd als orderdetails
                 {
                     OrderDetailId = O.LastRecordOD() + 1,
@@ -207,6 +210,18 @@ namespace Toymania.Models
                     OrderId = order.OrderId,
                     UnitPrice = Toy.Toy.Price,
                     Quantity = Toy.Count,
+                    Week = week,
+                    Month = DateTime.Now.Month,
+                    year = DateTime.Now.Year,
+                    Day = DateTime.Now.Day,
+                    Hour = DateTime.Now.Hour,
+                    Minute = DateTime.Now.Minute,
+                    
+                    Status = "In Progress",
+                    CName = Toy.Toy.Categories.CName,
+                    SCName = Toy.Toy.SubCategories.SCName
+                    
+                    
                 };
 
                 order.Total += (Toy.Count * Toy.Toy.Price);     //per toy wordt de orderprijs bijgewerkt

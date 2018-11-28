@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="TSM15.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="TSM15.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Balance">
           <Key>
             <PropertyRef Name="Email" />
@@ -38,13 +38,6 @@
           <Property Name="CName" Type="varchar" MaxLength="50" />
           <Property Name="Description" Type="varchar" MaxLength="50" />
         </EntityType>
-        <EntityType Name="History">
-          <Key>
-            <PropertyRef Name="HistoryId" />
-          </Key>
-          <Property Name="HistoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Email" Type="varchar" MaxLength="50" />
-        </EntityType>
         <EntityType Name="Order">
           <Key>
             <PropertyRef Name="OrderId" />
@@ -60,6 +53,13 @@
           <Property Name="Country" Type="varchar" MaxLength="50" />
           <Property Name="Total" Type="decimal" Precision="18" Scale="2" />
           <Property Name="OrderDate" Type="date" />
+          <Property Name="year" Type="int" Nullable="false" />
+          <Property Name="month" Type="int" />
+          <Property Name="day" Type="int" />
+          <Property Name="minute" Type="int" />
+          <Property Name="second" Type="int" />
+          <Property Name="hour" Type="int" />
+          <Property Name="week" Type="int" />
         </EntityType>
         <EntityType Name="OrderDetails">
           <Key>
@@ -71,7 +71,14 @@
           <Property Name="Quantity" Type="int" />
           <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Status" Type="varchar" MaxLength="50" />
-          <Property Name="HistoryId" Type="int" />
+          <Property Name="CName" Type="varchar" MaxLength="50" />
+          <Property Name="SCName" Type="varchar" MaxLength="50" />
+          <Property Name="Week" Type="int" />
+          <Property Name="Month" Type="int" />
+          <Property Name="year" Type="int" />
+          <Property Name="Day" Type="int" />
+          <Property Name="Hour" Type="int" />
+          <Property Name="Minute" Type="int" />
         </EntityType>
         <EntityType Name="Producers">
           <Key>
@@ -132,30 +139,6 @@
             </Principal>
             <Dependent Role="Cart">
               <PropertyRef Name="ToyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__History__Email__1AD3FDA4">
-          <End Role="Balance" Type="Self.Balance" Multiplicity="0..1" />
-          <End Role="History" Type="Self.History" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Balance">
-              <PropertyRef Name="Email" />
-            </Principal>
-            <Dependent Role="History">
-              <PropertyRef Name="Email" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__OrderDeta__Histo__282DF8C2">
-          <End Role="History" Type="Self.History" Multiplicity="0..1" />
-          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="History">
-              <PropertyRef Name="HistoryId" />
-            </Principal>
-            <Dependent Role="OrderDetails">
-              <PropertyRef Name="HistoryId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -247,7 +230,6 @@
           <EntitySet Name="Balance" EntityType="Self.Balance" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="History" EntityType="Self.History" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Producers" EntityType="Self.Producers" Schema="dbo" store:Type="Tables" />
@@ -258,14 +240,6 @@
           <AssociationSet Name="FK__Cart__ToyId__2180FB33" Association="Self.FK__Cart__ToyId__2180FB33">
             <End Role="Toy" EntitySet="Toy" />
             <End Role="Cart" EntitySet="Cart" />
-          </AssociationSet>
-          <AssociationSet Name="FK__History__Email__1AD3FDA4" Association="Self.FK__History__Email__1AD3FDA4">
-            <End Role="Balance" EntitySet="Balance" />
-            <End Role="History" EntitySet="History" />
-          </AssociationSet>
-          <AssociationSet Name="FK__OrderDeta__Histo__282DF8C2" Association="Self.FK__OrderDeta__Histo__282DF8C2">
-            <End Role="History" EntitySet="History" />
-            <End Role="OrderDetails" EntitySet="OrderDetails" />
           </AssociationSet>
           <AssociationSet Name="FK__OrderDeta__Order__2739D489" Association="Self.FK__OrderDeta__Order__2739D489">
             <End Role="Order" EntitySet="Order" />
@@ -296,8 +270,7 @@
             <End Role="Wishlist" EntitySet="Wishlist" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TSM15" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -315,7 +288,6 @@
           <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="profileTrue" Type="Int32" />
-          <NavigationProperty Name="History" Relationship="Self.FK__History__Email__1AD3FDA4" FromRole="Balance" ToRole="History" />
         </EntityType>
         <EntityType Name="Cart">
           <Key>
@@ -338,15 +310,6 @@
           <NavigationProperty Name="SubCategories" Relationship="Self.FK__SubCatego__Categ__18EBB532" FromRole="Categories" ToRole="SubCategories" />
           <NavigationProperty Name="Toy" Relationship="Self.FK__Toy__CategoryId__19DFD96B" FromRole="Categories" ToRole="Toy" />
         </EntityType>
-        <EntityType Name="History">
-          <Key>
-            <PropertyRef Name="HistoryId" />
-          </Key>
-          <Property Name="HistoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Balance" Relationship="Self.FK__History__Email__1AD3FDA4" FromRole="History" ToRole="Balance" />
-          <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__Histo__282DF8C2" FromRole="History" ToRole="OrderDetails" />
-        </EntityType>
         <EntityType Name="Order">
           <Key>
             <PropertyRef Name="OrderId" />
@@ -363,6 +326,13 @@
           <Property Name="Total" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="OrderDate" Type="DateTime" Precision="0" />
           <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__Order__2739D489" FromRole="Order" ToRole="OrderDetails" />
+          <Property Name="year" Type="Int32" Nullable="false" />
+          <Property Name="month" Type="Int32" />
+          <Property Name="day" Type="Int32" />
+          <Property Name="minute" Type="Int32" />
+          <Property Name="second" Type="Int32" />
+          <Property Name="hour" Type="Int32" />
+          <Property Name="week" Type="Int32" />
         </EntityType>
         <EntityType Name="OrderDetails">
           <Key>
@@ -374,10 +344,16 @@
           <Property Name="Quantity" Type="Int32" />
           <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="HistoryId" Type="Int32" />
-          <NavigationProperty Name="History" Relationship="Self.FK__OrderDeta__Histo__282DF8C2" FromRole="OrderDetails" ToRole="History" />
           <NavigationProperty Name="Order" Relationship="Self.FK__OrderDeta__Order__2739D489" FromRole="OrderDetails" ToRole="Order" />
           <NavigationProperty Name="Toy" Relationship="Self.FK__OrderDeta__ToyId__29221CFB" FromRole="OrderDetails" ToRole="Toy" />
+          <Property Name="CName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SCName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Week" Type="Int32" />
+          <Property Name="Month" Type="Int32" />
+          <Property Name="year" Type="Int32" />
+          <Property Name="Day" Type="Int32" />
+          <Property Name="Hour" Type="Int32" />
+          <Property Name="Minute" Type="Int32" />
         </EntityType>
         <EntityType Name="Producers">
           <Key>
@@ -439,18 +415,6 @@
           <Property Name="ToysId" Type="Int32" />
           <NavigationProperty Name="Toy" Relationship="Self.FK__Wishlist__ToysId__1EA48E88" FromRole="Wishlist" ToRole="Toy" />
         </EntityType>
-        <Association Name="FK__History__Email__1AD3FDA4">
-          <End Role="Balance" Type="Self.Balance" Multiplicity="0..1" />
-          <End Role="History" Type="Self.History" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Balance">
-              <PropertyRef Name="Email" />
-            </Principal>
-            <Dependent Role="History">
-              <PropertyRef Name="Email" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__Cart__ToyId__2180FB33">
           <End Role="Toy" Type="Self.Toy" Multiplicity="0..1" />
           <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
@@ -484,18 +448,6 @@
             </Principal>
             <Dependent Role="Toy">
               <PropertyRef Name="CategoryId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__OrderDeta__Histo__282DF8C2">
-          <End Role="History" Type="Self.History" Multiplicity="0..1" />
-          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="History">
-              <PropertyRef Name="HistoryId" />
-            </Principal>
-            <Dependent Role="OrderDetails">
-              <PropertyRef Name="HistoryId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -563,7 +515,6 @@
           <EntitySet Name="Balance" EntityType="Self.Balance" />
           <EntitySet Name="Cart" EntityType="Self.Cart" />
           <EntitySet Name="Categories" EntityType="Self.Categories" />
-          <EntitySet Name="History" EntityType="Self.History" />
           <EntitySet Name="Order" EntityType="Self.Order" />
           <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" />
           <EntitySet Name="Producers" EntityType="Self.Producers" />
@@ -571,10 +522,6 @@
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="Toy" EntityType="Self.Toy" />
           <EntitySet Name="Wishlist" EntityType="Self.Wishlist" />
-          <AssociationSet Name="FK__History__Email__1AD3FDA4" Association="Self.FK__History__Email__1AD3FDA4">
-            <End Role="Balance" EntitySet="Balance" />
-            <End Role="History" EntitySet="History" />
-          </AssociationSet>
           <AssociationSet Name="FK__Cart__ToyId__2180FB33" Association="Self.FK__Cart__ToyId__2180FB33">
             <End Role="Toy" EntitySet="Toy" />
             <End Role="Cart" EntitySet="Cart" />
@@ -586,10 +533,6 @@
           <AssociationSet Name="FK__Toy__CategoryId__19DFD96B" Association="Self.FK__Toy__CategoryId__19DFD96B">
             <End Role="Categories" EntitySet="Categories" />
             <End Role="Toy" EntitySet="Toy" />
-          </AssociationSet>
-          <AssociationSet Name="FK__OrderDeta__Histo__282DF8C2" Association="Self.FK__OrderDeta__Histo__282DF8C2">
-            <End Role="History" EntitySet="History" />
-            <End Role="OrderDetails" EntitySet="OrderDetails" />
           </AssociationSet>
           <AssociationSet Name="FK__OrderDeta__Order__2739D489" Association="Self.FK__OrderDeta__Order__2739D489">
             <End Role="Order" EntitySet="Order" />
@@ -654,17 +597,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="History">
-            <EntityTypeMapping TypeName="TSM15.History">
-              <MappingFragment StoreEntitySet="History">
-                <ScalarProperty Name="HistoryId" ColumnName="HistoryId" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Order">
             <EntityTypeMapping TypeName="TSM15.Order">
               <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="week" ColumnName="week" />
+                <ScalarProperty Name="hour" ColumnName="hour" />
+                <ScalarProperty Name="second" ColumnName="second" />
+                <ScalarProperty Name="minute" ColumnName="minute" />
+                <ScalarProperty Name="day" ColumnName="day" />
+                <ScalarProperty Name="month" ColumnName="month" />
+                <ScalarProperty Name="year" ColumnName="year" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
@@ -682,13 +624,20 @@
           <EntitySetMapping Name="OrderDetails">
             <EntityTypeMapping TypeName="TSM15.OrderDetails">
               <MappingFragment StoreEntitySet="OrderDetails">
+                <ScalarProperty Name="Minute" ColumnName="Minute" />
+                <ScalarProperty Name="Hour" ColumnName="Hour" />
+                <ScalarProperty Name="Day" ColumnName="Day" />
+                <ScalarProperty Name="year" ColumnName="year" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Week" ColumnName="Week" />
+                <ScalarProperty Name="SCName" ColumnName="SCName" />
+                <ScalarProperty Name="CName" ColumnName="CName" />
                 <ScalarProperty Name="OrderDetailId" ColumnName="OrderDetailId" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="ToyId" ColumnName="ToyId" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="HistoryId" ColumnName="HistoryId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -28,7 +28,6 @@ namespace Toymania.Models
         public virtual DbSet<Balance> Balance { get; set; }
         public virtual DbSet<Cart> Cart { get; set; }
         public virtual DbSet<Categories> Categories { get; set; }
-        public virtual DbSet<History> History { get; set; }
         public virtual DbSet<Order> Order { get; set; }
         public virtual DbSet<OrderDetails> OrderDetails { get; set; }
         public virtual DbSet<Producers> Producers { get; set; }

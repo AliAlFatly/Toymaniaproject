@@ -11,13 +11,9 @@ namespace Toymania.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
-    using Toymania.Models;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Web.Mvc;
 
     public partial class Categories
     {
@@ -28,13 +24,13 @@ namespace Toymania.Models
             this.Toy = new HashSet<Toy>();
         }
 
+        [ScaffoldColumn(false)]
         [DisplayName("Category")]
         //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CategoryId { get; set; }
         [DisplayName("Category")]
         public string CName { get; set; }
         public string Description { get; set; }
-
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubCategories> SubCategories { get; set; }

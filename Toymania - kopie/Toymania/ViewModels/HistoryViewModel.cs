@@ -11,6 +11,7 @@ namespace Toymania.ViewModels
 {
     public class HistoryViewModel
     {
-        public ICollection<History> HT { get; set; } //History items
+        public List<OrderDetails> IPOO { get; set; } //In progress orderdetails
+        public List<OrderDetails> COO { get; set; } //Completed orderdetails
     }
 }

@@ -11,13 +11,8 @@ namespace Toymania.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
-    using Toymania.Models;
-    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Web.Mvc;
 
     public partial class Order
     {
@@ -45,6 +40,20 @@ namespace Toymania.Models
         public Nullable<decimal> Total { get; set; }
         [ScaffoldColumn(false)]
         public Nullable<System.DateTime> OrderDate { get; set; }
+        [ScaffoldColumn(false)]
+        public Nullable<int> year { get; set; }
+        [ScaffoldColumn(false)]
+        public Nullable<int> month { get; set; }
+        [ScaffoldColumn(false)]
+        public Nullable<int> day { get; set; }
+        [ScaffoldColumn(false)]
+        public Nullable<int> minute { get; set; }
+        [ScaffoldColumn(false)]
+        public Nullable<int> second { get; set; }
+        [ScaffoldColumn(false)]
+        public Nullable<int> hour { get; set; }
+        [ScaffoldColumn(false)]
+        public Nullable<int> week { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderDetails> OrderDetails { get; set; }

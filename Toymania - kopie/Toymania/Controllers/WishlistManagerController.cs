@@ -29,9 +29,24 @@ namespace Toymania.Controllers
             return View(viewModel);
         }
 
-        public ActionResult IndexR(int RecordToRemoveId)
+        public ActionResult IndexR(int r)
         {
-            RFW(RecordToRemoveId);
+            RFW(r);
+            var w = WishlistManager.GW(this.HttpContext);
+            var viewModel = new WishlistViewModel
+            {
+                WT = w.GWT()
+            };
+            return View(viewModel);
+        }
+
+        public ActionResult IndexRA(int i, int r)
+        {
+            var addedItem = db.Toy.Single(t => t.ToysId == i);
+            var cart = ShoppingCart.GC(this.HttpContext);
+
+            cart.ATC(addedItem, i);
+            RFW(r);
             var w = WishlistManager.GW(this.HttpContext);
             var viewModel = new WishlistViewModel
             {
@@ -45,15 +60,20 @@ namespace Toymania.Controllers
             var addedItem = db.Toy.Single(t => t.ToysId == id);
             var w = WishlistManager.GW(this.HttpContext);
             w.ATW(addedItem, id);
+            
             return RedirectToAction("index");
         }
 
         [HttpPost]
         public void RFW(int id)
         {
-            var w = WishlistManager.GW(this.HttpContext);
-            string toyName = db.Wishlist.Single(t => t.WishlistId == id).Toy.ToysName;
-            w.RFW(id);
+            if(id != null)
+            {
+                var w = WishlistManager.GW(this.HttpContext);
+                string toyName = db.Wishlist.Single(t => t.WishlistId == id).Toy.ToysName;
+                w.RFW(id);
+            }
+
         }
 
     }

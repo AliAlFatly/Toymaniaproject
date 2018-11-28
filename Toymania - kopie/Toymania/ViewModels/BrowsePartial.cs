@@ -6,6 +6,8 @@ using Toymania.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using PagedList.Mvc;
+using PagedList;
 
 namespace Toymania.ViewModels
 {
@@ -14,7 +16,8 @@ namespace Toymania.ViewModels
         [Key]
         public List<Categories> C { get; set; }
         public ICollection<SubCategories> SC { get; set; }
-        public ICollection<Toy> T { get; set; }
+        //public ICollection<Toy> T { get; set; }
+        public IPagedList<Toy> T { get; set; }
         public int? PC { get; set; }
     }
 }

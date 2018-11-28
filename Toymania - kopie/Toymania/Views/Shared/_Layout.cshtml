@@ -21,16 +21,18 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <a href="~/Views/Home/Index.cshtml" <img src="~/Content/img/IconB.jpeg" /></a>
-                    <li>@Html.ActionLink("Home", "Index", null, new { @class = "logo_img" })</li>
+                    <li>@Html.ActionLink("Home", "Index", "Home", null,  new { @class = "logo_img"})</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     <li>@Html.ActionLink("Help", "Help", "Home")</li>
-                    <li>@Html.ActionLink("store", "Index", "store")</li>
-                    <li>@Html.ActionLink("ToyManager", "Index", "ToyManager")</li>
+                    <li>@Html.ActionLink("Store", "Index", "store")</li>
+                    @*<li>@Html.ActionLink("ToyManager", "Index", "ToyManager")</li>*@
                     <li>@Html.ActionLink("Wishlist", "Index", "WishlistManager")</li>
                     <li>@{Html.RenderAction("CartSummary", "ShoppingCart");}</li>
-                    <li>@Html.ActionLink("Orders", "Index", "Orders")</li>
-                    <li>@Html.ActionLink("Stats", "Index", "Stats")</li>
+                    @*<li>@Html.ActionLink("Orders", "Index", "Orders")</li>*@
+                    @*<li>@Html.ActionLink("Stats", "Index", "Stats")</li>
+                    <li>@Html.ActionLink("OrderDetails", "Index", "OrderDetails")</li>
+                    <li>@Html.ActionLink("UserManager", "Index", "ApplicationUsers")</li>*@
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

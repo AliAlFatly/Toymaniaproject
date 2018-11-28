@@ -2,15 +2,6 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@*<li class="dropdown">
-        <a href="#" data-toggle="dropdown" class="dropdown-toggle">
-            A<b class="caret"></b>
-        </a>
-        <ul class="dropdown-menu">
-            <li><a href="#" data-toggle="tab">A</a></li>
-            <li><a href="#" data-toggle="tab">A</a></li>
-        </ul>
-    </li>*@
 
 
 <html>
@@ -23,84 +14,95 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
         google.charts.load('current', { packages: ['corechart'] });
-        google.charts.setOnLoadCallback(drawChart);
+        //google.charts.setOnLoadCallback(drawChart);
         google.load("visualization", "1", { packages: ["corechart"] });
 
         //https://developers.google.com/chart/interactive/docs/basic_load_libs
-        //function drawChart() {
-        //    // Define the chart to be drawn.
-        //    var data = new google.visualization.DataTable();
-        //    data.addColumn('string', 'Element');
-        //    data.addColumn('number', 'Percentage');
-        //    data.addRows([
-        //        ['Nitrogen', 0.78],
-        //        ['Oxygen', 0.21],
-        //        ['Other', 0.01]
-        //    ]);
-
-        //    // Instantiate and draw the chart.
-        //    var chart = new google.visualization.PieChart(document.getElementById('myPieChart'));
-        //    chart.draw(data, null);
-        //}
     </script>
 </head>
 <body>
     <br />
-    <div class="container">
-        @*<div class="row">
-            <div class="col-xs-6">
+    <div class="container" style="width:auto">
+        <div class="row">
+            <div class="col-xs-6 ODT" style="width:100%">
+
                 <ul class="nav nav-tabs">
-                    <li class="active">
-                        <a href="#Linechart" data-toggle="tab">Linechart</a>
+                    <li @*class="active"*@>
+                        <a href="#LinechartW" data-toggle="tab">Linechart - Week</a>
                     </li>
                     <li>
-                        <a href="#Piechart" data-toggle="tab">Piechart</a>
+                        <a href="#LinechartM" data-toggle="tab">Linechart - Month</a>
                     </li>
                     <li>
-                        <a href="#Diagram" data-toggle="tab">Diagram</a>
+                        <a href="#PiechartW" data-toggle="tab">Piechart - Week</a>
                     </li>
-
-
+                    <li>
+                        <a href="#PiechartM" data-toggle="tab">Piechart - Month</a>
+                    </li>
+                    <li>
+                        <a href="#DiagramW" data-toggle="tab">Diagram - Week</a>
+                    </li>
+                    <li>
+                        <a href="#DiagramM" data-toggle="tab">Diagram - Month</a>
+                    </li>
                 </ul>
                 <div class="tab-content">
-                    <div id="Linechart" class="tab-pane active">
-                        <select id="LCYSelector" onchange="">
-                            <option value="2017">2017</option>
-                            <option value="2018">2018</option>
-                        </select>
+                    <div id="LinechartW" class="tab-pane active">
 
-                        <button id="LCYB">click meh</button>
-                        <button type="button" id="OB">test2</button>
-                        <p id="tp1">empty</p>
+                        <button type="button" id="BLTW">Categories-Total sales</button>
+                        <button type="button" id="BLRW">Categories-Revenue</button>
+                        <button type="button" id="BLPW">Categories-profit</button>
 
-                        <div class="chart" style="width:80%; height:300px">
+                        @*<div class="chart" id="chart" style="width:100%; height:500px">
 
-                        </div>
+            </div>*@
+
                     </div>
-                    <div id="Piechart" class="tab-pane">
-                        <p>piechart</p>
+                    <div id="LinechartM" class="tab-pane">
+                        <button type="button" id="BLTM">Categories-Total sales</button>
+                        <button type="button" id="BLRM">Categories-Revenue</button>
+                        <button type="button" id="BLPM">Categories-profit</button>
+
+
+
                     </div>
-                    <div id="Diagram" class="tab-pane">
-                        <p>diagram</p>
+
+
+                    <div id="PiechartW" class="tab-pane">
+
                     </div>
+                    <div id="PiechartM" class="tab-pane">
+
+                    </div>
+
+
+                    <div id="DiagramW" class="tab-pane">
+
+                    </div>
+                    <div id="DiagramM" class="tab-pane">
+
+                    </div>
+
+                    <div class="chart" id="chart" style="width:100%; height:500px">
+
+                    </div>
+
+
                 </div>
-
             </div>
-        </div>*@
-        <select id="LCYSelector" onchange="">
+        </div>
+        @*<select id="LCYSelector" onchange="">
             <option value="2017">2017</option>
             <option value="2018">2018</option>
-        </select>
+        </select>*@
 
-        <button id="LCYB">click meh</button>
-        <button type="button" id="OB">test2</button>
-        <p id="tp1">empty</p>
 
-        <div class="chart" id="chart" style="width:80%; height:300px">
-
-        </div>
 
     </div>
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+    </script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>*@
+
     <script type="text/javascript">
 
         var chartDataYear;
@@ -120,13 +122,20 @@
                 $("#tp1").replaceWith(year);
                 console.log(year);
             });
-            $("#OB").on("click", info);
+            $("#BLTW").on("click", LYTW);
+            $("#BLPW").on("click", LYPW);
+            $("#BLRW").on("click", LYRW);
+
+            $("#BLTM").on("click", LYTM);
+            $("#BLPM").on("click", LYPM);
+            $("#BLRM").on("click", LYRM);
 
         });
-
-        function info() {
+        /*-------------------------------------------------------------------------------------------------------------------------------------*/
+        /*--------------Total------------------*/
+        function LYTW() {
             $.ajax({
-                url: 'Stats/SalesDataYearWise',
+                url: 'Stats/DYCVerkocht', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -139,9 +148,342 @@
             }).done(function () {
                 CurrentReport = 'year';
                 //GlobalYear = rowLevel;
-                generateChart(chartDataYear, "chart year", selectYear);
+                generateChart(chartDataYear, "chart year", LTW);
             });
         }
+
+        function LTW(chart, data) {
+            var selectedItem = chart.getSelection()[0];
+            if (selectedItem) {
+                var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                var rl = rowLevel.toString();
+                //var year = new Date(rowLevel, 2)
+                var chartData = null;
+                $.ajax({
+                    url: '/Stats/DWCVerkocht', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                    type: 'get',
+                    dataType: 'json',
+                    data: { 'y': rowLevel },
+                    success: function (d) {
+                        chartDataMonth = d;
+                    },
+                    error: function () {
+                        alert("Error")
+                    }
+                }).done(function () {
+                    CurrentReport = 'month';
+                    GlobalYear = rowLevel;
+                    generateChart(chartDataMonth, "chart year" + " " + rl, selectMonth);
+                });
+            }
+        }
+
+        /*--------------Profit-----------------*/
+
+        function LYPW() {
+            $.ajax({
+                url: '/Stats/DYCWinst', //Stats/SalesDataYearWise
+                type: 'GET',
+                dataType: 'json',
+                data: {},
+                success: function (d) {
+                    chartDataYear = d;
+                },
+                error: function () {
+                    alert("Error");
+                }
+            }).done(function () {
+                CurrentReport = 'year';
+                //GlobalYear = rowLevel;
+                generateChart(chartDataYear, "chart year", LPW);
+            });
+        }
+
+        function LPW(chart, data) {
+            var selectedItem = chart.getSelection()[0];
+            if (selectedItem) {
+                var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                var rl = rowLevel.toString();
+                //var year = new Date(rowLevel, 2)
+                var chartData = null;
+                $.ajax({
+                    url: '/Stats/DWCWinst', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                    type: 'get',
+                    dataType: 'json',
+                    data: { 'y': rowLevel },
+                    success: function (d) {
+                        chartDataMonth = d;
+                    },
+                    error: function () {
+                        alert("Error")
+                    }
+                }).done(function () {
+                    CurrentReport = 'month';
+                    GlobalYear = rowLevel;
+                    generateChart(chartDataMonth, "chart year" + " " + rl, selectMonth);
+                });
+            }
+        }
+
+        /*--------------Revenue----------------*/
+
+
+        function LYRW() {
+            $.ajax({
+                url: '/Stats/DYCOmzet', //Stats/SalesDataYearWise
+                type: 'GET',
+                dataType: 'json',
+                data: {},
+                success: function (d) {
+                    chartDataYear = d;
+                },
+                error: function () {
+                    alert("Error");
+                }
+            }).done(function () {
+                CurrentReport = 'year';
+                //GlobalYear = rowLevel;
+                generateChart(chartDataYear, "chart year", LRW);
+            });
+        }
+
+        function LRW(chart, data) {
+            var selectedItem = chart.getSelection()[0];
+            if (selectedItem) {
+                var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                var rl = rowLevel.toString();
+                //var year = new Date(rowLevel, 2)
+                var chartData = null;
+                $.ajax({
+                    url: '/Stats/DWCOmzet', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                    type: 'get',
+                    dataType: 'json',
+                    data: { 'y': rowLevel },
+                    success: function (d) {
+                        chartDataMonth = d;
+                    },
+                    error: function () {
+                        alert("Error")
+                    }
+                }).done(function () {
+                    CurrentReport = 'month';
+                    GlobalYear = rowLevel;
+                    generateChart(chartDataMonth, "chart year" + " " + rl, selectMonth);
+                });
+            }
+        }
+
+        /*-------------------------------------------------------------------------------------------------------------------------------------*/
+        function LYTM() {
+            $.ajax({
+                url: 'Stats/DYCVerkocht', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                type: 'GET',
+                dataType: 'json',
+                data: {},
+                success: function (d) {
+                    chartDataYear = d;
+                },
+                error: function () {
+                    alert("Error");
+                }
+            }).done(function () {
+                CurrentReport = 'year';
+                //GlobalYear = rowLevel;
+                generateChart(chartDataYear, "chart year", LTM);
+            });
+        }
+
+        function LTM(chart, data) {
+            var selectedItem = chart.getSelection()[0];
+            if (selectedItem) {
+                var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                var rl = rowLevel.toString();
+                //var year = new Date(rowLevel, 2)
+                var chartData = null;
+                $.ajax({
+                    url: '/Stats/DMCV', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                    type: 'get',
+                    dataType: 'json',
+                    data: { 'y': rowLevel },
+                    success: function (d) {
+                        chartDataMonth = d;
+                    },
+                    error: function () {
+                        alert("Error")
+                    }
+                }).done(function () {
+                    CurrentReport = 'month';
+                    GlobalYear = rowLevel;
+                    generateChart(chartDataMonth, "chart year" + " " + rl, LTMD);
+                });
+            }
+        }
+
+        function LTMD(chart, data) {
+            //month event(after select month data from chart)
+            var selectedItem = chart.getSelection()[0];
+            if (selectedItem) {
+                var rowLevel = data.getValue(selectedItem.row, 0);
+                $.ajax({
+                    url: '/Stats/DDMCV',
+                    type: 'get',
+                    dataType: 'json',
+                    data: { 'y': GlobalYear, 'm': rowLevel },
+                    succes: function (d) {
+                        chartDataDays = d
+                    },
+                    error: function () {
+                        alert("error!")
+                    }
+                }).done(function () {
+                    CurrentReport = "days";
+                    generateChart(chartDataDays, "Chart" + rowLevel + " " + GlobalYear, null);
+                });
+            }
+        }
+
+
+        function LYPM() {
+            $.ajax({
+                url: '/Stats/DYCWinst', //Stats/SalesDataYearWise
+                type: 'GET',
+                dataType: 'json',
+                data: {},
+                success: function (d) {
+                    chartDataYear = d;
+                },
+                error: function () {
+                    alert("Error");
+                }
+            }).done(function () {
+                CurrentReport = 'year';
+                //GlobalYear = rowLevel;
+                generateChart(chartDataYear, "chart year", LPW);
+            });
+        }
+
+        function LPW(chart, data) {
+            var selectedItem = chart.getSelection()[0];
+            if (selectedItem) {
+                var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                var rl = rowLevel.toString();
+                //var year = new Date(rowLevel, 2)
+                var chartData = null;
+                $.ajax({
+                    url: '/Stats/DMCW', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                    type: 'get',
+                    dataType: 'json',
+                    data: { 'y': rowLevel },
+                    success: function (d) {
+                        chartDataMonth = d;
+                    },
+                    error: function () {
+                        alert("Error")
+                    }
+                }).done(function () {
+                    CurrentReport = 'month';
+                    GlobalYear = rowLevel;
+                    generateChart(chartDataMonth, "chart year" + " " + rl, LTMD);
+                });
+            }
+        }
+
+        function LTMD(chart, data) {
+            //month event(after select month data from chart)
+            var selectedItem = chart.getSelection()[0];
+            if (selectedItem) {
+                var rowLevel = data.getValue(selectedItem.row, 0);
+                $.ajax({
+                    url: '/Stats/DDMCW',
+                    type: 'get',
+                    dataType: 'json',
+                    data: { 'y': GlobalYear, 'm': rowLevel },
+                    succes: function (d) {
+                        chartDataDays = d
+                    },
+                    error: function () {
+                        alert("error!")
+                    }
+                }).done(function () {
+                    CurrentReport = "days";
+                    generateChart(chartDataDays, "Chart" + rowLevel + " " + GlobalYear, null);
+                });
+            }
+        }
+
+
+
+
+        function LYRM() {
+            $.ajax({
+                url: '/Stats/DYCOmzet', //Stats/SalesDataYearWise
+                type: 'GET',
+                dataType: 'json',
+                data: {},
+                success: function (d) {
+                    chartDataYear = d;
+                },
+                error: function () {
+                    alert("Error");
+                }
+            }).done(function () {
+                CurrentReport = 'year';
+                //GlobalYear = rowLevel;
+                generateChart(chartDataYear, "chart year", LRW);
+            });
+        }
+
+        function LRW(chart, data) {
+            var selectedItem = chart.getSelection()[0];
+            if (selectedItem) {
+                var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                var rl = rowLevel.toString();
+                //var year = new Date(rowLevel, 2)
+                var chartData = null;
+                $.ajax({
+                    url: '/Stats/DMCO', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                    type: 'get',
+                    dataType: 'json',
+                    data: { 'y': rowLevel },
+                    success: function (d) {
+                        chartDataMonth = d;
+                    },
+                    error: function () {
+                        alert("Error")
+                    }
+                }).done(function () {
+                    CurrentReport = 'month';
+                    GlobalYear = rowLevel;
+                    generateChart(chartDataMonth, "chart year" + " " + rl, LTMD);
+                });
+            }
+        }
+
+        function LTMD(chart, data) {
+            //month event(after select month data from chart)
+            var selectedItem = chart.getSelection()[0];
+            if (selectedItem) {
+                var rowLevel = data.getValue(selectedItem.row, 0);
+                $.ajax({
+                    url: '/Stats/DDMCO',
+                    type: 'get',
+                    dataType: 'json',
+                    data: { 'y': GlobalYear, 'm': rowLevel },
+                    succes: function (d) {
+                        chartDataDays = d
+                    },
+                    error: function () {
+                        alert("error!")
+                    }
+                }).done(function () {
+                    CurrentReport = "days";
+                    generateChart(chartDataDays, "Chart" + rowLevel + " " + GlobalYear, null);
+                });
+            }
+        }
+
+        /*-------------------------------------------------------------------------------------------------------------------------------------*/
+
 
         function generateChart(chartData, title, selectEvent) {
             var data = google.visualization.arrayToDataTable(chartData);
@@ -168,29 +510,29 @@
             //Create new Back Button
             if (currentReport != 'year') { //back button except year
                 var $back = $('<button/>')
-                            .text('Back')
-                            .addClass('reportBack')
-                            .click(function () {
-                                switch (currentReport) {
-                                    case 'month':
-                                        CurrentReport = 'year';
-                                        generateChart(chartDataYear, "Sales Report Data", selectYear);
-                                        break;
-                                    case 'days':
-                                        CurrentReport = 'month';
-                                        generateChart(chartDataMonth, "Sales Report Data of year " + GlobalYear, selectMonth);
-                                        break;
-                                    default:
- 
-                                }
-                                $(this).parent().remove();
-                            });
+                    .text('Back')
+                    .addClass('reportBack')
+                    .click(function () {
+                        switch (currentReport) {
+                            case 'month':
+                                CurrentReport = 'year';
+                                generateChart(chartDataYear, "Sales Report Data", selectYear);
+                                break;
+                            case 'days':
+                                CurrentReport = 'month';
+                                generateChart(chartDataMonth, "Sales Report Data of year " + GlobalYear, selectMonth);
+                                break;
+                            default:
+
+                        }
+                        $(this).parent().remove();
+                    });
                 var $div = $('<div/>')
-                        .addClass('backButtonContainer')
-                        .css({ 'width': '70%', 'text-align': 'right', 'padding': '5px' })
-                        .append($back);
+                    .addClass('backButtonContainer')
+                    .css({ 'width': '70%', 'text-align': 'right', 'padding': '5px' })
+                    .append($back);
                 $('#chart').before($div);
- 
+
             }
         }
 
@@ -202,7 +544,7 @@
                 //var year = new Date(rowLevel, 2)
                 var chartData = null;
                 $.ajax({
-                    url: '/Stats/SalesDataMonthWise', //DataWeekWise
+                    url: '/Stats/DWCVerkocht', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
                     type: 'get',
                     dataType: 'json',
                     data: { 'y': rowLevel },
@@ -215,7 +557,7 @@
                 }).done(function () {
                     CurrentReport = 'month';
                     GlobalYear = rowLevel;
-                    generateChart(chartDataMonth, "chart year" +" " + rl, selectMonth);
+                    generateChart(chartDataMonth, "chart year" + " " + rl, selectMonth);
                 });
             }
         }
@@ -242,8 +584,6 @@
                 });
             }
         }
-
-
 
     </script>
 </body>

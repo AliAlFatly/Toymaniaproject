@@ -29,5 +29,7 @@ namespace Toymania.Models
         {
             return new ApplicationDbContext();
         }
+
+        //public System.Data.Entity.DbSet<Toymania.Models.ApplicationUser> ApplicationUsers { get; set; }
     }
 }

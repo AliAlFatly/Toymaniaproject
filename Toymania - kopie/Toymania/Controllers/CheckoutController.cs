@@ -19,17 +19,26 @@ namespace Toymania.Controllers
         {
             return View();
         }
-        
+
         [HttpPost]
         public ActionResult AddressAndPayment(FormCollection values)
         {
             var order = new Order();
             var OI = new Orders();
+            double w = DateTime.Now.DayOfYear / 7;
+            var week = (int)Math.Ceiling(w);
 
             //TryUpdateModel(order);
             order.OrderId = OI.LastRecordO() + 1;
             order.Username = User.Identity.Name;
             order.OrderDate = DateTime.Now;
+            order.year = DateTime.Now.Year;
+            order.month = DateTime.Now.Month;
+            order.day = DateTime.Now.Day;
+            order.minute = DateTime.Now.Minute;
+            order.second = DateTime.Now.Second;
+            order.hour = DateTime.Now.Hour;
+            order.week = week;       
             order.FirstName = values["FirstName"];
             order.LastName = values["LastName"];
             order.Address = values["Address"];
@@ -37,6 +46,7 @@ namespace Toymania.Controllers
             order.State = values["State"];
             order.PostalCode = values["PostalCode"];
             order.Country = values["Country"];
+            
 
             order.Total = 0;
 
@@ -78,6 +88,7 @@ namespace Toymania.Controllers
 
             
         }
+
         public ActionResult Complete(int id)
         {
 

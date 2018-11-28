@@ -21,28 +21,43 @@ namespace Toymania.Controllers
         {
             Orders o = new Orders();
             List<Order> O = o.GO(this.HttpContext);
+            List<Order> IP = o.GOS(this.HttpContext, "In Progress");
+            List<Order> C = o.GOS(this.HttpContext, "Completed");
 
 
             var OVM = new OrdersViewModel
             {
-                Order = O
+                O = O,
+                IP = IP,
+                C = C
             };
 
             return View(OVM);
         }
 
-        public ActionResult Detail(int id)
+        public ActionResult Detail(int id, string S)
         {
             var o = new Orders();
 
-            var ODTemp = o.GD(id);
-
-            var ODVM = new OrderDetailViewModel
+            if( S != null)
             {
-                OD = ODTemp
-            };
+                var ODTemp = o.GDS(id, S);
+                var ODVM = new OrderDetailViewModel
+                {
+                    OD = ODTemp
+                };
+                return View(ODVM);
+            }
+            else
+            {
+                var ODTemp = o.GD(id);
+                var ODVM = new OrderDetailViewModel
+                {
+                    OD = ODTemp
+                };
+                return View(ODVM);
+            }
 
-            return View(ODVM);
         }
 
 

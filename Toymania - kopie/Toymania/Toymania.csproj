@@ -82,7 +82,7 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.1-beta1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1-beta2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
       <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
@@ -226,9 +226,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AccountManagersCController.cs" />
+    <Compile Include="Controllers\ApplicationUsersController.cs" />
+    <Compile Include="Controllers\OrderDetailsController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\StatsController.cs" />
     <Compile Include="Controllers\WishlistManagerController.cs" />
+    <Compile Include="Models\ApplicationUsersViewModel.cs" />
     <Compile Include="Models\App_Start\BundleConfig.cs" />
     <Compile Include="Models\App_Start\FilterConfig.cs" />
     <Compile Include="Models\App_Start\IdentityConfig.cs" />
@@ -253,9 +257,6 @@
       <DependentUpon>TSE15.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Categories.cs">
-      <DependentUpon>TSE15.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\History.cs">
       <DependentUpon>TSE15.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
@@ -501,9 +502,22 @@
     <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\Stats\Index.cshtml" />
     <Content Include="Views\Stats\test2.cshtml" />
+    <Content Include="Views\OrderDetails\Create.cshtml" />
+    <Content Include="Views\OrderDetails\Delete.cshtml" />
+    <Content Include="Views\OrderDetails\Details.cshtml" />
+    <Content Include="Views\OrderDetails\Edit.cshtml" />
+    <Content Include="Views\OrderDetails\Index.cshtml" />
+    <Content Include="Views\ApplicationUsers\Create.cshtml" />
+    <Content Include="Views\ApplicationUsers\Delete.cshtml" />
+    <Content Include="Views\ApplicationUsers\Details.cshtml" />
+    <Content Include="Views\ApplicationUsers\Edit.cshtml" />
+    <Content Include="Views\ApplicationUsers\Index.cshtml" />
+    <Content Include="Views\WishlistManager\IndexRA.cshtml" />
+    <Content Include="Views\OrderDetails\IndexC.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\AccountManagersC\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

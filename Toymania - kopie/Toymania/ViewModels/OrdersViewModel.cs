@@ -13,7 +13,9 @@ namespace Toymania.ViewModels
 {
     public class OrdersViewModel
     {
-        public List<Order> Order { get; set; } //ICollection of orders
+        public List<Order> O { get; set; }
+        public List<Order> IP { get; set; }
+        public List<Order> C { get; set; }
 
     }
 }

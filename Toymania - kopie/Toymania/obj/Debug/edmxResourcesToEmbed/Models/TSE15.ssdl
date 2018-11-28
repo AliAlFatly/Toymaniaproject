@@ -33,13 +33,6 @@
     <Property Name="CName" Type="varchar" MaxLength="50" />
     <Property Name="Description" Type="varchar" MaxLength="50" />
   </EntityType>
-  <EntityType Name="History">
-    <Key>
-      <PropertyRef Name="HistoryId" />
-    </Key>
-    <Property Name="HistoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Email" Type="varchar" MaxLength="50" />
-  </EntityType>
   <EntityType Name="Order">
     <Key>
       <PropertyRef Name="OrderId" />
@@ -55,6 +48,13 @@
     <Property Name="Country" Type="varchar" MaxLength="50" />
     <Property Name="Total" Type="decimal" Precision="18" Scale="2" />
     <Property Name="OrderDate" Type="date" />
+    <Property Name="year" Type="int" Nullable="false" />
+    <Property Name="month" Type="int" />
+    <Property Name="day" Type="int" />
+    <Property Name="minute" Type="int" />
+    <Property Name="second" Type="int" />
+    <Property Name="hour" Type="int" />
+    <Property Name="week" Type="int" />
   </EntityType>
   <EntityType Name="OrderDetails">
     <Key>
@@ -66,7 +66,14 @@
     <Property Name="Quantity" Type="int" />
     <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="2" />
     <Property Name="Status" Type="varchar" MaxLength="50" />
-    <Property Name="HistoryId" Type="int" />
+    <Property Name="CName" Type="varchar" MaxLength="50" />
+    <Property Name="SCName" Type="varchar" MaxLength="50" />
+    <Property Name="Week" Type="int" />
+    <Property Name="Month" Type="int" />
+    <Property Name="year" Type="int" />
+    <Property Name="Day" Type="int" />
+    <Property Name="Hour" Type="int" />
+    <Property Name="Minute" Type="int" />
   </EntityType>
   <EntityType Name="Producers">
     <Key>
@@ -127,30 +134,6 @@
       </Principal>
       <Dependent Role="Cart">
         <PropertyRef Name="ToyId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__History__Email__1AD3FDA4">
-    <End Role="Balance" Type="Self.Balance" Multiplicity="0..1" />
-    <End Role="History" Type="Self.History" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Balance">
-        <PropertyRef Name="Email" />
-      </Principal>
-      <Dependent Role="History">
-        <PropertyRef Name="Email" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__OrderDeta__Histo__282DF8C2">
-    <End Role="History" Type="Self.History" Multiplicity="0..1" />
-    <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="History">
-        <PropertyRef Name="HistoryId" />
-      </Principal>
-      <Dependent Role="OrderDetails">
-        <PropertyRef Name="HistoryId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -242,7 +225,6 @@
     <EntitySet Name="Balance" EntityType="Self.Balance" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="History" EntityType="Self.History" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Producers" EntityType="Self.Producers" Schema="dbo" store:Type="Tables" />
@@ -253,14 +235,6 @@
     <AssociationSet Name="FK__Cart__ToyId__2180FB33" Association="Self.FK__Cart__ToyId__2180FB33">
       <End Role="Toy" EntitySet="Toy" />
       <End Role="Cart" EntitySet="Cart" />
-    </AssociationSet>
-    <AssociationSet Name="FK__History__Email__1AD3FDA4" Association="Self.FK__History__Email__1AD3FDA4">
-      <End Role="Balance" EntitySet="Balance" />
-      <End Role="History" EntitySet="History" />
-    </AssociationSet>
-    <AssociationSet Name="FK__OrderDeta__Histo__282DF8C2" Association="Self.FK__OrderDeta__Histo__282DF8C2">
-      <End Role="History" EntitySet="History" />
-      <End Role="OrderDetails" EntitySet="OrderDetails" />
     </AssociationSet>
     <AssociationSet Name="FK__OrderDeta__Order__2739D489" Association="Self.FK__OrderDeta__Order__2739D489">
       <End Role="Order" EntitySet="Order" />

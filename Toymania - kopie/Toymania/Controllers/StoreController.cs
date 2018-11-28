@@ -6,6 +6,8 @@ using System.Web.Mvc;
 //using Toymania.Models;
 using Toymania.Models;
 using Toymania.ViewModels;
+using PagedList;
+using PagedList.Mvc;
 
 
 namespace Toymania.Controllers
@@ -15,12 +17,11 @@ namespace Toymania.Controllers
         // GET: store
         TSE15 db = new TSE15();
       
-        public ActionResult Index(string C, string SC, int? PC, int? P)
+        public ActionResult Index(string C, string SC, int? PC, int? P, string search)
         {
-
+            var PS = 3;
             List<Categories> CL = db.Categories.ToList();
-
-            //var product = db.Toy.OrderByDescending(x => x.ToysId).toPageList(1, 10);
+            //functie schrijven die prijs category als parameter krijgt en de prijsrange terug geeft om code te verminderen
 
             if (C != null)
             {
@@ -42,50 +43,66 @@ namespace Toymania.Controllers
                 ViewBag.Page = P;
                 ViewData["Page"] = P;
             }
+            if(search != null)
+            {
+                ViewBag.srch = search;
+                ViewData["srch"] = search;
+            }
             
 
-            if (C != null && SC == null && PC == null)  //category page 2
+            if (C != null && SC == null && PC == null && search == null)  //category page 2
             {
                 Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
 
                 BrowsePartial a = new BrowsePartial
                 {
                     C = CL,
-                    T = OC.Toy,
+                    T = OC.Toy.ToPagedList(P ?? 1, PS),
                     SC = OC.SubCategories,
                     PC = null
                 };
                 return View(a);
             }
-            else if(C != null && PC == null) // subcategory page
+
+
+            else if(C != null && SC != null && PC == null && search == null) // subcategory page
             {
                 Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
                 SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
                 BrowsePartial a = new BrowsePartial
                 {
                     C = CL,
-                    T = OSC.Toy,
+                    T = OSC.Toy.ToPagedList(P ?? 1, PS),
                     SC = OC.SubCategories,
                     PC = null
                 };
                 return View(a);
             }
-            else if(C != null && SC != null && PC != null) // price page naar subcategory filter
+
+
+            else if(C != null && SC != null && PC != null && search == null) // price page naar subcategory filter
             {
                 //ICollection<Toy> toy = null;
 
                 if (PC == 1)
                 {
-                    IQueryable <ICollection<Toy>> TTemp = from TT in db.Toy
+                    var TTemp = from TT in db.Toy
                                 where TT.SubCategories.SCName == SC && TT.Price > 0.00m && TT.Price < 10.00m
-                                select (ICollection<Toy>)TT;
-                    ICollection<Toy> TToy = TTemp.First();
+                                select TT;
+                    var TToy = new List<Toy>();
+                    foreach(Toy t in TTemp)
+                    {
+                        TToy.Add(t);
+                    }
+
+
+                    //var TToy = TTemp.First();
                     Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
                     SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
                     BrowsePartial a = new BrowsePartial
                     {
                         C = CL,
-                        T = TToy,
+                        T = TToy.ToPagedList(P ?? 1, PS),
                         SC = OC.SubCategories,
                         PC = null
                     };
@@ -93,16 +110,23 @@ namespace Toymania.Controllers
                 }
                 else if (PC == 2)
                 {
-                    IQueryable <ICollection<Toy>> TTemp = from TT in db.Toy
+                    var TTemp = from TT in db.Toy
                                 where TT.SubCategories.SCName == SC && TT.Price > 9.99m && TT.Price < 20.00m
-                                select (ICollection<Toy>)TT;
-                    ICollection<Toy> TToy = TTemp.First();
+                                select TT;
+                    var TToy = new List<Toy>();
+                    foreach (Toy t in TTemp)
+                    {
+                        TToy.Add(t);
+                    }
+
+
+                    //var TToy = TTemp.First();
                     Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
                     SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
                     BrowsePartial a = new BrowsePartial
                     {
                         C = CL,
-                        T = TToy,
+                        T = TToy.ToPagedList(P ?? 1, PS),
                         SC = OC.SubCategories,
                         PC = null
                     };
@@ -110,16 +134,23 @@ namespace Toymania.Controllers
                 }
                 else if (PC == 3)
                 {
-                    IQueryable <ICollection<Toy>> TTemp = from TT in db.Toy
+                    var TTemp = from TT in db.Toy
                                 where TT.SubCategories.SCName == SC && TT.Price > 19.99m && TT.Price < 50.00m
-                                select (ICollection<Toy>)TT;
-                    ICollection<Toy> TToy = TTemp.First();
+                                select TT;
+                    var TToy = new List<Toy>();
+                    foreach (Toy t in TTemp)
+                    {
+                        TToy.Add(t);
+                    }
+
+
+                    //var TToy = TTemp.First();
                     Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
                     SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
                     BrowsePartial a = new BrowsePartial
                     {
                         C = CL,
-                        T = TToy,
+                        T = TToy.ToPagedList(P ?? 1, PS),
                         SC = OC.SubCategories,
                         PC = null
                     };
@@ -127,16 +158,23 @@ namespace Toymania.Controllers
                 }
                 else if (PC == 4)
                 {
-                    IQueryable <ICollection<Toy>> TTemp = from TT in db.Toy
+                    var TTemp = from TT in db.Toy
                                 where TT.SubCategories.SCName == SC && TT.Price > 49.99m && TT.Price < 100.00m
-                                select (ICollection<Toy>)TT;
-                    ICollection<Toy> TToy = TTemp.First();
+                                select TT;
+                    var TToy = new List<Toy>();
+                    foreach (Toy t in TTemp)
+                    {
+                        TToy.Add(t);
+                    }
+
+
+                    //var TToy = TTemp.First();
                     Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
                     SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
                     BrowsePartial a = new BrowsePartial
                     {
                         C = CL,
-                        T = TToy,
+                        T = TToy.ToPagedList(P ?? 1, PS),
                         SC = OC.SubCategories,
                         PC = null
                     };
@@ -144,16 +182,23 @@ namespace Toymania.Controllers
                 }
                 else if (PC == 5)
                 {
-                    IQueryable <ICollection<Toy>> TTemp = from TT in db.Toy
+                    var TTemp = from TT in db.Toy
                                 where TT.SubCategories.SCName == SC && TT.Price > 99.99m && TT.Price < 500.00m
-                                select (ICollection<Toy>)TT;
-                    ICollection<Toy> TToy = TTemp.First();
+                                select TT;
+                    var TToy = new List<Toy>();
+                    foreach (Toy t in TTemp)
+                    {
+                        TToy.Add(t);
+                    }
+
+
+                    //var TToy = TTemp.First();
                     Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
                     SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
                     BrowsePartial a = new BrowsePartial
                     {
                         C = CL,
-                        T = TToy,
+                        T = TToy.ToPagedList(P ?? 1, PS),
                         SC = OC.SubCategories,
                         PC = null
                     };
@@ -161,16 +206,23 @@ namespace Toymania.Controllers
                 }
                 else if (PC == 6)
                 {
-                    IQueryable <ICollection<Toy>> TTemp = from TT in db.Toy
+                    var TTemp = from TT in db.Toy
                                 where TT.SubCategories.SCName == SC && TT.Price > 500.00m
-                                select (ICollection<Toy>)TT;
-                    ICollection<Toy> TToy = TTemp.First();
+                                select TT;
+                    var TToy = new List<Toy>();
+                    foreach (Toy t in TTemp)
+                    {
+                        TToy.Add(t);
+                    }
+
+
+                    //var TToy = TTemp.First();
                     Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
                     SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
                     BrowsePartial a = new BrowsePartial
                     {
                         C = CL,
-                        T = TToy,
+                        T = TToy.ToPagedList(P ?? 1, PS),
                         SC = OC.SubCategories,
                         PC = null
                     };
@@ -180,23 +232,32 @@ namespace Toymania.Controllers
                 {
                     return View();
                 }
-            }
-            else if (C != null && PC != null) // price page naar category filter
+            } //X
+
+
+            else if (C != null && SC == null && PC != null && search == null) // price page naar category filter
             {
                 //ICollection<Toy> toy = null;
 
                 if (PC == 1)
                 {
-                    IQueryable <ICollection<Toy>> TTemp = from TT in db.Toy
+                    var TTemp = from TT in db.Toy
                                 where TT.Categories.CName == C && TT.Price > 0.00m && TT.Price < 10.00m
-                                select (ICollection<Toy>)TT;
-                    ICollection<Toy> TToy = TTemp.First();
+                                select TT;
+                    var TToy = new List<Toy>();
+                    foreach (Toy t in TTemp)
+                    {
+                        TToy.Add(t);
+                    }
+
+
+                    //var TToy = TTemp.First();
                     Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
-                    SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
+                    //SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
                     BrowsePartial a = new BrowsePartial
                     {
                         C = CL,
-                        T = TToy,
+                        T = TToy.ToPagedList(P ?? 1, PS),
                         SC = OC.SubCategories,
                         PC = null
                     };
@@ -204,16 +265,23 @@ namespace Toymania.Controllers
                 }
                 else if (PC == 2)
                 {
-                    IQueryable <ICollection<Toy>> TTemp = from TT in db.Toy
+                    var TTemp = from TT in db.Toy
                                 where TT.Categories.CName == C && TT.Price > 9.99m && TT.Price < 20.00m
-                                select (ICollection<Toy>)TT;
-                    ICollection<Toy> TToy = TTemp.First();
+                                select TT;
+                    var TToy = new List<Toy>();
+                    foreach (Toy t in TTemp)
+                    {
+                        TToy.Add(t);
+                    }
+
+
+                    //var TToy = TTemp.First();
                     Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
-                    SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
+                    //SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
                     BrowsePartial a = new BrowsePartial
                     {
                         C = CL,
-                        T = TToy,
+                        T = TToy.ToPagedList(P ?? 1, PS),
                         SC = OC.SubCategories,
                         PC = null
                     };
@@ -221,16 +289,23 @@ namespace Toymania.Controllers
                 }
                 else if (PC == 3)
                 {
-                    IQueryable <ICollection<Toy>> TTemp = from TT in db.Toy
+                    var TTemp = from TT in db.Toy
                                 where TT.Categories.CName == C && TT.Price > 19.99m && TT.Price < 50.00m
-                                select (ICollection<Toy>)TT;
-                    ICollection<Toy> TToy = TTemp.First();
+                                select TT;
+                    var TToy = new List<Toy>();
+                    foreach (Toy t in TTemp)
+                    {
+                        TToy.Add(t);
+                    }
+
+
+                    //var TToy = TTemp.First();
                     Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
-                    SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
+                    //SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
                     BrowsePartial a = new BrowsePartial
                     {
                         C = CL,
-                        T = TToy,
+                        T = TToy.ToPagedList(P ?? 1, PS),
                         SC = OC.SubCategories,
                         PC = null
                     };
@@ -238,16 +313,23 @@ namespace Toymania.Controllers
                 }
                 else if (PC == 4)
                 {
-                    IQueryable <ICollection<Toy>> TTemp = from TT in db.Toy
+                    var TTemp = from TT in db.Toy
                                 where TT.Categories.CName == C && TT.Price > 49.99m && TT.Price < 100.00m
-                                select (ICollection<Toy>)TT;
-                    ICollection<Toy> TToy = TTemp.First();
+                                select TT;
+                    var TToy = new List<Toy>();
+                    foreach (Toy t in TTemp)
+                    {
+                        TToy.Add(t);
+                    }
+
+
+                    //var TToy = TTemp.First();
                     Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
-                    SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
+                    //SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
                     BrowsePartial a = new BrowsePartial
                     {
                         C = CL,
-                        T = TToy,
+                        T = TToy.ToPagedList(P ?? 1, PS),
                         SC = OC.SubCategories,
                         PC = null
                     };
@@ -255,16 +337,23 @@ namespace Toymania.Controllers
                 }
                 else if (PC == 5)
                 {
-                    IQueryable <ICollection<Toy>> TTemp = from TT in db.Toy
+                    var TTemp = from TT in db.Toy
                                 where TT.Categories.CName == C && TT.Price > 99.99m && TT.Price < 500.00m
-                                select (ICollection<Toy>)TT;
-                    ICollection<Toy> TToy = TTemp.First();
+                                select TT;
+                    var TToy = new List<Toy>();
+                    foreach (Toy t in TTemp)
+                    {
+                        TToy.Add(t);
+                    }
+
+
+                    //var TToy = TTemp.First();
                     Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
-                    SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
+                    //SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
                     BrowsePartial a = new BrowsePartial
                     {
                         C = CL,
-                        T = TToy,
+                        T = TToy.ToPagedList(P ?? 1, PS),
                         SC = OC.SubCategories,
                         PC = null
                     };
@@ -272,16 +361,23 @@ namespace Toymania.Controllers
                 }
                 else if (PC == 6)
                 {
-                    IQueryable <ICollection<Toy>> TTemp = from TT in db.Toy
+                    var TTemp = from TT in db.Toy
                                 where TT.Categories.CName == C && TT.Price > 500.00m
-                                select (ICollection<Toy>)TT;
-                    ICollection<Toy> TToy = TTemp.First();
+                                select TT;
+                    var TToy = new List<Toy>();
+                    foreach (Toy t in TTemp)
+                    {
+                        TToy.Add(t);
+                    }
+
+
+                    //var TToy = TTemp.First();
                     Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
-                    SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
+                    //SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
                     BrowsePartial a = new BrowsePartial
                     {
                         C = CL,
-                        T = TToy,
+                        T = TToy.ToPagedList(P ?? 1, PS),
                         SC = OC.SubCategories,
                         PC = null
                     };
@@ -291,44 +387,215 @@ namespace Toymania.Controllers
                 {
                     return View();
                 }
-            }
-            else //start page
+            } //X
+
+
+            else if (C == null && SC == null && PC != null && search == null) // price page naar category filter
+            {
+                //ICollection<Toy> toy = null;
+
+                if (PC == 1)
+                {
+                    var TTemp = from TT in db.Toy
+                                where  TT.Price > 0.00m && TT.Price < 10.00m
+                                select TT;
+                    var TToy = new List<Toy>();
+                    foreach (Toy t in TTemp)
+                    {
+                        TToy.Add(t);
+                    }
+
+
+                    //var TToy = TTemp.First();
+                    
+                    //Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
+                    //SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
+                    BrowsePartial a = new BrowsePartial
+                    {
+                        C = CL,
+                        T = TToy.ToPagedList(P ?? 1, PS),
+                        SC = null,
+                        PC = null
+                    };
+                    return View(a);
+                }
+                else if (PC == 2)
+                {
+                    var TTemp = from TT in db.Toy
+                                where TT.Price > 9.99m && TT.Price < 20.00m
+                                select TT;
+                    var TToy = new List<Toy>();
+                    foreach (Toy t in TTemp)
+                    {
+                        TToy.Add(t);
+                    }
+
+
+                    //var TToy = TTemp.First();
+                    //Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
+                    //SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
+                    BrowsePartial a = new BrowsePartial
+                    {
+                        C = CL,
+                        T = TToy.ToPagedList(P ?? 1, PS),
+                        SC = null,
+                        PC = null
+                    };
+                    return View(a);
+
+
+                    //var TTemp = from TT in db.Toy
+                    //            where TT.Categories.CName == C && TT.Price > 9.99m && TT.Price < 20.00m
+                    //            select TT;
+                    //var TToy = new List<Toy>();
+                    //foreach (Toy t in TTemp)
+                    //{
+                    //    TToy.Add(t);
+                    //}
+
+
+                    ////var TToy = TTemp.First();
+                    ////Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
+                    ////SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
+                    //BrowsePartial a = new BrowsePartial
+                    //{
+                    //    C = CL,
+                    //    T = TToy,
+                    //    SC = null,
+                    //    PC = null
+                    //};
+                    //return View(a);
+                }
+                else if (PC == 3)
+                {
+                    var TTemp = from TT in db.Toy
+                                where TT.Price > 19.99m && TT.Price < 50.00m
+                                select TT;
+                    var TToy = new List<Toy>();
+                    foreach (Toy t in TTemp)
+                    {
+                        TToy.Add(t);
+                    }
+
+
+                    //var TToy = TTemp.First();
+                    //Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
+                    //SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
+                    BrowsePartial a = new BrowsePartial
+                    {
+                        C = CL,
+                        T = TToy.ToPagedList(P ?? 1, PS),
+                        SC = null,
+                        PC = null
+                    };
+                    return View(a);
+                }
+                else if (PC == 4)
+                {
+                    var TTemp = from TT in db.Toy
+                                where TT.Price > 49.99m && TT.Price < 100.00m
+                                select TT;
+                    var TToy = new List<Toy>();
+                    foreach (Toy t in TTemp)
+                    {
+                        TToy.Add(t);
+                    }
+
+
+                    //var TToy = TTemp.First();
+                    //Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
+                    //SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
+                    BrowsePartial a = new BrowsePartial
+                    {
+                        C = CL,
+                        T = TToy.ToPagedList(P ?? 1, PS),
+                        SC = null,
+                        PC = null
+                    };
+                    return View(a);
+                }
+                else if (PC == 5)
+                {
+                    var TTemp = from TT in db.Toy
+                                where TT.Price > 99.99m && TT.Price < 500.00m
+                                select TT;
+                    var TToy = new List<Toy>();
+                    foreach (Toy t in TTemp)
+                    {
+                        TToy.Add(t);
+                    }
+
+
+                    //var TToy = TTemp.First();
+                    //Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
+                    //SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
+                    BrowsePartial a = new BrowsePartial
+                    {
+                        C = CL,
+                        T = TToy.ToPagedList(P ?? 1, PS),
+                        SC = null,
+                        PC = null
+                    };
+                    return View(a);
+                }
+                else if (PC == 6)
+                {
+                    var TTemp = from TT in db.Toy
+                                where TT.Price > 500.00m
+                                select TT;
+                    var TToy = new List<Toy>();
+                    foreach (Toy t in TTemp)
+                    {
+                        TToy.Add(t);
+                    }
+
+
+                    //var TToy = TTemp.First();
+                    //Categories OC = db.Categories.Include("Toy").Single(c => c.CName == C); //One Category
+                    //SubCategories OSC = db.SubCategories.Include("Toy").Single(sc => sc.SCName == SC); //One SubCategory
+                    BrowsePartial a = new BrowsePartial
+                    {
+                        C = CL,
+                        T = TToy.ToPagedList(P ?? 1, PS),
+                        SC = null,
+                        PC = null
+                    };
+                    return View(a);
+                }
+                else
+                {
+                    return View();
+                }
+            } //X
+
+            else if (C == null && SC == null && PC == null && search != null) //start page
             {
                 List<Toy> Toys = db.Toy.ToList();
+
+                var TST = db.Toy.Where(x => x.ToysName.Contains(search)).ToList();
+
                 BrowsePartial a = new BrowsePartial
                 {
                     C = CL,
-                    T = Toys,
+                    T = TST.ToPagedList(P ?? 1, PS),
                     SC = null,
                     PC = null,
                 };
                 return View(a);
             }
 
-            //var SCM = db.SubCategories.Include("Toy").SingleOrDefault(c => c.SCName == SC);
-
-            //var CID = SCM.CategoryId;
-            //var CM = db.Categories.SingleOrDefault(c => c.CategoryId == CID);
-
-            //BrowsePartial a = new BrowsePartial
-            //{
-            //    C = CL,
-            //    T = SCM.Toy,
-            //    SC = CM.SubCategories,
-            //    PC = PC
-            //};
-
-
-            //Categories cvm = new Categories();
-            //List<Categories> cvmList = CL.Select(x => new Categories
-            //{
-            //    CategoryId = x.CategoryId,
-            //    CName = x.CName,
-            //    Description = x.Description,
-            //    Toy = x.Toy
-            //}).ToList();
-
-            
+            else //start page
+            {
+                List<Toy> Toys = db.Toy.ToList();
+                BrowsePartial a = new BrowsePartial
+                {
+                    C = CL,
+                    T = Toys.ToPagedList(P ?? 1, PS),
+                    SC = null,
+                    PC = null,
+                };
+                return View(a);
+            }           
         }
 
         public ActionResult Details(int id)
@@ -343,18 +610,18 @@ namespace Toymania.Controllers
             return View(TT);
         }
 
-        public ActionResult IndexR(string SRCH)
+        public ActionResult IndexR(string search, int? P, int PS)
         {
             List<Categories> CL = db.Categories.ToList();
             List<Toy> Toys = db.Toy.ToList();
-            if (SRCH != "" | SRCH != null)
+            if (search != "" | search != null)
             {
-                Toys = db.Toy.Where(x => x.ToysName.Contains(SRCH)).ToList();
+                Toys = db.Toy.Where(x => x.ToysName.Contains(search)).ToList();
             }
             BrowsePartial a = new BrowsePartial
             {
                 C = CL,
-                T = Toys,
+                T = Toys.ToPagedList(P ?? 1, PS),
                 SC = null,
                 PC = null,
             };

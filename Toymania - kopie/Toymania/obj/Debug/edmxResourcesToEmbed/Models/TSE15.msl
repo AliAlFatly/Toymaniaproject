@@ -37,17 +37,16 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="History">
-      <EntityTypeMapping TypeName="TSM15.History">
-        <MappingFragment StoreEntitySet="History">
-          <ScalarProperty Name="HistoryId" ColumnName="HistoryId" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Order">
       <EntityTypeMapping TypeName="TSM15.Order">
         <MappingFragment StoreEntitySet="Order">
+          <ScalarProperty Name="week" ColumnName="week" />
+          <ScalarProperty Name="hour" ColumnName="hour" />
+          <ScalarProperty Name="second" ColumnName="second" />
+          <ScalarProperty Name="minute" ColumnName="minute" />
+          <ScalarProperty Name="day" ColumnName="day" />
+          <ScalarProperty Name="month" ColumnName="month" />
+          <ScalarProperty Name="year" ColumnName="year" />
           <ScalarProperty Name="OrderId" ColumnName="OrderId" />
           <ScalarProperty Name="Username" ColumnName="Username" />
           <ScalarProperty Name="FirstName" ColumnName="FirstName" />
@@ -65,13 +64,20 @@
     <EntitySetMapping Name="OrderDetails">
       <EntityTypeMapping TypeName="TSM15.OrderDetails">
         <MappingFragment StoreEntitySet="OrderDetails">
+          <ScalarProperty Name="Minute" ColumnName="Minute" />
+          <ScalarProperty Name="Hour" ColumnName="Hour" />
+          <ScalarProperty Name="Day" ColumnName="Day" />
+          <ScalarProperty Name="year" ColumnName="year" />
+          <ScalarProperty Name="Month" ColumnName="Month" />
+          <ScalarProperty Name="Week" ColumnName="Week" />
+          <ScalarProperty Name="SCName" ColumnName="SCName" />
+          <ScalarProperty Name="CName" ColumnName="CName" />
           <ScalarProperty Name="OrderDetailId" ColumnName="OrderDetailId" />
           <ScalarProperty Name="OrderId" ColumnName="OrderId" />
           <ScalarProperty Name="ToyId" ColumnName="ToyId" />
           <ScalarProperty Name="Quantity" ColumnName="Quantity" />
           <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
           <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="HistoryId" ColumnName="HistoryId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

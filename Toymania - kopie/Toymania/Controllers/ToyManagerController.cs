@@ -84,7 +84,7 @@ namespace Toymania.Controllers
                 Price = toy.Price,
                 Counter = 0,
                 MinimumAge = toy.MinimumAge,
-                SubCategories = toy.SubCategories
+                SubCategoryId = toy.SubCategoryId
 
             };
 

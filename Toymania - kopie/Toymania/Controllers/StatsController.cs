@@ -13,7 +13,6 @@ using System.Web.Mvc.Ajax;
 //using System.Web.Helpers.Chart;
 using System.Web.Helpers;
 using System.Globalization;
-using System.Linq.Expressions;
 using Google.Apis;
 using System.Threading;
 using System.Data.Entity.SqlServer;
@@ -27,9 +26,15 @@ namespace Toymania.Controllers
         //class schrijven die een lijst return met waardes zoals jaar/week/dag informatie aan de hand van de gegeven parameter?
         //groupby convert to string maand/week??
 
-
-
         TSE15 db = new TSE15();
+
+        //totaal verkocht
+        //omzet
+        //winst
+        //
+
+
+
 
         public class weeksInString
         {
@@ -52,97 +57,49 @@ namespace Toymania.Controllers
                 return this.Day;
             }
 
-            
+
         }
 
         public class weeks
         {
-            public int Day { get; set; }
+            public int Week { get; set; }
             public decimal? Total { get; set; }
-
-            //public weeks(int d, decimal? t)
-            //{
-            //    this.Day = d;
-            //    this.Total = t;
-            //}
 
             public decimal? total()
             {
                 return this.Total;
             }
 
-            public int day()
+            public int? week()
             {
-                return this.Day;
+                return this.Week;
             }
-
-            
-
         }
 
-        public List<weeks> DayOfYear(IQueryable<weeksInString> w) //deze functie moet een helejaar returnen
+        public string GCategory(int id)
         {
-            DateTime d = Convert.ToDateTime(w.First().Day);
-            var year = d.Year;
+            var CIQ = from t in db.Toy
+                      where t.ToysId == id
+                      select t.Categories;
+            var c = CIQ.FirstOrDefault();
+            return c.CName;
+        }
 
-            if(DateTime.IsLeapYear(year))
-            {
-                var wk = new List<weeks>();
-                for (int i = 1; i <= 366; i++)
-                {
-                    
-                    weeksInString TempWIS = w.Where(a => Convert.ToInt32(a.Day) == i).FirstOrDefault();
-                    if(TempWIS != null)
-                    {
-                        weeks TempW = new weeks
-                        {
-                            Day = i,
-                            Total = TempWIS.Total
-                        };
-                        wk.Add(TempW);
-                    }
-                    else
-                    {
-                        weeks TempW = new weeks
-                        {
-                            Day = i,
-                            Total = 0
-                        };
-                        wk.Add(TempW);
-                    }                    
-                }
-                return wk;
-            }
-            else
-            {
-                var wk = new List<weeks>();
-                for (int i = 1; i <= 365; i++)
-                {
+        public string GSCategory(int id)
+        {
+            var CIQ = from t in db.Toy
+                      where t.ToysId == id
+                      select t.SubCategories;
+            var c = CIQ.FirstOrDefault();
+            return c.SCName;
+        }
 
-                    weeksInString TempWIS = w.Where(a => Convert.ToInt32(a.Day) == i).FirstOrDefault();
-                    if (TempWIS != null)
-                    {
-                        weeks TempW = new weeks
-                        {
-                            Day = i,
-                            Total = TempWIS.Total
-                        };
-                        wk.Add(TempW);
-                    }
-                    else
-                    {
-                        weeks TempW = new weeks
-                        {
-                            Day = i,
-                            Total = 0
-                        };
-                        wk.Add(TempW);
-                    }
+        public class weeksT
+        {
+            public int? week { get; set; }
+            public int? quantity { get; set; }
+            public int? toysId { get; set; }
 
-
-                }
-                return wk;
-            }
         }
 
         public class weekData
@@ -195,11 +152,10 @@ namespace Toymania.Controllers
         public int YDR(int w, int d)
         {
             var day = d;
-            for (int i = 1; i < w; i++)
+            for (int i = 2; i < w; i++)
             {
                 day = day + 7;
             }
-
             return day;
         }
 
@@ -244,7 +200,6 @@ namespace Toymania.Controllers
             };
 
         }
-
 
         public JsonResult SalesDataMonthWise(int y)
         {
@@ -346,83 +301,54 @@ namespace Toymania.Controllers
         {
             var t1 = (from o in db.Order
                       where o.OrderDate.Value.Year.Equals(y)
-                      //where Convert.ToDateTime(o.OrderDate).ToString("yyyy") == year
-                      group o by o.OrderDate.Value.ToString("dd-MM-yyyy") into b
-                      //group o by DOY(o.OrderDate) into b
-                      //group o by o.OrderDate.Value.DayOfYear into b
-                      //group o by SqlFunctions.StringConvert(("dd-MM-yyyy")o.OrderDate.Value.Day) into b
-                      //group o by o.OrderDate.Value.Day.ToString("dd-MM-yyyy") into b
-                      //group o by Convert.ToDateTime(o.OrderDate).ToString("dd-MM-yyyy") into b
-                      //group o by Convert.ToDateTime(o.OrderDate).ToString("MMMM") into b
-                      select new weeksInString          //(b.Key, b.Sum(a => a.Total)));
+                      group o by o.week into b
+                      select new weeks
                       {
-                          Day = b.Key,
+                          Week = (int)b.Key,
                           Total = b.Sum(a => a.Total)
                       });
 
-            
-
-            var t4 = DayOfYear(t1);
-            
-            
-            if (t4 != null)
+            if (t1 != null)
             {
-                //var yearnumber = t4.Count();
-                var t5 = new List<weekData>();                
-                for (int i = 1; i <= 52; i++)
+                var t2 = new List<weeks>();
+                for (int i = 1; i <= 53; i++)
                 {
-                    weeks[] a = new weeks[7];
-                    a[0] = t4.Where(b => b.Day.Equals(YDR(i, 1))).FirstOrDefault();
-                    a[1] = t4.Where(b => b.Day.Equals(YDR(i, 2))).FirstOrDefault();
-                    a[2] = t4.Where(b => b.Day.Equals(YDR(i, 3))).FirstOrDefault();
-                    a[3] = t4.Where(b => b.Day.Equals(YDR(i, 4))).FirstOrDefault();
-                    a[4] = t4.Where(b => b.Day.Equals(YDR(i, 5))).FirstOrDefault();
-                    a[5] = t4.Where(b => b.Day.Equals(YDR(i, 6))).FirstOrDefault();
-                    a[6] = t4.Where(b => b.Day.Equals(YDR(i, 7))).FirstOrDefault();                    
-                    DateTime d = Convert.ToDateTime(t1.First().Day);
-                    var year = d.Year;
-                    if (i == 52 && DateTime.IsLeapYear(year))
+                    weeks TEMPW = new weeks { };
+                    if (t1.Where(w => w.Week == i) != null)
                     {
-                        weeks[] a3 = new weeks[3];
-                        a3[0] = t4.Where(b => b.Day.Equals(YDR(i + 1, 1))).FirstOrDefault();
-                        a3[1] = t4.Where(b => b.Day.Equals(YDR(i + 1, 2))).FirstOrDefault();
-                        a3[2] = t4.Where(b => b.Day.Equals(YDR(i + 1, 3))).FirstOrDefault();
-                        weekData t2 = new weekData(i, a);
-                        weekData ta3 = new weekData(i + 1, a3);
-                        t5.Add(t2);
-                        t5.Add(ta3);
-                    }
-                    else if(i == 52 && !DateTime.IsLeapYear(year))
-                    {
-                        weeks[] a2 = new weeks[2];
-                        a2[0] = t4.Where(b => b.Day.Equals(YDR(i + 1, 1))).FirstOrDefault();
-                        a2[1] = t4.Where(b => b.Day.Equals(YDR(i + 1, 2))).FirstOrDefault();
-                        weekData t2 = new weekData(i, a);
-                        weekData ta2 = new weekData(i + 1, a2);
-                        t5.Add(t2);
-                        t5.Add(ta2);
+                        TEMPW.Week = i;
+                        TEMPW.Total = (from o in db.Order
+                                       where o.OrderDate.Value.Year.Equals(y) && o.week == i
+                                       group o by o.week into T
+                                       select T.Sum(x => x.Total)
+
+                                       ).ToList().FirstOrDefault();
+
+                        t2.Add(TEMPW);
                     }
                     else
                     {
-                        weekData t2 = new weekData(i, a);
-                        t5.Add(t2);
+                        TEMPW.Week = i;
+                        TEMPW.Total = 0;
+                        t2.Add(TEMPW);
                     }
-                    
                 }
+                var wc = 53;
 
-                var t6 = new object[52];
-                t6 = new object[]
+                var t6 = new object[wc + 1];
+                t6[0] = new object[]
                     {
-                        "week",
+                        "Week",
                         "Total"
                     };
-                for (int j = 1; j <= 52; j++)
+
+
+                for (int j = 1; j <= wc; j++)
                 {
-                    var weeksdata = t5.Where(c => c.week.Equals(j)).FirstOrDefault();
-                    var wt = weeksdata.data;
+                    var wt = t2.Where(c => c.Week == j).FirstOrDefault();
                     if (wt != null)
                     {
-                        t6[j] = new object[] { "week" + weeksdata.week, weeksdata.total() };
+                        t6[j] = new object[] { "week" + wt.Week, wt.Total };
                     }
 
                 }
@@ -432,23 +358,6 @@ namespace Toymania.Controllers
                     Data = t6,
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet
                 };
-                //if( yearnumber > 365)
-                //{
-                //    for (int i = 1; i <= 366; i++)
-                //    {
-
-                //    }
-                //    //52 keer 7 items toevoegen
-                //    //list van weeknr en daarachter arrays van 7 items met dag + totaal
-                //    //items toevoegen 7 per keer
-                //}
-                //else
-                //{
-                //    for (int i = 1; i <= 365; i++)
-                //    {
-
-                //    }
-                //}
             }
             return new JsonResult
             {
@@ -457,35 +366,236 @@ namespace Toymania.Controllers
             };
         }
 
-        public ActionResult Diagram1()
+
+
+        /*-------------------------------------------------------------------------------------------------*/
+
+        public class CT
         {
-            int year = 2018;                                //I
-            var KDY = new DateTime(01 / 01 / year + 1);
-            var GDY = new DateTime(31 / 12 / year - 1);
-            var t4 = from o in db.Order
-                     group o by Convert.ToDateTime(o.OrderDate).ToString("MMMM") into b
-                     select new
-                     {
-                         month = b.Key,
-                         total = b.Sum(a => a.Total)
-                     };
-            if (t4 != null)
+            public string SC { get; set; } //SubCategory
+            public string C { get; set; } //Category
+            public int? T { get; set; } //totaal verkocht
+            public decimal? t { get; set; } //totaal winst of omzet(prijs)
+        }
+
+        public class CL
+        {
+            public int W { get; set; }
+            public List<CT> ct { get; set; }
+        }
+
+        public class CLY
+        {
+            public int Y { get; set; }
+            public List<CT> ct { get; set; }
+        }
+
+        public class CLM
+        {
+            public int M { get; set; }
+            public List<CT> ct { get; set; }
+        }
+
+        public class CLD
+        {
+            public int D { get; set; }
+            public List<CT> ct { get; set; }
+        }
+
+        /*-------------------------------------------------------------------------------------------------*/
+
+        public int GTCY(int Y, string CName) //get total category(sales)
+        {
+            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            var T = (from od in db.OrderDetails
+                     where od.year == Y && od.CName == CName
+                     select od.Quantity).Sum();
+
+            if (T != null)
             {
-                var chartData = new object[t4.Count() + 1];
-                chartData[0] = new object[]
+                var R = (int)T;
+                return R;
+            }
+            else
+            {
+                var R = 0;
+                return R;
+            }
+        }
+
+        public decimal? GTWCY(int Y, string CName) //get total winst category
+        {
+            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            var T = from od in db.OrderDetails
+                    where od.year == Y && od.CName == CName
+                    select od;
+            //functie die toy, quantity, prijs neemt en totaal uitrekent
+
+            if (T != null)
+            {
+                decimal? R = 0;
+                foreach (var i in T)
                 {
-                    "month",
-                    "total"
-                };
-                int j = 0;
-                foreach (var i in t4)
-                {
-                    j++;
-                    chartData[j] = new object[] { i.month.ToString(), i.total };
+                    R += (i.UnitPrice * i.Quantity) * 1.08m; //8% winst(m = decimal representatie)
                 }
+                return R;
+
+
+            }
+            else
+            {
+                decimal? R = 0;
+                return R;
+            }
+        }
+
+        public decimal? GTOCY(int Y, string CName) //get total omzet category
+        {
+            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            var T = from od in db.OrderDetails
+                    where od.year == Y && od.CName == CName
+                    select od;
+            //functie die toy, quantity, prijs neemt en totaal uitrekent
+
+            if (T != null)
+            {
+                decimal? R = 0;
+                foreach (var i in T)
+                {
+                    R += (i.UnitPrice * i.Quantity);
+                }
+                return R;
+
+
+            }
+            else
+            {
+                decimal? R = 0;
+                return R;
+            }
+        }
+
+
+
+        public JsonResult DYCVerkocht()
+        {
+            var sdy = (from o in db.Order
+                      group o by o.OrderDate.Value.Year into b
+                      select b.Key).ToList();
+
+            var FY = sdy.FirstOrDefault();
+            var LY = sdy.LastOrDefault();
+            var YC = sdy.Count();
+
+            //var t1 = (from o in db.OrderDetails
+            //          group o by o.year into y
+            //          select y).ToList();
+
+            var t2 = (from o in db.OrderDetails
+                      select o).ToList();
+
+            var ODCL = new List<CLY>();
+            if (t2 != null)
+            {
+                for (int? i = FY; i <= LY; i++)
+                {
+                    var TEMPCT = new List<CT>();
+
+                    if (t2.Where(x => x.year == i) != null)
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                T = GTCY((int)i, c.CName)
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CLY
+                        {
+                            Y = (int)i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                    else
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                T = 0
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CLY
+                        {
+                            Y = (int)i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                }
+            }
+
+            if (ODCL != null)
+            {
+                var t6 = new object[YC + 1];
+                t6[0] = new object[]
+                    {
+                        "Year",
+                        "Bord en Kaartspellen",
+                        "Poppen",
+                        "Speelvoertuigen",
+                        "Video games",
+                        "Puzzels",
+                        "Lego",
+                        "Bouwen",
+                        "Boeken",
+                        "Hobby en creatief",
+                        "Baby en peuter",
+                        "Buitenspeelgoed"
+                    };
+
+                var j = 0;
+                foreach (var i in ODCL) { 
+                    j++;
+                    if (i != null)
+                    {
+                        t6[j] = new object[] { i.Y.ToString(),
+                            i.ct.Where(x => x.C == "Bord en Kaartspellen").Select(c => c.T).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Poppen").Select(c => c.T).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Speelvoertuigen").Select(c => c.T).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Video games").Select(c => c.T).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Puzzels").Select(c => c.T).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Lego").Select(c => c.T).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Bouwen").Select(c => c.T).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Boeken").Select(c => c.T).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Hobby en creatief").Select(c => c.T).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Baby en peuter").Select(c => c.T).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Buitenspeelgoed").Select(c => c.T).FirstOrDefault(),
+
+
+                        };
+                    }
+                    else
+                    {
+                        t6[j] = new object[] { i.Y.ToString(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+                    }
+
+                }
+
                 return new JsonResult
                 {
-                    Data = chartData,
+                    Data = t6,
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet
                 };
             }
@@ -494,127 +604,1569 @@ namespace Toymania.Controllers
                 Data = null,
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
-
-
-
-            //List<string> LT = new List<string>();
-            //List<decimal?> LT2 = new List<decimal?>();
-
-            //foreach (var item in test3)
-            //{
-            //    LT.Add(item.Key);
-            //    foreach (var i in item)
-            //    {
-            //        foreach (var i2 in i)
-            //        {
-            //            LT2.Add(i2);
-            //        }
-            //    }
-            //}
-
-            //var c = new Chart(width: 800, height: 200).AddSeries(
-            //    chartType: "colomn",
-            //    xValue: LT,
-            //    yValues: LT2).Write();
-            //ViewBag.c = c;
-            //ViewData["c"] = c;
-            //return null;
         }
-        
-        //test2
-        public ActionResult IndexT(int y)
+
+        public JsonResult DYCWinst()
         {
-            // int year = y
-            int year = 2018;                                //I
-            var KDY = new DateTime(01 / 01 / year + 1);
-            var GDY = new DateTime(31 / 12 / year - 1);
+            var sdy = (from o in db.Order
+                       group o by o.OrderDate.Value.Year into b
+                       select b.Key).ToList();
 
-            //var test = from od in db.OrderDetails
-            //           from o in db.Order
-            //           where od.Order.OrderDate >  date1 & od.Order.OrderDate < date2 & o.OrderDate > date1 & o.OrderDate < date2
-            //           select [new list]
+            var FY = sdy.FirstOrDefault();
+            var LY = sdy.LastOrDefault();
+            var YC = sdy.Count();
 
-            //maanden selecteren 
-            var Test1 = from M in
-                     (from m in db.Order
-                      where m.OrderDate > GDY & m.OrderDate < KDY
-                      select m.OrderDate).ToList()
-                        select Convert.ToDateTime(M).ToString("MMMM");
+            //var t1 = (from o in db.OrderDetails
+            //          group o by o.year into y
+            //          select y).ToList();
 
+            var t2 = (from o in db.OrderDetails
+                      select o).ToList();
 
-
-
-            var test2 = from od in db.OrderDetails
-                        from o in db.Order
-                        where od.Order.OrderDate > GDY & od.Order.OrderDate < KDY & o.OrderDate > GDY & o.OrderDate < KDY
-                        select new { detailid = od.OrderDetailId, month = Convert.ToDateTime(o.OrderDate).ToString("MMMM") };
-
-            //per jaarsmaanden totaal omzet
-            // select sum from o.total, group by convert to month o.date
-            var JMTO = from o in db.Order
-                       where o.OrderDate > GDY & o.OrderDate < KDY
-                       group o.Total by Convert.ToDateTime(o.OrderDate).ToString("MMMM") into b
-                       select new { maand = b, totaal = b.Sum(), };
-
-
-            var test3 = from o in db.Order
-                        let m = from oo in db.Order
-                                where oo.OrderDate > GDY & oo.OrderDate < KDY
-                                group oo.Total by Convert.ToDateTime(oo.OrderDate).ToString("MMMM") into b
-                                select b.Sum()
-                        group m by Convert.ToDateTime(o.OrderDate).ToString("MMMM") into cp
-                        select cp;
-
-
-
-            List<string> LT = new List<string>();
-            List<decimal?> LT2 = new List<decimal?>();
-
-            foreach (var item in test3)
+            var ODCL = new List<CLY>();
+            if (t2 != null)
             {
-                LT.Add(item.Key);
-                foreach (var i in item)
+                for (int? i = FY; i <= LY; i++)
                 {
-                    foreach (var i2 in i)
+                    var TEMPCT = new List<CT>();
+
+                    if (t2.Where(x => x.year == i) != null)
                     {
-                        LT2.Add(i2);
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                t = GTWCY((int)i, c.CName)
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CLY
+                        {
+                            Y = (int)i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                    else
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                t = 0
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CLY
+                        {
+                            Y = (int)i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
                     }
                 }
             }
 
-            var c = new Chart(width: 800, height: 200).AddSeries(
-                chartType: "colomn",
-                xValue: LT,
-                yValues: LT2).Write();
+            if (ODCL != null)
+            {
+                var t6 = new object[YC + 1];
+                t6[0] = new object[]
+                    {
+                        "Year",
+                        "Bord en Kaartspellen",
+                        "Poppen",
+                        "Speelvoertuigen",
+                        "Video games",
+                        "Puzzels",
+                        "Lego",
+                        "Bouwen",
+                        "Boeken",
+                        "Hobby en creatief",
+                        "Baby en peuter",
+                        "Buitenspeelgoed"
+                    };
 
-            ViewBag.d = c;
-            ViewData["d"] = c;
+                var j = 0;
+                foreach (var i in ODCL)
+                {
+                    j++;
+                    if (i != null)
+                    {
+                        t6[j] = new object[] { i.Y.ToString(),
+                            i.ct.Where(x => x.C == "Bord en Kaartspellen").Select(c => c.t).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Poppen").Select(c => c.t).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Speelvoertuigen").Select(c => c.t).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Video games").Select(c => c.t).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Puzzels").Select(c => c.t).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Lego").Select(c => c.t).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Bouwen").Select(c => c.t).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Boeken").Select(c => c.t).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Hobby en creatief").Select(c => c.t).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Baby en peuter").Select(c => c.t).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Buitenspeelgoed").Select(c => c.t).FirstOrDefault(),
 
 
+                        };
+                    }
+                    else
+                    {
+                        t6[j] = new object[] { i.Y.ToString(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                    }
 
-            return View();
+                }
+
+                return new JsonResult
+                {
+                    Data = t6,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+            return new JsonResult
+            {
+                Data = null,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
         }
+
+        public JsonResult DYCOmzet()
+        {
+            var sdy = (from o in db.Order
+                       group o by o.OrderDate.Value.Year into b
+                       select b.Key).ToList();
+
+            var FY = sdy.FirstOrDefault();
+            var LY = sdy.LastOrDefault();
+            var YC = sdy.Count();
+
+            //var t1 = (from o in db.OrderDetails
+            //          group o by o.year into y
+            //          select y).ToList();
+
+            var t2 = (from o in db.OrderDetails
+                      select o).ToList();
+
+            var ODCL = new List<CLY>();
+            if (t2 != null)
+            {
+                for (int? i = FY; i <= LY; i++)
+                {
+                    var TEMPCT = new List<CT>();
+
+                    if (t2.Where(x => x.year == i) != null)
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                t = GTOCY((int)i, c.CName)
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CLY
+                        {
+                            Y = (int)i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                    else
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                t = 0
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CLY
+                        {
+                            Y = (int)i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                }
+            }
+
+            if (ODCL != null)
+            {
+                var t6 = new object[YC + 1];
+                t6[0] = new object[]
+                    {
+                        "Year",
+                        "Bord en Kaartspellen",
+                        "Poppen",
+                        "Speelvoertuigen",
+                        "Video games",
+                        "Puzzels",
+                        "Lego",
+                        "Bouwen",
+                        "Boeken",
+                        "Hobby en creatief",
+                        "Baby en peuter",
+                        "Buitenspeelgoed"
+                    };
+
+                var j = 0;
+                foreach (var i in ODCL)
+                {
+                    j++;
+                    if (i != null)
+                    {
+                        t6[j] = new object[] { i.Y.ToString(),
+                            i.ct.Where(x => x.C == "Bord en Kaartspellen").Select(c => c.t).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Poppen").Select(c => c.t).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Speelvoertuigen").Select(c => c.t).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Video games").Select(c => c.t).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Puzzels").Select(c => c.t).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Lego").Select(c => c.t).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Bouwen").Select(c => c.t).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Boeken").Select(c => c.t).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Hobby en creatief").Select(c => c.t).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Baby en peuter").Select(c => c.t).FirstOrDefault(),
+                            i.ct.Where(x => x.C == "Buitenspeelgoed").Select(c => c.t).FirstOrDefault(),
+
+
+                        };
+                    }
+                    else
+                    {
+                        t6[j] = new object[] { i.Y.ToString(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                    }
+
+                }
+
+                return new JsonResult
+                {
+                    Data = t6,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+            return new JsonResult
+            {
+                Data = null,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+        /*-------------------------------------------------------------------------------------------------*/
+        public int TCM(int Y, string CName, int M) //get total category(sales)
+        {
+            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            var T = (from od in db.OrderDetails
+                     where od.year == Y && od.CName == CName && od.Month == M
+                     select od.Quantity).Sum();
+
+            if (T != null)
+            {
+                var R = (int)T;
+                return R;
+            }
+            else
+            {
+                var R = 0;
+                return R;
+            }
+        }
+
+        public decimal? WCM(int Y, string CName, int M) //get total winst category
+        {
+            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            var T = from od in db.OrderDetails
+                    where od.year == Y && od.CName == CName && od.Month == M
+                    select od;
+            //functie die toy, quantity, prijs neemt en totaal uitrekent
+
+            if (T != null)
+            {
+                decimal? R = 0;
+                foreach (var i in T)
+                {
+                    R += (i.UnitPrice * i.Quantity) * 1.08m; //8% winst(m = decimal representatie)
+                }
+                return R;
+
+
+            }
+            else
+            {
+                decimal? R = 0;
+                return R;
+            }
+        }
+
+        public decimal? OCM(int Y, string CName, int M) //get total omzet category
+        {
+            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            var T = from od in db.OrderDetails
+                    where od.year == Y && od.CName == CName && od.Month == M
+                    select od;
+            //functie die toy, quantity, prijs neemt en totaal uitrekent
+
+            if (T != null)
+            {
+                decimal? R = 0;
+                foreach (var i in T)
+                {
+                    R += (i.UnitPrice * i.Quantity);
+                }
+                return R;
+
+
+            }
+            else
+            {
+                decimal? R = 0;
+                return R;
+            }
+        }
+
+        public JsonResult DMCV(int y)
+        {
+            var t1 = (from o in db.OrderDetails
+                      where o.year == y
+                      select o).ToList();
+
+            var ODCL = new List<CLM>();
+            if (t1 != null)
+            {
+                for (int i = 0; i <= 12; i++)
+                {
+                    var TEMPCT = new List<CT>();
+
+                    if (t1.Where(x => x.Month == i) != null)
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                T = TCM(y, c.CName, i)
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CLM
+                        {
+                            M = i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                    else
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                T = 0
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CLM
+                        {
+                            M = i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                }
+            }
+
+
+            if (ODCL != null)
+            {
+                var t6 = new object[12 + 1];
+
+                t6[0] = new object[]
+                  {
+                    "Month",
+                    "Bord en Kaartspellen",
+                    "Poppen",
+                    "Speelvoertuigen",
+                    "Video games",
+                    "Puzzels",
+                    "Lego",
+                    "Bouwen",
+                    "Boeken",
+                    "Hobby en creatief",
+                    "Baby en peuter",
+                    "Buitenspeelgoed"
+                  };
+                for (int i = 1; i <= 12; i++)
+                {
+                    string monthName = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i);
+                    var MD = ODCL.Where(a => a.M.Equals(i)).FirstOrDefault();
+                    if (MD != null)
+                    {
+                        t6[i] = new object[] { monthName,
+                            MD.ct.Where(x => x.C == "Bord en Kaartspellen").Select(c => c.T).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Poppen").Select(c => c.T).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Speelvoertuigen").Select(c => c.T).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Video games").Select(c => c.T).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Puzzels").Select(c => c.T).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Lego").Select(c => c.T).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Bouwen").Select(c => c.T).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Boeken").Select(c => c.T).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Hobby en creatief").Select(c => c.T).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Baby en peuter").Select(c => c.T).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Buitenspeelgoed").Select(c => c.T).FirstOrDefault(),
+
+
+                        };
+                    }
+                    else
+                    {
+                        t6[i] = new object[] { monthName, 0 };
+                    }
+
+                }
+                return new JsonResult
+                {
+                    Data = t6,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+            return new JsonResult
+            {
+                Data = null,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult DMCW(int y)
+        {
+            var t1 = (from o in db.OrderDetails
+                      where o.year == y
+                      select o).ToList();
+
+            var ODCL = new List<CLM>();
+            if (t1 != null)
+            {
+                for (int i = 0; i <= 12; i++)
+                {
+                    var TEMPCT = new List<CT>();
+
+                    if (t1.Where(x => x.Month == i) != null)
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                t = WCM(y, c.CName, i)
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CLM
+                        {
+                            M = i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                    else
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                t = 0m
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CLM
+                        {
+                            M = i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                }
+            }
+
+
+            if (ODCL != null)
+            {
+                var t6 = new object[12 + 1];
+
+                t6[0] = new object[]
+                  {
+                    "Month",
+                    "Bord en Kaartspellen",
+                    "Poppen",
+                    "Speelvoertuigen",
+                    "Video games",
+                    "Puzzels",
+                    "Lego",
+                    "Bouwen",
+                    "Boeken",
+                    "Hobby en creatief",
+                    "Baby en peuter",
+                    "Buitenspeelgoed"
+                  };
+                for (int i = 1; i <= 12; i++)
+                {
+                    string monthName = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i);
+                    var MD = ODCL.Where(a => a.M.Equals(i)).FirstOrDefault();
+                    if (MD != null)
+                    {
+                        t6[i] = new object[] { monthName,
+                            MD.ct.Where(x => x.C == "Bord en Kaartspellen").Select(c => c.t).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Poppen").Select(c => c.t).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Speelvoertuigen").Select(c => c.t).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Video games").Select(c => c.t).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Puzzels").Select(c => c.t).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Lego").Select(c => c.t).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Bouwen").Select(c => c.t).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Boeken").Select(c => c.t).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Hobby en creatief").Select(c => c.t).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Baby en peuter").Select(c => c.t).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Buitenspeelgoed").Select(c => c.t).FirstOrDefault(),
+
+
+                        };
+                    }
+                    else
+                    {
+                        t6[i] = new object[] { monthName, 0 };
+                    }
+
+                }
+                return new JsonResult
+                {
+                    Data = t6,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+            return new JsonResult
+            {
+                Data = null,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult DMCO(int y)
+        {
+            var t1 = (from o in db.OrderDetails
+                      where o.year == y
+                      select o).ToList();
+
+            var ODCL = new List<CLM>();
+            if (t1 != null)
+            {
+                for (int i = 0; i <= 12; i++)
+                {
+                    var TEMPCT = new List<CT>();
+
+                    if (t1.Where(x => x.Month == i) != null)
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                t = OCM(y, c.CName, i)
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CLM
+                        {
+                            M = i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                    else
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                t = 0m
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CLM
+                        {
+                            M = i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                }
+            }
+
+
+            if (ODCL != null)
+            {
+                var t6 = new object[12 + 1];
+
+                t6[0] = new object[]
+                  {
+                    "Month",
+                    "Bord en Kaartspellen",
+                    "Poppen",
+                    "Speelvoertuigen",
+                    "Video games",
+                    "Puzzels",
+                    "Lego",
+                    "Bouwen",
+                    "Boeken",
+                    "Hobby en creatief",
+                    "Baby en peuter",
+                    "Buitenspeelgoed"
+                  };
+                for (int i = 1; i <= 12; i++)
+                {
+                    string monthName = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i);
+                    var MD = ODCL.Where(a => a.M.Equals(i)).FirstOrDefault();
+                    if (MD != null)
+                    {
+                        t6[i] = new object[] { monthName,
+                            MD.ct.Where(x => x.C == "Bord en Kaartspellen").Select(c => c.t).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Poppen").Select(c => c.t).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Speelvoertuigen").Select(c => c.t).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Video games").Select(c => c.t).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Puzzels").Select(c => c.t).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Lego").Select(c => c.t).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Bouwen").Select(c => c.t).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Boeken").Select(c => c.t).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Hobby en creatief").Select(c => c.t).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Baby en peuter").Select(c => c.t).FirstOrDefault(),
+                            MD.ct.Where(x => x.C == "Buitenspeelgoed").Select(c => c.t).FirstOrDefault(),
+
+
+                        };
+                    }
+                    else
+                    {
+                        t6[i] = new object[] { monthName, 0 };
+                    }
+
+                }
+                return new JsonResult
+                {
+                    Data = t6,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+            return new JsonResult
+            {
+                Data = null,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        /*-------------------Day-------------------*/
+        public int TCD(int Y, string CName, int M, int D) //get total category(sales)                   //////////////IIIIIIIIIII check
+        {
+            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            var T = (from od in db.OrderDetails
+                     where od.year == Y && od.CName == CName && od.Month == M && od.Day == D
+                     select od.Quantity).Sum(); // ToList(); ///? quantity.sum != quantity * sum
+
+            if (T != null)
+            {
+                //var R = 0;
+                //foreach(var I in T)
+                //{
+                //    R += (int)I;
+                //}
+                var R = (int)T;
+                return R;
+            }
+            else
+            {
+                var R = 0;
+                return R;
+            }
+        }
+
+        public decimal? WCD(int Y, string CName, int M, int D) //get total winst category
+        {
+            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            var T = from od in db.OrderDetails
+                    where od.year == Y && od.CName == CName && od.Month == M && od.Day == D
+                    select od;
+            //functie die toy, quantity, prijs neemt en totaal uitrekent
+
+            if (T != null)
+            {
+                decimal? R = 0;
+                foreach (var i in T)
+                {
+                    R += (i.UnitPrice * i.Quantity) * 1.08m; //8% winst(m = decimal representatie)
+                }
+                return R;
+
+
+            }
+            else
+            {
+                decimal? R = 0;
+                return R;
+            }
+        }
+
+        public decimal? OCD(int Y, string CName, int M, int D) //get total omzet category
+        {
+            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            var T = from od in db.OrderDetails
+                    where od.year == Y && od.CName == CName && od.Month == M && od.Day == D
+                    select od;
+            //functie die toy, quantity, prijs neemt en totaal uitrekent
+
+            if (T != null)
+            {
+                decimal? R = 0;
+                foreach (var i in T)
+                {
+                    R += (i.UnitPrice * i.Quantity);
+                }
+                return R;
+
+
+            }
+            else
+            {
+                decimal? R = 0;
+                return R;
+            }
+        }
+
+        public JsonResult DDMCV(int y, string m)
+        {
+            int M = DateTime.ParseExact(m, "MMMM", CultureInfo.InvariantCulture).Month;
+            int days = DateTime.DaysInMonth(y, M);
+
+
+            var t1 = (from o in db.OrderDetails
+                      where o.year == y && o.Month == M
+                      select o).ToList();
+
+            var ODCL = new List<CLD>();
+            if (t1 != null)
+            {
+                for (int i = 0; i <= days; i++)
+                {
+                    var TEMPCT = new List<CT>();
+
+                    if (t1.Where(x => x.Day == i) != null)
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                T = TCD(y, c.CName, M, i)
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CLD
+                        {
+                            D = i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                    else
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                T = 0
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CLD
+                        {
+                            D = i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                }
+            }
+
+            if (ODCL != null)
+            {
+                var t6 = new object[days + 1];
+
+                t6[0] = new object[]
+                  {
+                    "Day",
+                    "Bord en Kaartspellen",
+                    "Poppen",
+                    "Speelvoertuigen",
+                    "Video games",
+                    "Puzzels",
+                    "Lego",
+                    "Bouwen",
+                    "Boeken",
+                    "Hobby en creatief",
+                    "Baby en peuter",
+                    "Buitenspeelgoed"
+                  };
+                for (int i = 1; i <= days; i++)
+                {
+                    var DD = ODCL.Where(a => a.D.Equals(i)).FirstOrDefault();
+                    if (DD != null)
+                    {
+                        t6[i] = new object[] { i.ToString(),
+                            DD.ct.Where(x => x.C == "Bord en Kaartspellen").Select(c => c.T).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Poppen").Select(c => c.T).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Speelvoertuigen").Select(c => c.T).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Video games").Select(c => c.T).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Puzzels").Select(c => c.T).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Lego").Select(c => c.T).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Bouwen").Select(c => c.T).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Boeken").Select(c => c.T).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Hobby en creatief").Select(c => c.T).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Baby en peuter").Select(c => c.T).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Buitenspeelgoed").Select(c => c.T).FirstOrDefault(),
+
+
+                        };
+                    }
+                    else
+                    {
+                        t6[i] = new object[] { i.ToString(), 0 };
+                    }
+
+                }
+                return new JsonResult
+                {
+                    Data = t6,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+            return new JsonResult
+            {
+                Data = null,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult DDMCW(int y, string m)
+        {
+            int M = DateTime.ParseExact(m, "MMMM", CultureInfo.InvariantCulture).Month;
+            int days = DateTime.DaysInMonth(y, M);
+
+
+            var t1 = (from o in db.OrderDetails
+                      where o.year == y && o.Month == M
+                      select o).ToList();
+
+            var ODCL = new List<CLD>();
+            if (t1 != null)
+            {
+                for (int i = 0; i <= days; i++)
+                {
+                    var TEMPCT = new List<CT>();
+
+                    if (t1.Where(x => x.Day == i) != null)
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                t = WCD(y, c.CName, M, i)
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CLD
+                        {
+                            D = i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                    else
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                t = 0m
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CLD
+                        {
+                            D = i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                }
+            }
+
+            if (ODCL != null)
+            {
+                var t6 = new object[days + 1];
+
+                t6[0] = new object[]
+                  {
+                    "Day",
+                    "Bord en Kaartspellen",
+                    "Poppen",
+                    "Speelvoertuigen",
+                    "Video games",
+                    "Puzzels",
+                    "Lego",
+                    "Bouwen",
+                    "Boeken",
+                    "Hobby en creatief",
+                    "Baby en peuter",
+                    "Buitenspeelgoed"
+                  };
+                for (int i = 1; i <= days; i++)
+                {
+                    var DD = ODCL.Where(a => a.D.Equals(i)).FirstOrDefault();
+                    if (DD != null)
+                    {
+                        t6[i] = new object[] { i.ToString(),
+                            DD.ct.Where(x => x.C == "Bord en Kaartspellen").Select(c => c.t).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Poppen").Select(c => c.t).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Speelvoertuigen").Select(c => c.t).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Video games").Select(c => c.t).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Puzzels").Select(c => c.t).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Lego").Select(c => c.t).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Bouwen").Select(c => c.t).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Boeken").Select(c => c.t).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Hobby en creatief").Select(c => c.t).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Baby en peuter").Select(c => c.t).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Buitenspeelgoed").Select(c => c.t).FirstOrDefault(),
+
+
+                        };
+                    }
+                    else
+                    {
+                        t6[i] = new object[] { i.ToString(), 0 };
+                    }
+
+                }
+                return new JsonResult
+                {
+                    Data = t6,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+            return new JsonResult
+            {
+                Data = null,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult DDMCO(int y, string m)
+        {
+            int M = DateTime.ParseExact(m, "MMMM", CultureInfo.InvariantCulture).Month;
+            int days = DateTime.DaysInMonth(y, M);
+
+
+            var t1 = (from o in db.OrderDetails
+                      where o.year == y && o.Month == M
+                      select o).ToList();
+
+            var ODCL = new List<CLD>();
+            if (t1 != null)
+            {
+                for (int i = 0; i <= days; i++)
+                {
+                    var TEMPCT = new List<CT>();
+
+                    if (t1.Where(x => x.Day == i) != null)
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                t = OCD(y, c.CName, M, i)
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CLD
+                        {
+                            D = i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                    else
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                t = 0m
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CLD
+                        {
+                            D = i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                }
+            }
+
+            if (ODCL != null)
+            {
+                var t6 = new object[days + 1];
+
+                t6[0] = new object[]
+                  {
+                    "Day",
+                    "Bord en Kaartspellen",
+                    "Poppen",
+                    "Speelvoertuigen",
+                    "Video games",
+                    "Puzzels",
+                    "Lego",
+                    "Bouwen",
+                    "Boeken",
+                    "Hobby en creatief",
+                    "Baby en peuter",
+                    "Buitenspeelgoed"
+                  };
+                for (int i = 1; i <= days; i++)
+                {
+                    //string monthName = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i);
+                    var DD = ODCL.Where(a => a.D.Equals(i)).FirstOrDefault();
+                    if (DD != null)
+                    {
+                        t6[i] = new object[] { i.ToString(),
+                            DD.ct.Where(x => x.C == "Bord en Kaartspellen").Select(c => c.t).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Poppen").Select(c => c.t).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Speelvoertuigen").Select(c => c.t).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Video games").Select(c => c.t).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Puzzels").Select(c => c.t).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Lego").Select(c => c.t).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Bouwen").Select(c => c.t).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Boeken").Select(c => c.t).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Hobby en creatief").Select(c => c.t).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Baby en peuter").Select(c => c.t).FirstOrDefault(),
+                            DD.ct.Where(x => x.C == "Buitenspeelgoed").Select(c => c.t).FirstOrDefault(),
+
+
+                        };
+                    }
+                    else
+                    {
+                        t6[i] = new object[] { i.ToString(), 0 };
+                    }
+
+                }
+                return new JsonResult
+                {
+                    Data = t6,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+            return new JsonResult
+            {
+                Data = null,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        /*-------------------------------------------------------------------------------------------------*/
+        public int GTC(int W, string CName, int y) //get total category(sales)
+        {
+            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            var T = (from od in db.OrderDetails
+                     where od.Week == W && od.CName == CName && od.year == y
+                     select od.Quantity).Sum();
+            if (T != null)
+            {
+                var R = (int)T;
+                return R;
+            }
+            else
+            {
+                var R = 0;
+                return R;
+            }
+        }
+
+        public decimal? GTWC(int W, string CName, int y) //get total winst category
+        {
+            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            var T = from od in db.OrderDetails
+                    where od.Week == W && od.CName == CName && od.year == y
+                    select od;
+            //functie die toy, quantity, prijs neemt en totaal uitrekent
+
+            if (T != null)
+            {
+                decimal? R = 0;
+                foreach (var i in T)
+                {
+                    R += (i.UnitPrice * i.Quantity) * 1.08m; //8% winst(m = decimal representatie)
+                }                
+                return R;
+
+
+            }
+            else
+            {
+                decimal? R = 0;
+                return R;
+            }
+        }
+
+        public decimal? GTOC(int W, string CName, int y) //get total omzet category
+        {
+            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            var T = from od in db.OrderDetails
+                    where od.Week == W && od.CName == CName && od.year == y
+                    select od;
+            //functie die toy, quantity, prijs neemt en totaal uitrekent
+
+            if (T != null)
+            {
+                decimal? R = 0;
+                foreach (var i in T)
+                {
+                    R += (i.UnitPrice * i.Quantity);
+                }
+                return R;
+
+
+            }
+            else
+            {
+                decimal? R = 0;
+                return R;
+            }
+        }
+
+
+          
+
+        public JsonResult DWCVerkocht(int y) //DATA WEEK CATEGORIES
+        {
+            var t1 = (from o in db.OrderDetails
+                      where o.year == y
+                      select o).ToList();
+
+            var ODCL = new List<CL>();
+            if(t1 != null)
+            {
+                for(int i = 0; i <= 53; i++)
+                {
+                    var TEMPCT = new List<CT>();
+
+                    if(t1.Where(x=> x.Week == i) != null)
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                T = GTC(i, c.CName, y)
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CL
+                        {
+                            W = i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                    else
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach(var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                T = 0
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CL
+                        {
+                            W = i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                }
+            }
+
+            if (ODCL != null)
+            {
+                var wc = 53;
+                var t6 = new object[wc + 1];
+                t6[0] = new object[]
+                    {
+                        "Week",
+                        "Bord en Kaartspellen",
+                        "Poppen",
+                        "Speelvoertuigen",
+                        "Video games",
+                        "Puzzels",
+                        "Lego",
+                        "Bouwen",
+                        "Boeken",
+                        "Hobby en creatief",
+                        "Baby en peuter",
+                        "Buitenspeelgoed"
+                    };
+
+                
+                for (int j = 1; j <= wc; j++)
+                {
+                    var wD = ODCL.Where(c => c.W == j).FirstOrDefault();
+                    if (wD != null)
+                    {
+                        t6[j] = new object[] { "week" + wD.W,
+                            wD.ct.Where(x => x.C == "Bord en Kaartspellen").Select(c => c.T).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Poppen").Select(c => c.T).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Speelvoertuigen").Select(c => c.T).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Video games").Select(c => c.T).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Puzzels").Select(c => c.T).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Lego").Select(c => c.T).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Bouwen").Select(c => c.T).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Boeken").Select(c => c.T).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Hobby en creatief").Select(c => c.T).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Baby en peuter").Select(c => c.T).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Buitenspeelgoed").Select(c => c.T).FirstOrDefault(),
+
+
+                        };
+                    }
+
+                }
+
+                return new JsonResult
+                {
+                    Data = t6,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+            return new JsonResult
+            {
+                Data = null,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult DWCWinst(int y) //DATA WEEK CATEGORIES
+        {
+            var t1 = (from o in db.OrderDetails
+                      where o.year == y
+                      select o).ToList();
+
+            var ODCL = new List<CL>();
+            if (t1 != null)
+            {
+                for (int i = 0; i <= 53; i++)
+                {
+                    var TEMPCT = new List<CT>();
+
+                    if (t1.Where(x => x.Week == i) != null)
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                t = GTWC(i, c.CName, y) //deze functie is anders dan DWCVerkocht(enige wat verandert wordt/ winst ipv sum)
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CL
+                        {
+                            W = i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                    else
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                t = 0m
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CL
+                        {
+                            W = i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                }
+            }
+
+            if (ODCL != null)
+            {
+                var wc = 53;
+                var t6 = new object[wc + 1];
+                t6[0] = new object[]
+                    {
+                        "Week",
+                        "Bord en Kaartspellen",
+                        "Poppen",
+                        "Speelvoertuigen",
+                        "Video games",
+                        "Puzzels",
+                        "Lego",
+                        "Bouwen",
+                        "Boeken",
+                        "Hobby en creatief",
+                        "Baby en peuter",
+                        "Buitenspeelgoed"
+                    };
+
+
+                for (int j = 1; j <= wc; j++)
+                {
+                    var wD = ODCL.Where(c => c.W == j).FirstOrDefault();
+                    if (wD != null)
+                    {
+                        t6[j] = new object[] { "week" + wD.W,
+                            wD.ct.Where(x => x.C == "Bord en Kaartspellen").Select(c => c.t).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Poppen").Select(c => c.t).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Speelvoertuigen").Select(c => c.t).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Video games").Select(c => c.t).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Puzzels").Select(c => c.t).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Lego").Select(c => c.t).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Bouwen").Select(c => c.t).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Boeken").Select(c => c.t).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Hobby en creatief").Select(c => c.t).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Baby en peuter").Select(c => c.t).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Buitenspeelgoed").Select(c => c.t).FirstOrDefault(),
+
+
+                        };
+                    }
+
+                }
+
+                return new JsonResult
+                {
+                    Data = t6,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+            return new JsonResult
+            {
+                Data = null,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult DWCOmzet(int y) //DATA WEEK CATEGORIES
+        {
+            var t1 = (from o in db.OrderDetails
+                      where o.year == y
+                      select o).ToList();
+
+            var ODCL = new List<CL>();
+            if (t1 != null)
+            {
+                for (int i = 0; i <= 53; i++)
+                {
+                    var TEMPCT = new List<CT>();
+
+                    if (t1.Where(x => x.Week == i) != null)
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                t = GTOC(i, c.CName, y) //deze functie is anders dan DWCVerkocht(enige wat verandert wordt/ omzet ipv sum)
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CL
+                        {
+                            W = i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                    else
+                    {
+                        var CC = from C in db.Categories
+                                 select C;
+                        foreach (var c in CC)
+                        {
+                            var T2 = new CT
+                            {
+                                C = c.CName,
+                                t = 0m
+                            };
+                            TEMPCT.Add(T2);
+                        }
+
+                        var TEMPCL = new CL
+                        {
+                            W = i,
+                            ct = TEMPCT
+                        };
+                        ODCL.Add(TEMPCL);
+                    }
+                }
+            }
+
+            if (ODCL != null)
+            {
+                var wc = 53;
+                var t6 = new object[wc + 1];
+                t6[0] = new object[]
+                    {
+                        "Week",
+                        "Bord en Kaartspellen",
+                        "Poppen",
+                        "Speelvoertuigen",
+                        "Video games",
+                        "Puzzels",
+                        "Lego",
+                        "Bouwen",
+                        "Boeken",
+                        "Hobby en creatief",
+                        "Baby en peuter",
+                        "Buitenspeelgoed"
+                    };
+
+
+                for (int j = 1; j <= wc; j++)
+                {
+                    var wD = ODCL.Where(c => c.W == j).FirstOrDefault();
+                    if (wD != null)
+                    {
+                        t6[j] = new object[] { "week" + wD.W,
+                            wD.ct.Where(x => x.C == "Bord en Kaartspellen").Select(c => c.t).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Poppen").Select(c => c.t).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Speelvoertuigen").Select(c => c.t).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Video games").Select(c => c.t).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Puzzels").Select(c => c.t).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Lego").Select(c => c.t).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Bouwen").Select(c => c.t).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Boeken").Select(c => c.t).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Hobby en creatief").Select(c => c.t).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Baby en peuter").Select(c => c.t).FirstOrDefault(),
+                            wD.ct.Where(x => x.C == "Buitenspeelgoed").Select(c => c.t).FirstOrDefault(),
+
+
+                        };
+                    }
+
+                }
+
+                return new JsonResult
+                {
+                    Data = t6,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+            return new JsonResult
+            {
+                Data = null,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+        /*-------------------Day-------------------*/
+
+
+
+        /*-------------------------------------------------------------------------------------------------*/
+
+        //filter idee: filterlist in loop generated by javascript radio checker?
+
+
     }
 
 }
 
 
-// filter op maanden, weken(jaar basis) weeksdagen, maanddagen?
-// op category/sub category
-// omzet + winst
-// aantal verkocht
-// 
-//decimal Jan = 0;
-//decimal feb = 0;
-//decimal mar = 2;
-//decimal apr = 4;
-//var a = new Chart(width: 800, height: 200).AddSeries(
-//    chartType: "column",
-//    xValue: new[] { "Jan", "Feb", "Mar", "apr" },
-//    yValues: new[] { Jan, feb, mar, apr }).Write("png");
-//ViewBag.d = a;
-//ViewData["d"] = a;
-
-// nav bar -> diagram + pie chart
-//diagram filter based on dropdown menu time + object
-// piechart filter = select sub category or category

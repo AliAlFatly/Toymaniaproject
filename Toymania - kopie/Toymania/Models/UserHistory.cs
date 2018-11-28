@@ -16,50 +16,50 @@ namespace Toymania.Models
         TSE15 db = new TSE15();
         List<int> HIDLI { get; set; }
 
-        public ICollection<History> GID(HttpContextBase context)
-        {
-            var HistoryId = from h in db.History
-                            where h.Email == context.User.Identity.GetUserName()
-                            select (ICollection<History>)h;
-            ICollection<History> HIDC = HistoryId.First();
+        //public ICollection<History> GID(HttpContextBase context)
+        //{
+        //    var HistoryId = from h in db.History
+        //                    where h.Email == context.User.Identity.GetUserName()
+        //                    select (ICollection<History>)h;
+        //    ICollection<History> HIDC = HistoryId.First();
 
-            return HIDC;
-        }
-
-
-
-        public int LastRecord()
-        {
-
-            IQueryable<int> HILIQ = db.History.Select(x => x.HistoryId); //HistoryIdList IQueryable
-            List<int> HL = new List<int> { };   //HistoryIdList
-            foreach (int LOI in HILIQ){HL.Add(LOI);}
-            int LH = HL.Last();
-            return LH;
-        }
+        //    return HIDC;
+        //}
 
 
-        public void ATH(History h)
-        {
-            var HT = new History
-            {
-                HistoryId = h.HistoryId,
-                Email = h.Email,
-            };
-            db.History.Add(HT);
-            db.SaveChanges();
-        }
+
+        //public int LastRecord()
+        //{
+
+        //    IQueryable<int> HILIQ = db.History.Select(x => x.HistoryId); //HistoryIdList IQueryable
+        //    List<int> HL = new List<int> { };   //HistoryIdList
+        //    foreach (int LOI in HILIQ){HL.Add(LOI);}
+        //    int LH = HL.Last();
+        //    return LH;
+        //}
 
 
-        public ICollection<History> GH(HttpContextBase c)
-        {
-            var HIQ = from h in db.History
-                            where h.Email == c.User.Identity.GetUserName()
-                            select (ICollection<History>)h;
-            ICollection<History> H = HIQ.First();
+        //public void ATH(History h)
+        //{
+        //    var HT = new History
+        //    {
+        //        HistoryId = h.HistoryId,
+        //        Email = h.Email,
+        //    };
+        //    db.History.Add(HT);
+        //    db.SaveChanges();
+        //}
 
-            return H;
-        }
+
+        //public ICollection<History> GH(HttpContextBase c)
+        //{
+        //    var HIQ = from h in db.History
+        //                    where h.Email == c.User.Identity.GetUserName()
+        //                    select (ICollection<History>)h;
+        //    ICollection<History> H = HIQ.First();
+
+        //    return H;
+        //}
 
     }
 }

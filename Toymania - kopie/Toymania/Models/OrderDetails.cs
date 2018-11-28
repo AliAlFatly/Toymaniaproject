@@ -11,16 +11,12 @@ namespace Toymania.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
-    using Toymania.Models;
-    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Web.Mvc;
 
     public partial class OrderDetails
     {
+        [ScaffoldColumn(false)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int OrderDetailId { get; set; }
         public Nullable<int> OrderId { get; set; }
@@ -28,9 +24,17 @@ namespace Toymania.Models
         public Nullable<int> Quantity { get; set; }
         public Nullable<decimal> UnitPrice { get; set; }
         public string Status { get; set; }
-        public Nullable<int> HistoryId { get; set; }
-
-        public virtual History History { get; set; }
+        [ScaffoldColumn(false)]
+        public string CName { get; set; }
+        [ScaffoldColumn(false)]
+        public string SCName { get; set; }
+        public Nullable<int> Week { get; set; }
+        public Nullable<int> Month { get; set; }
+        public Nullable<int> year { get; set; }
+        public Nullable<int> Day { get; set; }
+        public Nullable<int> Hour { get; set; }
+        public Nullable<int> Minute { get; set; }
+    
         public virtual Order Order { get; set; }
         public virtual Toy Toy { get; set; }
     }
