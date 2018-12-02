@@ -34,7 +34,7 @@ namespace Toymania.Models
         public Nullable<int> Day { get; set; }
         public Nullable<int> Hour { get; set; }
         public Nullable<int> Minute { get; set; }
-    
+
         public virtual Order Order { get; set; }
         public virtual Toy Toy { get; set; }
     }

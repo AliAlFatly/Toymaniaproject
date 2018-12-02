@@ -14,7 +14,7 @@ namespace Toymania.Models
     public class Orders
     {
         TSE15 db = new TSE15();
-
+        ApplicationDbContext d = new ApplicationDbContext();
 
         public int LastRecordO()
         {
@@ -27,6 +27,7 @@ namespace Toymania.Models
 
         public int LastRecordOD()
         {
+            
             IQueryable<int> ODILIQ = db.OrderDetails.Select(x => x.OrderDetailId); //OrderDetailList IQueryable
             List<int> ODL = new List<int> { };   //OrderDetailList
             foreach (int LOI in ODILIQ) { ODL.Add(LOI); }
@@ -77,6 +78,7 @@ namespace Toymania.Models
 
         public List<Order> GO(HttpContextBase c) //get Orders
         {
+            
             var Order = new Order();
             IQueryable<Order> OQ = from o in db.Order
                     where o.Username == c.User.Identity.Name

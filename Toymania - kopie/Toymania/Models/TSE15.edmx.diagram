@@ -23,6 +23,7 @@
         <AssociationConnector Association="TSM15.FK__Toy__ProducerId__1DB06A4F" ManuallyRouted="false" />
         <AssociationConnector Association="TSM15.FK__Toy__SubCategory__208CD6FA" ManuallyRouted="false" />
         <AssociationConnector Association="TSM15.FK__Wishlist__ToysId__1EA48E88" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="TSM15.Coupon" Width="1.5" PointX="5.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -288,3 +288,8 @@ C:\Users\aeazh_000\Desktop\Toymania - kopie\Toymania\bin\Google.Apis.Core.pdb
 C:\Users\aeazh_000\Desktop\Toymania - kopie\Toymania\bin\Google.Apis.Core.xml
 C:\Users\aeazh_000\Desktop\Toymania - kopie\Toymania\bin\PagedList.xml
 C:\Users\aeazh_000\Desktop\Toymania - kopie\Toymania\bin\PagedList.Mvc.xml
+C:\Users\aeazh_000\Desktop\Toymania - kopie\Toymania\obj\Debug\Toymania.Migrations.InitialCreate.resources
+C:\Users\aeazh_000\Desktop\Toymania - kopie\Toymania\obj\Debug\Toymania.csproj.GenerateResource.cache
+C:\Users\aeazh_000\Desktop\Toymania - kopie\Toymania\obj\Debug\Toymania.Migrations.m1.resources
+C:\Users\aeazh_000\Desktop\Toymania - kopie\Toymania\obj\Debug\Toymania.Migrations.m11.resources
+C:\Users\aeazh_000\Desktop\Toymania - kopie\Toymania\obj\Debug\Toymania.Migrations.m2.resources

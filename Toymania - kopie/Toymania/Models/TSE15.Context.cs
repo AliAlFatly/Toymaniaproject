@@ -35,5 +35,6 @@ namespace Toymania.Models
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Toy> Toy { get; set; }
         public virtual DbSet<Wishlist> Wishlist { get; set; }
+        public virtual DbSet<Coupon> Coupon { get; set; }
     }
 }

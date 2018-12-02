@@ -11,7 +11,7 @@ namespace Toymania.Models
 {
     using System;
     using System.Collections.Generic;
-
+    
     public partial class Balance
     {
         public string Email { get; set; }

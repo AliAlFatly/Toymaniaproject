@@ -228,10 +228,28 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountManagersCController.cs" />
     <Compile Include="Controllers\ApplicationUsersController.cs" />
+    <Compile Include="Controllers\CouponController.cs" />
     <Compile Include="Controllers\OrderDetailsController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\StatsController.cs" />
     <Compile Include="Controllers\WishlistManagerController.cs" />
+    <Compile Include="Migrations\201812012133338_InitialCreate.cs" />
+    <Compile Include="Migrations\201812012133338_InitialCreate.Designer.cs">
+      <DependentUpon>201812012133338_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812021239441_m1.cs" />
+    <Compile Include="Migrations\201812021239441_m1.Designer.cs">
+      <DependentUpon>201812021239441_m1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812021243056_m11.cs" />
+    <Compile Include="Migrations\201812021243056_m11.Designer.cs">
+      <DependentUpon>201812021243056_m11.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812021514577_m2.cs" />
+    <Compile Include="Migrations\201812021514577_m2.Designer.cs">
+      <DependentUpon>201812021514577_m2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationUsersViewModel.cs" />
     <Compile Include="Models\App_Start\BundleConfig.cs" />
     <Compile Include="Models\App_Start\FilterConfig.cs" />
@@ -257,6 +275,9 @@
       <DependentUpon>TSE15.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Categories.cs">
+      <DependentUpon>TSE15.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Coupon.cs">
       <DependentUpon>TSE15.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
@@ -305,6 +326,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\BrowsePartial.cs" />
+    <Compile Include="ViewModels\CVM.cs" />
     <Compile Include="ViewModels\HistoryViewModel.cs" />
     <Compile Include="ViewModels\OrderDetailViewModel.cs" />
     <Compile Include="ViewModels\OrdersViewModel.cs" />
@@ -514,6 +536,9 @@
     <Content Include="Views\ApplicationUsers\Index.cshtml" />
     <Content Include="Views\WishlistManager\IndexRA.cshtml" />
     <Content Include="Views\OrderDetails\IndexC.cshtml" />
+    <Content Include="Views\Account\DisplayEmail.cshtml" />
+    <Content Include="Views\Coupon\GenerateCoupons.cshtml" />
+    <Content Include="Views\Coupon\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -530,6 +555,20 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201812012133338_InitialCreate.resx">
+      <DependentUpon>201812012133338_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812021239441_m1.resx">
+      <DependentUpon>201812021239441_m1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812021243056_m11.resx">
+      <DependentUpon>201812021243056_m11.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812021514577_m2.resx">
+      <DependentUpon>201812021514577_m2.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

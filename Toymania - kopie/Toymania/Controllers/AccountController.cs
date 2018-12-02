@@ -18,8 +18,18 @@ namespace Toymania.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
+        //toymaniat1@gmail.com - A@Test@1
+        //toymaniat2@outlook.com - A@Test@2
+        //toymaniat3@outlook.com - A@Test@3
+
         public AccountController()
         {
+        }
+
+        [AllowAnonymous]
+        public ActionResult DisplayEmail()
+        {
+            return View();
         }
 
         private void MigrateShoppingCart(string Email)
@@ -170,8 +180,7 @@ namespace Toymania.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/Register
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -183,15 +192,16 @@ namespace Toymania.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                    MigrateShoppingCart(model.Email);
-                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var callbackUrl = Url.Action(
+                       "ConfirmEmail", "Account",
+                       new { userId = user.Id, code = code },
+                       protocol: Request.Url.Scheme);
 
-                    return RedirectToAction("Index", "Home");
+                    await UserManager.SendEmailAsync(user.Id,
+                       "Confirm your account", callbackUrl);
+                    // ViewBag.Link = callbackUrl;   // Used only for initial demo.
+                    return View("DisplayEmail");
                 }
                 AddErrors(result);
             }
@@ -199,6 +209,61 @@ namespace Toymania.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+
+        //
+        //// POST: /Account/Register
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Register(RegisterViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+        //        var result = await UserManager.CreateAsync(user, model.Password);
+        //        if (result.Succeeded)
+        //        {
+
+        //            var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+        //            var callbackUrl = Url.Action(
+        //               "ConfirmEmail", "Account",
+        //               new { userId = user.Id, code = code },
+        //               protocol: Request.Url.Scheme);
+
+        //            await UserManager.SendEmailAsync(user.Id,
+        //               "Confirm your account",
+        //               "Please confirm your account by clicking this link: <a href=\""
+        //                                               + callbackUrl + "\">link</a>");
+        //            // ViewBag.Link = callbackUrl;   // Used only for initial demo.
+        //            //Add this to check if the email was confirmed.
+        //            //if (!await UserManager.IsEmailConfirmedAsync(user.Id))
+        //            //{
+        //            //    ModelState.AddModelError("", "You need to confirm your email.");
+        //            //    return View(model);
+        //            //}
+        //            return RedirectToAction("PRECE");
+        //            //--------------//
+        //            //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+        //            //MigrateShoppingCart(model.Email);           //!!!!!!!!+++++++++++_______________--------------________________++++++++++++++++!!!!!!!!!!!!!!!!!!//
+
+
+        //            //// For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+        //            //// Send an email with this link
+        //            //// string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+        //            //// var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+        //            //// await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+        //            //return RedirectToAction("Index", "Home");
+        //        }
+        //        AddErrors(result);
+        //    }
+
+        //    // If we got this far, something failed, redisplay form
+        //    return View(model);
+        //}
+
+
 
         //
         // GET: /Account/ConfirmEmail
