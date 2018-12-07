@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Toymania.Models.Toy>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+<div class="Createmarg">
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table Createmarg">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ToysName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.Counter)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MinimumAge)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubCategoryId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Categories.CName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Producers.Name)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ToysName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.Counter)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MinimumAge)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubCategories.SCName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Categories.CName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Producers.Name)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ToysId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ToysId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ToysId })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
