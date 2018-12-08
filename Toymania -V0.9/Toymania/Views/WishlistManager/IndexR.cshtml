@@ -1,0 +1,72 @@
+﻿@model Toymania.ViewModels.WishlistViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<body>
+    @*<table>
+            <tr>
+                <th>
+                    Item Name
+                </th>
+                <th>
+                    Price (each)
+                </th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model.WT)
+            {
+                <tr id="row-@item.WishlistId">
+                    <td>
+                        @Html.ActionLink(item.Toy.ToysName, "Details", "Store", new { id = item.Toy.ToysId }, null)
+                    </td>
+                    <td>
+                        @item.Toy.Price
+                    </td>
+                    <td>
+                        @Html.ActionLink("Remove", "IndexR", new { r = item.WishlistId })
+                    </td>
+                    <td>
+                        @Html.ActionLink("Add to cart", "IndexRA", new { i = item.Toy.ToysId, r = item.WishlistId })
+                    </td>
+                </tr>
+            }
+
+
+
+
+        </table>*@
+
+
+
+    @if (Model.WT != null)
+    {
+        <div class=" toymenu col-md-8">
+            @foreach (var item in Model.WT)
+            {
+                <div class="col-md-4">
+                    <p>
+
+                        <img src="@Url.Content("~/Content/img/"+item.Toy.ItemArtUrl)" />
+                    </p>
+                    <p>
+                        @Html.ActionLink(item.Toy.ToysName, "Details", "Store", new { id = item.Toy.ToysId }, null)
+                    </p>
+                    <p>
+                        <em>Price:</em>
+                        @String.Format("{0:F} Euro", item.Toy.Price)
+                    </p>
+                    <p>
+                        @Html.ActionLink("Remove", "IndexR", new { r = item.WishlistId })
+                    </p>
+                    <p>
+                        @Html.ActionLink("Add to cart", "IndexRA", new { i = item.Toy.ToysId, r = item.WishlistId })
+                    </p>
+
+
+                </div>
+            }
+        </div>
+    }
+</body>

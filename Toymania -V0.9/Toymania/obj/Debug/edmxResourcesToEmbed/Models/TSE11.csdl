@@ -1,0 +1,341 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TSM11" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Balance">
+    <Key>
+      <PropertyRef Name="Email" />
+    </Key>
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Balance1" Type="Double" />
+    <NavigationProperty Name="History" Relationship="Self.FK__History__Email__73BA3083" FromRole="Balance" ToRole="History" />
+    <NavigationProperty Name="Order" Relationship="Self.FK__Order__Email__70DDC3D8" FromRole="Balance" ToRole="Order" />
+    <NavigationProperty Name="Wishlist" Relationship="Self.FK__Wishlist__Email__7B5B524B" FromRole="Balance" ToRole="Wishlist" />
+  </EntityType>
+  <EntityType Name="Cart">
+    <Key>
+      <PropertyRef Name="RecordId" />
+    </Key>
+    <Property Name="RecordId" Type="Int32" Nullable="false" />
+    <Property Name="CartId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ToyId" Type="Int32" />
+    <Property Name="Count" Type="Int32" />
+    <Property Name="DateCreated" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="Toy" Relationship="Self.FK__Cart__ToyId__02084FDA" FromRole="Cart" ToRole="Toy" />
+  </EntityType>
+  <EntityType Name="Categories">
+    <Key>
+      <PropertyRef Name="CategoryId" />
+    </Key>
+    <Property Name="CategoryId" Type="Int32" Nullable="false" />
+    <Property Name="CName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="SubCategories" Relationship="Self.FK__SubCatego__Categ__778AC167" FromRole="Categories" ToRole="SubCategories" />
+    <NavigationProperty Name="Toy" Relationship="Self.FK__Toy__CategoryId__00200768" FromRole="Categories" ToRole="Toy" />
+  </EntityType>
+  <EntityType Name="History">
+    <Key>
+      <PropertyRef Name="HistoryId" />
+    </Key>
+    <Property Name="HistoryId" Type="Int32" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Balance" Relationship="Self.FK__History__Email__73BA3083" FromRole="History" ToRole="Balance" />
+    <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__Histo__04E4BC85" FromRole="History" ToRole="OrderDetails" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="OrderId" />
+    </Key>
+    <Property Name="OrderId" Type="Int32" Nullable="false" />
+    <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Total" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="OrderDate" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="Balance" Relationship="Self.FK__Order__Email__70DDC3D8" FromRole="Order" ToRole="Balance" />
+    <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__Order__6D0D32F4" FromRole="Order" ToRole="OrderDetails" />
+  </EntityType>
+  <EntityType Name="OrderDetails">
+    <Key>
+      <PropertyRef Name="OrderDetailId" />
+    </Key>
+    <Property Name="OrderDetailId" Type="Int32" Nullable="false" />
+    <Property Name="OrderId" Type="Int32" />
+    <Property Name="ToyId" Type="Int32" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="HistoryId" Type="Int32" />
+    <NavigationProperty Name="History" Relationship="Self.FK__OrderDeta__Histo__04E4BC85" FromRole="OrderDetails" ToRole="History" />
+    <NavigationProperty Name="Order" Relationship="Self.FK__OrderDeta__Order__6D0D32F4" FromRole="OrderDetails" ToRole="Order" />
+    <NavigationProperty Name="Toy" Relationship="Self.FK__OrderDeta__ToyId__02FC7413" FromRole="OrderDetails" ToRole="Toy" />
+  </EntityType>
+  <EntityType Name="Producers">
+    <Key>
+      <PropertyRef Name="ProducerId" />
+    </Key>
+    <Property Name="ProducerId" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Toy" Relationship="Self.FK__Toy__ProducerId__7F2BE32F" FromRole="Producers" ToRole="Toy" />
+  </EntityType>
+  <EntityType Name="SubCategories">
+    <Key>
+      <PropertyRef Name="SubCategoryId" />
+    </Key>
+    <Property Name="SubCategoryId" Type="Int32" Nullable="false" />
+    <Property Name="SCName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CategoryId" Type="Int32" />
+    <NavigationProperty Name="Categories" Relationship="Self.FK__SubCatego__Categ__778AC167" FromRole="SubCategories" ToRole="Categories" />
+    <NavigationProperty Name="Toy" Relationship="Self.FK__Toy__SubCategory__01142BA1" FromRole="SubCategories" ToRole="Toy" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Toy">
+    <Key>
+      <PropertyRef Name="ToysId" />
+    </Key>
+    <Property Name="ToysId" Type="Int32" Nullable="false" />
+    <Property Name="ToysName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CategoryId" Type="Int32" />
+    <Property Name="ProducerId" Type="Int32" />
+    <Property Name="ItemArtUrl" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Price" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Counter" Type="Int32" />
+    <Property Name="MinimumAge" Type="Int32" />
+    <Property Name="SubCategoryId" Type="Int32" />
+    <NavigationProperty Name="Cart" Relationship="Self.FK__Cart__ToyId__02084FDA" FromRole="Toy" ToRole="Cart" />
+    <NavigationProperty Name="Categories" Relationship="Self.FK__Toy__CategoryId__00200768" FromRole="Toy" ToRole="Categories" />
+    <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__ToyId__02FC7413" FromRole="Toy" ToRole="OrderDetails" />
+    <NavigationProperty Name="Producers" Relationship="Self.FK__Toy__ProducerId__7F2BE32F" FromRole="Toy" ToRole="Producers" />
+    <NavigationProperty Name="SubCategories" Relationship="Self.FK__Toy__SubCategory__01142BA1" FromRole="Toy" ToRole="SubCategories" />
+    <NavigationProperty Name="Wishlist" Relationship="Self.FK__Wishlist__ToysId__03F0984C" FromRole="Toy" ToRole="Wishlist" />
+  </EntityType>
+  <EntityType Name="Wishlist">
+    <Key>
+      <PropertyRef Name="WishlistId" />
+    </Key>
+    <Property Name="WishlistId" Type="Int32" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ToysId" Type="Int32" />
+    <NavigationProperty Name="Balance" Relationship="Self.FK__Wishlist__Email__7B5B524B" FromRole="Wishlist" ToRole="Balance" />
+    <NavigationProperty Name="Toy" Relationship="Self.FK__Wishlist__ToysId__03F0984C" FromRole="Wishlist" ToRole="Toy" />
+  </EntityType>
+  <Association Name="FK__History__Email__73BA3083">
+    <End Role="Balance" Type="Self.Balance" Multiplicity="0..1" />
+    <End Role="History" Type="Self.History" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Balance">
+        <PropertyRef Name="Email" />
+      </Principal>
+      <Dependent Role="History">
+        <PropertyRef Name="Email" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Order__Email__70DDC3D8">
+    <End Role="Balance" Type="Self.Balance" Multiplicity="1" />
+    <End Role="Order" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Balance">
+        <PropertyRef Name="Email" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="Email" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Wishlist__Email__7B5B524B">
+    <End Role="Balance" Type="Self.Balance" Multiplicity="0..1" />
+    <End Role="Wishlist" Type="Self.Wishlist" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Balance">
+        <PropertyRef Name="Email" />
+      </Principal>
+      <Dependent Role="Wishlist">
+        <PropertyRef Name="Email" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Cart__ToyId__02084FDA">
+    <End Role="Toy" Type="Self.Toy" Multiplicity="0..1" />
+    <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Toy">
+        <PropertyRef Name="ToysId" />
+      </Principal>
+      <Dependent Role="Cart">
+        <PropertyRef Name="ToyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__SubCatego__Categ__778AC167">
+    <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
+    <End Role="SubCategories" Type="Self.SubCategories" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="CategoryId" />
+      </Principal>
+      <Dependent Role="SubCategories">
+        <PropertyRef Name="CategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Toy__CategoryId__00200768">
+    <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
+    <End Role="Toy" Type="Self.Toy" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="CategoryId" />
+      </Principal>
+      <Dependent Role="Toy">
+        <PropertyRef Name="CategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderDeta__Histo__04E4BC85">
+    <End Role="History" Type="Self.History" Multiplicity="0..1" />
+    <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="History">
+        <PropertyRef Name="HistoryId" />
+      </Principal>
+      <Dependent Role="OrderDetails">
+        <PropertyRef Name="HistoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderDeta__Order__6D0D32F4">
+    <End Role="Order" Type="Self.Order" Multiplicity="0..1" />
+    <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="OrderId" />
+      </Principal>
+      <Dependent Role="OrderDetails">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderDeta__ToyId__02FC7413">
+    <End Role="Toy" Type="Self.Toy" Multiplicity="0..1" />
+    <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Toy">
+        <PropertyRef Name="ToysId" />
+      </Principal>
+      <Dependent Role="OrderDetails">
+        <PropertyRef Name="ToyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Toy__ProducerId__7F2BE32F">
+    <End Role="Producers" Type="Self.Producers" Multiplicity="0..1" />
+    <End Role="Toy" Type="Self.Toy" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Producers">
+        <PropertyRef Name="ProducerId" />
+      </Principal>
+      <Dependent Role="Toy">
+        <PropertyRef Name="ProducerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Toy__SubCategory__01142BA1">
+    <End Role="SubCategories" Type="Self.SubCategories" Multiplicity="0..1" />
+    <End Role="Toy" Type="Self.Toy" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SubCategories">
+        <PropertyRef Name="SubCategoryId" />
+      </Principal>
+      <Dependent Role="Toy">
+        <PropertyRef Name="SubCategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Wishlist__ToysId__03F0984C">
+    <End Role="Toy" Type="Self.Toy" Multiplicity="0..1" />
+    <End Role="Wishlist" Type="Self.Wishlist" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Toy">
+        <PropertyRef Name="ToysId" />
+      </Principal>
+      <Dependent Role="Wishlist">
+        <PropertyRef Name="ToysId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="TSE11" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Balance" EntityType="Self.Balance" />
+    <EntitySet Name="Cart" EntityType="Self.Cart" />
+    <EntitySet Name="Categories" EntityType="Self.Categories" />
+    <EntitySet Name="History" EntityType="Self.History" />
+    <EntitySet Name="Order" EntityType="Self.Order" />
+    <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" />
+    <EntitySet Name="Producers" EntityType="Self.Producers" />
+    <EntitySet Name="SubCategories" EntityType="Self.SubCategories" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="Toy" EntityType="Self.Toy" />
+    <EntitySet Name="Wishlist" EntityType="Self.Wishlist" />
+    <AssociationSet Name="FK__History__Email__73BA3083" Association="Self.FK__History__Email__73BA3083">
+      <End Role="Balance" EntitySet="Balance" />
+      <End Role="History" EntitySet="History" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Order__Email__70DDC3D8" Association="Self.FK__Order__Email__70DDC3D8">
+      <End Role="Balance" EntitySet="Balance" />
+      <End Role="Order" EntitySet="Order" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Wishlist__Email__7B5B524B" Association="Self.FK__Wishlist__Email__7B5B524B">
+      <End Role="Balance" EntitySet="Balance" />
+      <End Role="Wishlist" EntitySet="Wishlist" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Cart__ToyId__02084FDA" Association="Self.FK__Cart__ToyId__02084FDA">
+      <End Role="Toy" EntitySet="Toy" />
+      <End Role="Cart" EntitySet="Cart" />
+    </AssociationSet>
+    <AssociationSet Name="FK__SubCatego__Categ__778AC167" Association="Self.FK__SubCatego__Categ__778AC167">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="SubCategories" EntitySet="SubCategories" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Toy__CategoryId__00200768" Association="Self.FK__Toy__CategoryId__00200768">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="Toy" EntitySet="Toy" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderDeta__Histo__04E4BC85" Association="Self.FK__OrderDeta__Histo__04E4BC85">
+      <End Role="History" EntitySet="History" />
+      <End Role="OrderDetails" EntitySet="OrderDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderDeta__Order__6D0D32F4" Association="Self.FK__OrderDeta__Order__6D0D32F4">
+      <End Role="Order" EntitySet="Order" />
+      <End Role="OrderDetails" EntitySet="OrderDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderDeta__ToyId__02FC7413" Association="Self.FK__OrderDeta__ToyId__02FC7413">
+      <End Role="Toy" EntitySet="Toy" />
+      <End Role="OrderDetails" EntitySet="OrderDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Toy__ProducerId__7F2BE32F" Association="Self.FK__Toy__ProducerId__7F2BE32F">
+      <End Role="Producers" EntitySet="Producers" />
+      <End Role="Toy" EntitySet="Toy" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Toy__SubCategory__01142BA1" Association="Self.FK__Toy__SubCategory__01142BA1">
+      <End Role="SubCategories" EntitySet="SubCategories" />
+      <End Role="Toy" EntitySet="Toy" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Wishlist__ToysId__03F0984C" Association="Self.FK__Wishlist__ToysId__03F0984C">
+      <End Role="Toy" EntitySet="Toy" />
+      <End Role="Wishlist" EntitySet="Wishlist" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
