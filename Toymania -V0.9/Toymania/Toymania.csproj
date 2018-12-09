@@ -506,6 +506,7 @@
     <Content Include="Views\Tracker\Index.cshtml" />
     <Content Include="Views\Tracker\IndexC.cshtml" />
     <Content Include="Views\Tracker\IndexD.cshtml" />
+    <Content Include="Views\Stats\Index - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
