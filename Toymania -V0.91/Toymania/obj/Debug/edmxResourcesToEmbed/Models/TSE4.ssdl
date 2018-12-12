@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TSM4.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Cart">
+    <Key>
+      <PropertyRef Name="RecordId" />
+    </Key>
+    <Property Name="RecordId" Type="int" Nullable="false" />
+    <Property Name="CartId" Type="varchar" MaxLength="50" />
+    <Property Name="ToyId" Type="int" />
+    <Property Name="Count" Type="int" />
+    <Property Name="DateCreated" Type="date" />
+  </EntityType>
+  <EntityType Name="Categories">
+    <Key>
+      <PropertyRef Name="CategoryId" />
+    </Key>
+    <Property Name="CategoryId" Type="int" Nullable="false" />
+    <Property Name="CName" Type="varchar" MaxLength="50" />
+    <Property Name="Description" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="OrderId" />
+    </Key>
+    <Property Name="OrderId" Type="int" Nullable="false" />
+    <Property Name="Username" Type="varchar" MaxLength="50" />
+    <Property Name="FirstName" Type="varchar" MaxLength="50" />
+    <Property Name="Address" Type="varchar" MaxLength="50" />
+    <Property Name="City" Type="varchar" MaxLength="50" />
+    <Property Name="State" Type="varchar" MaxLength="50" />
+    <Property Name="PostalCode" Type="varchar" MaxLength="50" />
+    <Property Name="Country" Type="varchar" MaxLength="50" />
+    <Property Name="Email" Type="varchar" MaxLength="50" />
+    <Property Name="Total" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="OrderDate" Type="date" />
+  </EntityType>
+  <EntityType Name="OrderDetails">
+    <Key>
+      <PropertyRef Name="OrderDetailId" />
+    </Key>
+    <Property Name="OrderDetailId" Type="int" Nullable="false" />
+    <Property Name="OrderId" Type="int" />
+    <Property Name="ToyId" Type="int" />
+    <Property Name="Quantity" Type="int" />
+    <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="0" />
+  </EntityType>
+  <EntityType Name="Producers">
+    <Key>
+      <PropertyRef Name="ProducerId" />
+    </Key>
+    <Property Name="ProducerId" Type="int" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="Table">
+    <Key>
+      <PropertyRef Name="OrderId" />
+    </Key>
+    <Property Name="OrderId" Type="int" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" />
+    <Property Name="FirstName" Type="varchar" MaxLength="50" />
+    <Property Name="LastName" Type="varchar" MaxLength="50" />
+    <Property Name="Address" Type="varchar" MaxLength="50" />
+    <Property Name="City" Type="varchar" MaxLength="50" />
+    <Property Name="State" Type="varchar" MaxLength="50" />
+    <Property Name="PostalCode" Type="varchar" MaxLength="50" />
+    <Property Name="Country" Type="varchar" MaxLength="50" />
+    <Property Name="Email" Type="varchar" MaxLength="50" />
+    <Property Name="Total" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="OrderDate" Type="date" />
+  </EntityType>
+  <EntityType Name="Toy">
+    <Key>
+      <PropertyRef Name="ToysId" />
+    </Key>
+    <Property Name="ToysId" Type="int" Nullable="false" />
+    <Property Name="ToysName" Type="varchar" MaxLength="50" />
+    <Property Name="CategoryId" Type="int" />
+    <Property Name="ProducerId" Type="int" />
+    <Property Name="ItemArtUrl" Type="varchar" MaxLength="50" />
+    <Property Name="Price" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="Counter" Type="int" />
+    <Property Name="MinimumAge" Type="int" />
+    <Property Name="type" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK__Cart__ToyId__5CD6CB2B">
+    <End Role="Toy" Type="Self.Toy" Multiplicity="0..1" />
+    <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Toy">
+        <PropertyRef Name="ToysId" />
+      </Principal>
+      <Dependent Role="Cart">
+        <PropertyRef Name="ToyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderDeta__Order__6477ECF3">
+    <End Role="Order" Type="Self.Order" Multiplicity="0..1" />
+    <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="OrderId" />
+      </Principal>
+      <Dependent Role="OrderDetails">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderDeta__ToyId__5FB337D6">
+    <End Role="Toy" Type="Self.Toy" Multiplicity="0..1" />
+    <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Toy">
+        <PropertyRef Name="ToysId" />
+      </Principal>
+      <Dependent Role="OrderDetails">
+        <PropertyRef Name="ToyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Toy__CategoryId__3C69FB99">
+    <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
+    <End Role="Toy" Type="Self.Toy" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="CategoryId" />
+      </Principal>
+      <Dependent Role="Toy">
+        <PropertyRef Name="CategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Toy__ProducerId__3B75D760">
+    <End Role="Producers" Type="Self.Producers" Multiplicity="0..1" />
+    <End Role="Toy" Type="Self.Toy" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Producers">
+        <PropertyRef Name="ProducerId" />
+      </Principal>
+      <Dependent Role="Toy">
+        <PropertyRef Name="ProducerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="TSM4StoreContainer">
+    <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Producers" EntityType="Self.Producers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Table" EntityType="Self.Table" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Toy" EntityType="Self.Toy" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__Cart__ToyId__5CD6CB2B" Association="Self.FK__Cart__ToyId__5CD6CB2B">
+      <End Role="Toy" EntitySet="Toy" />
+      <End Role="Cart" EntitySet="Cart" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderDeta__Order__6477ECF3" Association="Self.FK__OrderDeta__Order__6477ECF3">
+      <End Role="Order" EntitySet="Order" />
+      <End Role="OrderDetails" EntitySet="OrderDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderDeta__ToyId__5FB337D6" Association="Self.FK__OrderDeta__ToyId__5FB337D6">
+      <End Role="Toy" EntitySet="Toy" />
+      <End Role="OrderDetails" EntitySet="OrderDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Toy__CategoryId__3C69FB99" Association="Self.FK__Toy__CategoryId__3C69FB99">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="Toy" EntitySet="Toy" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Toy__ProducerId__3B75D760" Association="Self.FK__Toy__ProducerId__3B75D760">
+      <End Role="Producers" EntitySet="Producers" />
+      <End Role="Toy" EntitySet="Toy" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
