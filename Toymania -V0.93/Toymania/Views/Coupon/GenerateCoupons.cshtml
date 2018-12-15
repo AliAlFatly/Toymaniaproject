@@ -1,0 +1,12 @@
+﻿@model Toymania.Models.Coupon
+
+@{
+    ViewBag.Title = "GenerateCoupons";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<body>
+    <p>Coupon code: @Model.Code</p>
+    <p>Coupon Value: @Model.Value.ToString()</p>
+</body>
+
