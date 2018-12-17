@@ -1,0 +1,157 @@
+﻿@*@model IEnumerable<Toymania.Models.OrderDetails>*@
+@model Toymania.ViewModels.HistoryViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OrderDetails</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container container-body2">
+
+        <br />
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-6 ODT">
+                    <ul class="nav nav-tabs">
+                        <li @*class="active"*@>
+                            <a href="#Orders" data-toggle="tab">Orders in progress</a>
+                        </li>
+                        <li>
+                            <a href="#History" data-toggle="tab">Completed orders</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="Orders" class="tab-pane active">
+                            <table class="table" id="orderhistorytable">
+                                <tr>
+                                    <th>
+                                        @*@Html.DisplayNameFor(model => model.Quantity)*@
+                                        @Html.DisplayNameFor(model => model.IPOO[0].Quantity)
+
+                                    </th>
+                                    <th>
+                                        @*@Html.DisplayNameFor(model => model.UnitPrice)*@
+                                        @Html.DisplayNameFor(model => model.IPOO[0].UnitPrice)
+                                    </th>
+                                    <th>
+                                        @*@Html.DisplayNameFor(model => model.Status)*@
+                                        @Html.DisplayNameFor(model => model.IPOO[0].Status)
+                                    </th>
+                                    @*<th>
+                                            @Html.DisplayNameFor(model => model.History.Email)
+                                        </th>*@
+                                    <th>
+                                        @*@Html.DisplayNameFor(model => model.Order.Username)*@
+                                        @Html.DisplayNameFor(model => model.IPOO[0].Order.Username)
+                                    </th>
+                                    <th>
+                                        @*@Html.DisplayNameFor(model => model.Toy.ToysName)*@
+                                        @Html.DisplayNameFor(model => model.IPOO[0].Toy.ToysName)
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                @foreach (var item in Model.IPOO)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Quantity)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.UnitPrice)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Status)
+                                        </td>
+                                        @*<td>
+                                                @Html.DisplayFor(modelItem => item.History.Email)
+                                            </td>*@
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Order.Username)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Toy.ToysName)
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink("Set Completed", "SC", new { id = item.OrderDetailId }) @*|
+                                                @Html.ActionLink("Details", "Details", new { id = item.OrderDetailId }) |
+                                                @Html.ActionLink("Delete", "Delete", new { id = item.OrderDetailId })*@
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                        <div id="History" class="tab-pane">
+                            <table class="table">
+                                <tr>
+                                    <th>
+                                        @*@Html.DisplayNameFor(model => model.Quantity)*@
+                                        @Html.DisplayNameFor(model => model.IPOO[0].Quantity)
+                                    </th>
+                                    <th>
+                                        @*@Html.DisplayNameFor(model => model.UnitPrice)*@
+                                        @Html.DisplayNameFor(model => model.IPOO[0].UnitPrice)
+                                    </th>
+                                    <th>
+                                        @*@Html.DisplayNameFor(model => model.Status)*@
+                                        @Html.DisplayNameFor(model => model.IPOO[0].Status)
+                                    </th>
+                                    @*<th>
+                                            @Html.DisplayNameFor(model => model.History.Email)
+                                        </th>*@
+                                    <th>
+                                        @*@Html.DisplayNameFor(model => model.Order.Username)*@
+                                        @Html.DisplayNameFor(model => model.IPOO[0].Order.Username)
+                                    </th>
+                                    <th>
+                                        @*@Html.DisplayNameFor(model => model.Toy.ToysName)*@
+                                        @Html.DisplayNameFor(model => model.IPOO[0].Toy.ToysName)
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                @foreach (var item in Model.COO)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Quantity)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.UnitPrice)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Status)
+                                        </td>
+                                        @*<td>
+                                                @Html.DisplayFor(modelItem => item.History.Email)
+                                            </td>*@
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Order.Username)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Toy.ToysName)
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink("Set in progress", "SIP", new { id = item.OrderDetailId }) @*|
+                                                @Html.ActionLink("Details", "Details", new { id = item.OrderDetailId }) |
+                                                @Html.ActionLink("Delete", "Delete", new { id = item.OrderDetailId })*@
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+        </script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+</div>
+</body>
+</html>
+

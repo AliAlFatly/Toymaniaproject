@@ -1,0 +1,144 @@
+﻿@model Toymania.ViewModels.OrdersViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Order details</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <br />
+    <div class="container container-body2">
+        <div class="row">
+            <div class="col-xs-6 ODT">
+                <ul class="nav nav-tabs">
+                    <li @*class="active"*@>
+                        <a href="#Orders" data-toggle="tab">All orders</a>
+                    </li>
+                    <li>
+                        <a href="#InProgress" data-toggle="tab">Order in progress</a>
+                    </li>
+                    <li>
+                        <a href="#Completed" data-toggle="tab">Completed order</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="Orders" class="tab-pane active">
+                        <table id="orderhistorytable">
+                            <tr>
+                                <th>
+                                    Order number
+                                </th>
+                                <th>
+                                    Price total
+
+                                </th>
+                            </tr>
+                            @foreach (var item in Model.O)
+                            {
+                                <tr id="row-@item.OrderId">
+                                    <td>
+                                        @Html.ActionLink(item.OrderId.ToString(), "Detail", new { id = item.OrderId })
+                                    </td>
+                                    <td>
+                                        @item.Total
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                    <div id="InProgress" class="tab-pane">
+                        <table>
+                            <tr>
+                                <th>
+                                    Order number
+                                </th>
+                                <th>
+                                    Price total
+
+                                </th>
+                            </tr>
+                            @foreach (var item in Model.IP)
+                            {
+                                <tr id="row-@item.OrderId">
+                                    <td>
+                                        @Html.ActionLink(item.OrderId.ToString(), "Detail", new { id = item.OrderId, S = "In Progress" })
+                                    </td>
+                                    <td>
+                                        @item.Total
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                    <div id="Completed" class="tab-pane">
+                        <table>
+                            <tr>
+                                <th>
+                                    Order number
+                                </th>
+                                <th>
+                                   Total price
+
+                                </th>
+                            </tr>
+                            @foreach (var item in Model.C)
+                            {
+                                <tr id="row-@item.OrderId">
+                                    <td>
+                                        @Html.ActionLink(item.OrderId.ToString(), "Detail", new { id = item.OrderId, S = "Completed" })
+                                    </td>
+                                    <td>
+                                        @item.Total
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+    </script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+
+@*<body>
+    <table>
+        <tr>
+            <th>
+                Order number
+            </th>
+            <th>
+                Price total
+
+            </th>
+        </tr>
+        @foreach (var item in Model.O)
+        {
+            <tr id="row-@item.OrderId">
+                <td>
+
+                    @Html.ActionLink(item.OrderId.ToString(), "Detail", new { id = item.OrderId })
+                </td>
+                <td>
+                    @item.Total
+                </td>
+
+            </tr>
+        }
+    </table>
+</body>*@
+
+

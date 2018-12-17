@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<body>
+        <div class="container container-body2">
+            <h2>Coupon generator</h2>
+            <li style="list-style:none">
+                @Html.ActionLink("Generate coupon with the value of: 5,00€", "GenerateCoupons", new { v = 10.00m }) <br />
+                @Html.ActionLink("Generate coupon with the value of: 10,00€", "GenerateCoupons", new { v = 10.00m }) <br />
+                @Html.ActionLink("Generate coupon with the value of: 20,00€", "GenerateCoupons", new { v = 20.00m }) <br />
+                @Html.ActionLink("Generate coupon with the value of: 50,00€", "GenerateCoupons", new { v = 50.00m }) <br />
+                @Html.ActionLink("Generate coupon with the value of: 100,00€", "GenerateCoupons", new { v = 100.00m }) <br />
+                @Html.ActionLink("Generate coupon with the value of: 250,00€", "GenerateCoupons", new { v = 250.00m }) <br />
+                @Html.ActionLink("Generate coupon with the value of: 500,00€", "GenerateCoupons", new { v = 500.00m }) <br />
+                @Html.ActionLink("Generate coupon with the value of: 1000,00€", "GenerateCoupons", new { v = 1000.00m }) <br />
+            </li>
+            </div>
+    </body>
+
