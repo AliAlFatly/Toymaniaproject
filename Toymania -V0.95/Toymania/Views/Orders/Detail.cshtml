@@ -1,0 +1,44 @@
+﻿@model Toymania.ViewModels.OrderDetailViewModel
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<body>
+    <div class="container container-body2">
+        <p></p>
+        <table id="orderhistorytable">
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Status
+                </th>
+            </tr>
+            @foreach (var item in Model.OD)
+            {
+                <tr id="row-@item.OrderId">
+                    <td>
+                        @item.Toy.ToysName
+                    </td>
+                    <td>
+                        @item.Quantity
+                    </td>
+                    <td>
+                        @item.UnitPrice
+                    </td>
+                    <td>
+                        @item.Status
+                    </td>
+                </tr>
+            }
+        </table>
+</div>
+</body>

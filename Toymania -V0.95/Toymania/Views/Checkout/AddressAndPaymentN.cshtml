@@ -1,0 +1,46 @@
+﻿@model Toymania.Models.Order
+@{
+                /**/
+
+                /**/
+
+                ViewBag.Title = "AddressAndPayment";
+                Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")"
+        type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"
+        type="text/javascript"></script>
+
+<body>
+    <div class="container container-body2">
+        <div>
+            <p>
+                <strong>Your balance is not sufficient. Please update your account balance before completing this purchase or remove some of the items from your cart</strong>
+            </p>
+        </div>
+        @using (Html.BeginForm())
+        {
+
+            <h2>Address And Payment</h2>
+            <fieldset>
+                <legend>Shipping Information</legend>
+                @Html.EditorForModel()
+            </fieldset>
+            @*<fieldset>
+                    <legend>Payment</legend>
+                    <p>
+                        We're running a promotion: all Products have 50% discount
+                        with the promo code: "50"
+                    </p>
+                    <div class="editor-label">
+                        @Html.Label("Promo Code")
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBox("PromoCode")
+                    </div>
+                </fieldset>*@
+            <input type="submit" value="Submit Order" />
+        }
+    </div>
+</body>
