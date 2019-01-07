@@ -17,7 +17,7 @@ namespace Toymania.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-
+//comment door T
         //toymaniat1@gmail.com      - A@Test@1
         //toymaniat2@outlook.com    - A@Test@2
         //toymaniat3@outlook.com    - A@Test@3
