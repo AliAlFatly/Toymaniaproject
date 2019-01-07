@@ -1,0 +1,24 @@
+﻿@model Toymania.Models.Coupon
+
+@{
+    ViewBag.Title = "UBP";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<body>
+        <div class="container container-body2">
+
+            <h2>UBP</h2>
+
+            @if (Model != null)
+            {
+                <div class="categorie">
+                    <p>Your balance have been updated.</p>
+                </div>
+            }
+            @if (Model == null)
+            {
+                <p>@ViewBag.message</p>
+            }
+            </div>
+    </body>

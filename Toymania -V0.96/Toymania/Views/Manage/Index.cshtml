@@ -1,0 +1,108 @@
+﻿@model Toymania.Models.IndexRViewModel
+@{
+    ViewBag.Title = "Manage";
+}
+
+<body>
+    <div class="container container-body2">
+        <h2>Customer@*@ViewBag.Title.*@</h2>
+        @*<p class="text-success">@ViewBag.StatusMessage</p>*@
+        <div>
+            @*<h4>TXT</h4>*@
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>Password:</dt>
+                <dd>
+                    [
+                    @if (Model.HasPassword)
+                    {
+                        @Html.ActionLink("Change your password", "ChangePassword")
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Create", "SetPassword")
+                    }
+                    ]
+                </dd>
+                <dt>Orders:</dt>
+                <dd>
+                    [ @Html.ActionLink("View your orders", "Index", "Orders") ]
+                </dd>
+                @*<dt>History:</dt>
+                <dd>
+                    [@Html.ActionLink("View your completed orders and order history", "Index", "Orders")]
+                </dd>*@
+                <dt>Cart:</dt>
+                <dd>
+                    [ @{Html.RenderAction("CartSummary", "ShoppingCart");} ]
+                </dd>
+                <dt>Wishlist:</dt>
+                <dd>
+                    [ @Html.ActionLink("View your wishlist", "Index", "WishlistManager") ]
+                </dd>
+                <dt>Store:</dt>
+                <dd>
+                    [ @Html.ActionLink("View the store", "Index", "store") ]
+                </dd>
+                <dt>Update balance:</dt>
+                <dd>
+                    [ @Html.ActionLink("Enter a coupon code", "UB", "Coupon") ]
+                </dd>
+            </dl>
+        </div>
+        <div>
+            @if (Model.isAdmin | Model.isOwner)
+            {
+                <h2>Admin@*@ViewBag.Title.*@</h2>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>Toy manager:</dt>
+                    <dd>
+                        [ @Html.ActionLink("View/add/edit/remove toys from the store", "Index", "ToyManager") ]
+                    </dd>
+                    <dt>Statistics:</dt>
+                    <dd>
+                        [ @Html.ActionLink("Statistics", "Index", "Stats") ]
+                    </dd>
+                    <dt>Order details:</dt>
+                    <dd>
+                        [ @Html.ActionLink("View customer orders and edit the order status", "Index", "OrderDetails") ]
+                    </dd>
+                    @*<dt>Orderstracker:</dt>
+                    <dd>
+                        [ @Html.ActionLink("track the customers orders and edit the order track status", "Index", "Tracker") ]
+                    </dd>*@
+                    <dt>Coupon generator:</dt>
+                    <dd>
+                        [ @Html.ActionLink("Generate a coupon", "Index", "Coupon") ]
+                    </dd>
+                </dl>
+            }
+
+        </div>
+        <div>
+            @if (Model.isOwner)
+            {
+                <h2>Owner@*@ViewBag.Title.*@</h2>
+                <dl class="dl-horizontal">
+                    <dt>User manager:</dt>
+                    <dd>
+                        [ @Html.ActionLink("View/add/edit/remove customer accounts", "Index", "ApplicationUsers") ]
+                    </dd>
+                    <dt>Fake data generator:</dt>
+                    <dd>
+                        [ @Html.ActionLink("Generate data", "Index", "DDG") ]
+                    </dd>
+                    <dt>Archive name generator:</dt>
+                    <dd>
+                        [ @Html.ActionLink("Generate archive name", "Index", "Archiver") ]
+                    </dd>
+                </dl>
+            }
+            @*<h4>TXT</h4>*@
+        </div>
+    </div>
+</body>
+
+
+

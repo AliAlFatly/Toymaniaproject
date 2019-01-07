@@ -1,0 +1,144 @@
+﻿@model Toymania.ViewModels.ShoppingCartViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="~/Scripts/bootstrap.min.js"></script>
+
+
+
+
+<body>
+
+    @if (Model.CT.Count() == 0)
+    {
+        <div class="container container-body2">
+            <p>Your cart is empty</p>
+        </div>
+    }
+
+    @if (Model.CT.Count() != 0)
+    {
+
+
+        <div class="container container-body2">
+            <h3>
+                Review your cart:
+            </h3>
+
+            @*<p class="button">@Html.ActionLink("Checkout", "AddressAndPayment", "Checkout")</p>
+            
+
+            <p class="button">@Html.ActionLink("CheckoutU", "AddressAndPaymentU", "Checkout")</p>*@
+
+
+            <p class="button">@Html.ActionLink("Checkout", "AddressAndPaymentManager", "Checkout")</p>
+
+            @*@{
+            Html.RenderAction("partial");
+        }*@
+
+            <table id="orderhistorytable">
+                <tr>
+                    <th>Name</th>
+                    <th>Price (per piece)</th>
+                    <th>Quantity</th>
+                    <th></th>
+                </tr>
+                @foreach (var item in Model.CT)
+                {
+                    <tr id="row_@item.RecordId">
+                        <td>@Html.ActionLink(item.Toy.ToysName, "Details", "Store", new { id = item.ToyId }, null)</td>
+                        <td>@item.Toy.Price</td>
+                        <td>@item.Count</td>
+                        @*<td>
+                            <a href="#" class="btn @*btn-danger" onclick="DeleteCartItem(@item.RecordId)"><i class="glyphicon glyphicon-trash"></i> </a>
+                        </td>*@
+                        <td>
+                            @Html.ActionLink("Remove from cart", "IndexR", new { RecordToRemoveId = item.RecordId })
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td>
+                        Total
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td id="cart-total">
+                        @Model.CartTotal
+                    </td>
+                </tr>
+            </table>
+
+
+
+            <div class="modal fade" id="M">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <a href="#" class="close" data-dismiss="modal">&times;</a>
+                            <h3 class="modal-title">Delete cart item</h3>
+                        </div>
+
+                        <div class="modal-body">
+                            <h4>Are you sure you want to delete the item from your cart?</h4>
+                            <div style="text-align:center;display:none" id="loaderDiv">
+                                <img src="~/Content/img/home.jpg" width="150" />
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <a href="#" class="btn btn-default" data-dismiss="modal">Cancel</a>
+                            <a href="#" class="btn btn-success" onclick="DeleteCartItem()">Confirm</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <input type="hidden" id="hiddenCartId" />
+        </div>
+
+        <script>
+            //$(document).ready(function () {
+            //    $("#btnSumbit").click(function ())
+
+            //})
+
+            var ConfirmDelete = function (id) {
+                $("hiddenCartId").val(id);
+                $("#M").modal('show');
+            }
+
+            var DeleteCartItem = function (p) {
+                //$("#loaderDiv").show();
+                var i = p;
+                //var i = $("#hiddenCartId").val();
+                $.ajax({
+                    type: "POST",
+                    url: "/ShoppingCart/RFC",
+                    data: { id: i },
+                    succes: function (r) {
+                        //$("#loaderDiv").hide();
+                        //$("#M").modal("hide");
+                        $("#row_" + i).remove();
+                    }
+                })
+
+
+            }
+
+        </script>
+    }
+
+
+</body>
+
+
