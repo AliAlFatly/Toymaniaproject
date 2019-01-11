@@ -1,0 +1,111 @@
+﻿@model Toymania.Models.Order
+@{
+    /**/
+
+    /**/
+
+    ViewBag.Title = "CouponDontExist";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")"
+        type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"
+        type="text/javascript"></script>
+
+<body>
+    <div class="container container-body2">
+        <div>
+            <p>
+                <strong>The entered coupon dont exist</strong>
+            </p>
+        </div>
+        @using (Html.BeginForm())
+        {
+
+            <h2>Address And Payment</h2>
+            <fieldset>
+                <legend>Shipping Information</legend>
+                @Html.EditorForModel()
+                @*<div class="editor-label">
+                    @Html.LabelFor(Model => Model.FirstName)
+                </div>
+                <div class="editor-label">
+                    @Html.EditorFor(Model => Model.FirstName)
+                    @Html.ValidationMessageFor(model => model.FirstName)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(Model => Model.LastName)
+                </div>
+                <div class="editor-label">
+                    @Html.EditorFor(Model => Model.LastName)
+                    @Html.ValidationMessageFor(model => model.LastName)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(Model => Model.Address)
+                </div>
+                <div class="editor-label">
+                    @Html.EditorFor(Model => Model.Address)
+                    @Html.ValidationMessageFor(model => model.Address)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(Model => Model.City)
+                </div>
+                <div class="editor-label">
+                    @Html.EditorFor(Model => Model.City)
+                    @Html.ValidationMessageFor(model => model.City)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(Model => Model.State)
+                </div>
+                <div class="editor-label">
+                    @Html.EditorFor(Model => Model.State)
+                    @Html.ValidationMessageFor(model => model.State)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(Model => Model.PostalCode)
+                </div>
+                <div class="editor-label">
+                    @Html.EditorFor(Model => Model.PostalCode)
+                    @Html.ValidationMessageFor(model => model.PostalCode)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(Model => Model.Country)
+                </div>
+                <div class="editor-label">
+                    @Html.EditorFor(Model => Model.Country)
+                    @Html.ValidationMessageFor(model => model.Country)
+                </div>*@
+
+            </fieldset>
+            <fieldset>
+                <div class="editor-label">
+                    @Html.Label("Couponcode")
+                </div>
+
+                <div class="editor-field">
+                    @Html.TextBox("Couponcode")
+                </div>
+            </fieldset>
+            @*<fieldset>
+                    <legend>Payment</legend>
+                    <p>
+                        We're running a promotion: all Products have 50% discount
+                        with the promo code: "50"
+                    </p>
+                    <div class="editor-label">
+                        @Html.Label("Promo Code")
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBox("PromoCode")
+                    </div>
+                </fieldset>*@
+            <input type="submit" value="Submit Order" />
+        }
+    </div>
+</body>

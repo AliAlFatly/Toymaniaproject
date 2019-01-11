@@ -1,0 +1,177 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+
+@model Toymania.ViewModels.BrowsePartial
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container container-body">
+        @using (@Html.BeginForm("Index", "Store", FormMethod.Get))
+        {
+
+            @Html.TextBox("search") <input type="submit" value="search" />
+
+            @*<button type="button" onclick="location.href='    @Url.Action("store", "Index", new { search = Request.QueryString["search"], C = ViewData["Category"],
+            SC = ViewData["SubCategory"], PC = ViewData["PriceCategory"] })'">Search</button>*@
+
+            @*<input type="submit" value="search" onclick="location.href='@Url.Action("search", "Index", new { search = Request.QueryString["search"], C = ViewData["Category"], SC = ViewData["SubCategory"], PC = ViewData["PriceCategory"] })'" />*@
+        }
+
+        @*@Url.Action("search", "Index", new { search = Request.QueryString["search"], C = ViewData["Category"], SC = ViewData["SubCategory"], PC = ViewData["PriceCategory"] })*@
+
+        <div class="col-md-12 categorien">
+            @foreach (var item in Model.C)
+            {
+
+                <ul>
+                    <li> @Html.ActionLink(item.CName, "index", new { C = item.CName, PC = ViewData["PriceCategory"], ps = ViewData["PageSize"] }) </li>
+
+                </ul>
+            }
+        </div>
+
+        @*pagination met behulp van viewdata(default wordt geset op 30-> vervolgens bij verandering de viewdata aanpassen);*@
+        <div class="Sidebar">
+            <div class="filters col-md-12 PCT1">
+                <p><strong>Prijsfilters</strong></p>
+                <li style="list-style:none">
+                    @Html.ActionLink("00.01 - 9,99 euro", "Index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PC = 1, ps = ViewData["PageSize"] }) <br />
+                    @Html.ActionLink("10,00 - 19,99 euro", "index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PC = 2, ps = ViewData["PageSize"] }) <br />
+                    @Html.ActionLink("20,00 - 49,99 euro", "index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PC = 3, ps = ViewData["PageSize"] }) <br />
+                    @Html.ActionLink("50,00 - 99,99 euro", "index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PC = 4, ps = ViewData["PageSize"] }) <br />
+                    @Html.ActionLink("100,00 - 499,99 euro", "index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PC = 5, ps = ViewData["PageSize"] }) <br />
+                    @Html.ActionLink("500,00+ euro", "index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PC = 6, ps = ViewData["PageSize"] }) <br />
+                </li>
+            </div>
+            <div class="col-md-12 SCT1">
+                <p><strong>Subcategorieën</strong></p>
+                @if (Model.SC != null)
+                {
+                    <div class="categorie">
+                        @foreach (var item in Model.SC)
+                        {
+                            <div class="filters">
+                                @Html.ActionLink(item.SCName, "index", new { C = ViewData["Category"], SC = item.SCName, PC = ViewData["PriceCategory"], ps = ViewData["PageSize"] })
+                            </div>
+                        }
+                    </div>
+                }
+
+            </div>
+        </div>
+        @if (Model.T != null)
+        {
+            <div class=" toymenu col-md-8">
+                @foreach (var item in Model.T)
+                {
+                    <div class="col-md-4">
+                        <p>
+
+                            <img src="@Url.Content("~/Content/img/"+item.ItemArtUrl)" />
+                        </p>
+                        <p>
+                            @Html.ActionLink(item.ToysName, "Details", new { id = item.ToysId })
+                        </p>
+                        <p>
+                            <strong>Prijs:</strong>
+                            @String.Format("€{0:F}", item.Price)
+                        </p>
+                        <p>
+                            <a href="#" class="btn" onclick="AddToCart(@item.ToysId)">Add to cart</a>
+                            @*@Html.ActionLink("Add to cart", "ATC", "ShoppingCart", new { id = item.ToysId }, null)*@
+                        </p>
+
+                        <p>
+                            <a href="#" class="btn" onclick="AddToWishlist(@item.ToysId)">Add to wishlist</a>
+                            @*@Html.ActionLink("Add to wishlist", "ATW", "WishlistManager", new { id = item.ToysId }, "")*@
+                        </p>
+
+                    </div>
+                }
+            </div>
+        }
+
+        @Html.PagedListPager(Model.T, P => Url.Action("Index", new { P, C = ViewData["Category"], SC = ViewData["SubCategory"], PC = ViewData["PriceCategory"], PS = ViewData["PageSize"] }),
+new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true, DisplayItemSliceAndTotal = true }
+)
+
+        <div style="display:block; width:100%">
+
+            @using (@Html.BeginForm("Index", "Store", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PC = ViewData["PriceCategory"] }, FormMethod.Post))
+            {
+                @Html.DropDownList("PS", new List<SelectListItem>
+                {
+                    new SelectListItem{Text = "30", Value = "30", Selected = true},
+                    new SelectListItem{Text = "60", Value = "60"},
+                    new SelectListItem{Text = "90", Value = "90"},
+                    new SelectListItem{Text = "120", Value = "120"}
+                })
+                <input type="submit" value="Change pagesize" />
+            }
+
+
+
+        </div>
+        @*<div class="dropdown">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                Page size<b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a>@Html.ActionLink("30", "Index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PC = ViewData["PriceCategory"], ps = "30" })</a></li>
+                <li><a>@Html.ActionLink("60", "Index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PC = ViewData["PriceCategory"], ps = "60" })</a></li>
+                <li><a>@Html.ActionLink("90", "Index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PC = ViewData["PriceCategory"], ps = "90" })</a></li>
+                <li><a>@Html.ActionLink("120", "Index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PC = ViewData["PriceCategory"], ps = "120" })</a></li>
+            </ul>
+        </div>*@
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+        </script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+        <script>
+            var AddToCart = function (id) {
+                var i = id;
+                $.ajax({
+                    type: "POST",
+                    url: "/ShoppingCart/AddPartial",
+                    data: { id: i },
+                    //success: function (r) {
+                    //}
+                })
+            }
+
+            var AddToWishlist = function (id) {
+                var i = id;
+                $.ajax({
+                    type: "POST",
+                    url: "/WishlistManager/AddPartial",
+                    data: { id: i },
+                    //success: function (r) {
+                    //}
+                })
+            }
+
+        </script>
+        @*<script src="~/Scripts/jquery-3.3.1.js"></script>
+        <script>
+            $(document).ready(function () {
+                $("#PS").change(function () {
+                    var v = $("#PS Option:Selected").text();
+                    @Html.ViewData["PageSize"] = v;
+                    @Html.Action("index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PC = ViewData["PriceCategory"], ps = ViewData["PageSize"] });
+
+                });
+            })
+        </script>*@
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,3438 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @*<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">*@
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', { packages: ['corechart'] });
+        //google.charts.setOnLoadCallback(drawChart);
+        google.load("visualization", "1", { packages: ["corechart"] });
+
+        //https://developers.google.com/chart/interactive/docs/basic_load_libs
+    </script>
+</head>
+<body>
+        <div class="container container-body2">
+            <br />
+            <div class="container" style="width:auto">
+                <div class="row">
+                    <div class="col-xs-6 ODT" style="width:100%">
+                        <ul class="nav nav-tabs">
+                            <li>
+                                <a href="#Linechart" data-toggle="tab">Linechart - Week</a>
+                            </li>
+                            <li>
+                                <a href="#Piechart" data-toggle="tab">Piechart - Week</a>
+                            </li>
+                            <li>
+                                <a href="#Diagram" data-toggle="tab">Diagram - Week</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="Linechart" class="tab-pane">
+                                <button type="button" id="CLS">Categories-linechart-sales</button>
+                                <button type="button" id="CLR">Categories-linechart-Revenue</button>
+                                <button type="button" id="CLP">Categories-linechart-Profit</button>
+                                <button type="button" id="SLS">Subcategories-linechart-sales</button>
+                                <button type="button" id="SLR">Subcategories-linechart-Revenue</button>
+                                <button type="button" id="SLP">Subcategories-linechart-Profit</button>
+                                <div class="chart" id="Lchart" style="width:100%; height:500px">
+                                </div>
+                            </div>
+
+                            <div id="Piechart" class="tab-pane">
+                                <button type="button" id="CPS">Piechart-sales</button>
+                                <button type="button" id="CPR">Piechart-Revenue</button>
+                                <button type="button" id="CPP">Piechart-Profit</button>
+                                <div class="chart" id="Pchart" style="width:100%; height:500px">
+                                </div>
+                            </div>
+                            <div id="Diagram" class="tab-pane">
+                                <button type="button" id="CDS">Categories-diagram-sales</button>
+                                <button type="button" id="CDR">Categories-diagram-Revenue</button>
+                                <button type="button" id="CDP">Categories-diagram-Profit</button>
+                                <button type="button" id="SDS">Subcategories-diagram-sales</button>
+                                <button type="button" id="SDR">Subcategories-diagram-Revenue</button>
+                                <button type="button" id="SDP">Subcategories-diagram-Profit</button>
+                                <div class="chart" id="Dchart" style="width:100%; height:500px">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*<ul>*@
+                    @*<button type="button" id="CDS">Categories-diagram-sales</button>
+                        <button type="button" id="CDR">Categories-diagram-Revenue</button>
+                        <button type="button" id="CDP">Categories-diagram-Profit</button>
+                        <button type="button" id="SDS">Subcategories-diagram-sales</button>
+                        <button type="button" id="SDR">Subcategories-diagram-Revenue</button>
+                        <button type="button" id="SDP">Subcategories-diagram-Profit</button>
+
+                        <button type="button" id="CLS">Categories-linechart-sales</button>
+                        <button type="button" id="CLR">Categories-linechart-Revenue</button>
+                        <button type="button" id="CLP">Categories-linechart-Profit</button>
+                        <button type="button" id="SLS">Subcategories-linechart-sales</button>
+                        <button type="button" id="SLR">Subcategories-linechart-Revenue</button>
+                        <button type="button" id="SLP">Subcategories-linechart-Profit</button>
+
+                        <button type="button" id="CPS">Piechart-sales</button>
+                        <button type="button" id="CPR">Piechart-Revenue</button>
+                        <button type="button" id="CPP">Piechart-Profit</button>*@
+                </div>
+
+                @*<div class="chart" id="chart" style="width:100%; height:500px">
+
+                    </div>*@
+            </div>
+            @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+                </script>
+                <script src="bootstrap/js/bootstrap.min.js"></script>*@
+            <script type="text/javascript">
+
+                var chartDataYear;
+                var chartDataMonth;
+                var chartDataWeeks;
+                var baseUrl = '/Stats/'
+                var TimeUrl = 'Y'
+                var FiltUrl = 'C'
+                var ResUrl = 'S'
+                var TUrl = baseUrl + TimeUrl + FiltUrl + ResUrl
+                var YearUrl = 'Stats/YCS'
+                var MY;
+                var GlobalYear;
+                var CurrentReport;
+                var filter = "W";
+                var Category = "C";
+
+                //var chartdataweek;
+                //google.load("visualization", "1", { packages: ["corechart"] });
+
+
+
+                $(document).ready(function () {
+
+                    $("#CDS").on("click", CDS);
+                    $("#CDR").on("click", CDR);
+                    $("#CDP").on("click", CDP);
+                    $("#SDS").on("click", SDS);
+                    $("#SDR").on("click", SDR);
+                    $("#SDP").on("click", SDP);
+
+                    $("#CLS").on("click", CLS);
+                    $("#CLR").on("click", CLR);
+                    $("#CLP").on("click", CLP);
+                    $("#SLS").on("click", SLS);
+                    $("#SLR").on("click", SLR);
+                    $("#SLP").on("click", SLP);
+
+                    $("#CPS").on("click", CPS);
+                    $("#CPR").on("click", CPR);
+                    $("#CPP").on("click", CPP);
+                    //$("#SPS").on("click", SPS);
+                    //$("#SPR").on("click", SPR);
+                    //$("#SPP").on("click", SPP);
+
+                });
+
+                /*-----------------------------------------------------------------------------------------------------------DIAGRAM-----------------------------------------------------------------------------------------------------------*/
+                /*----------------------------------------------------CATEGORY----------------------------------------------------*/
+                /*-------------------------SALES-------------------------*/
+                function CDS() {
+                    $.ajax({
+                        url: 'Stats/YCS', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'DCS';
+                        //GlobalYear = rowLevel;
+                        D(chartDataYear, "Sales per year", CDSMonth);
+                    });
+                }
+
+                function CDSMonth(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/MCS', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'DCSM';
+                            GlobalYear = rowLevel;
+                            D(chartDataMonth, "sales year" + " " + rl, CDSWeek);
+                        });
+                    }
+                }
+
+                function CDSWeek(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/WCS', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'DCSW';
+                            //GlobalYear = rowLevel;
+                            D(chartDataWeeks, "sales year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+                /*-------------------------REVENUE-----------------------*/
+                function CDR() {
+                    $.ajax({
+                        url: 'Stats/YCR', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'DCR';
+                        //GlobalYear = rowLevel;
+                        D(chartDataYear, "Revenue per year", CDRMonth);
+                    });
+                }
+
+                function CDRMonth(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/MCR', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'DCRM';
+                            GlobalYear = rowLevel;
+                            D(chartDataMonth, "Revenue year" + " " + rl, CDRWeek);
+                        });
+                    }
+                }
+
+                function CDRWeek(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/WCR', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'DCRW';
+                            //GlobalYear = rowLevel;
+                            D(chartDataWeeks, "Revenue year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+                /*-------------------------PROFIT------------------------*/
+                function CDP() {
+                    $.ajax({
+                        url: 'Stats/YCP', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'DCP';
+                        //GlobalYear = rowLevel;
+                        D(chartDataYear, "Profit per year", CDPMonth);
+                    });
+                }
+
+                function CDPMonth(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/MCP', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'DCPM';
+                            GlobalYear = rowLevel;
+                            D(chartDataMonth, "Profit year" + " " + rl, CDPWeek);
+                        });
+                    }
+                }
+
+                function CDPWeek(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/WCP', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'DCPW';
+                            //GlobalYear = rowLevel;
+                            D(chartDataWeeks, "Profit year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+                /*---------------------------------------------------SBCATEGORY---------------------------------------------------*/
+                /*-------------------------SALES-------------------------*/
+                function SDS() {
+                    $.ajax({
+                        url: 'Stats/YSS', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'DSS';
+                        //GlobalYear = rowLevel;
+                        D(chartDataYear, "Sales per year", SDSMonth);
+                    });
+                }
+
+                function SDSMonth(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/MSS', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'DSSM';
+                            GlobalYear = rowLevel;
+                            D(chartDataMonth, "Sales year" + " " + rl, SDSWeek);
+                        });
+                    }
+                }
+
+                function SDSWeek(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/WSS', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'DSSW';
+                            //GlobalYear = rowLevel;
+                            D(chartDataWeeks, "Sales year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+                /*-------------------------REVENUE-----------------------*/
+                function SDR() {
+                    $.ajax({
+                        url: 'Stats/YSR', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'DSR';
+                        //GlobalYear = rowLevel;
+                        D(chartDataYear, "Revenue per year", SDRMonth);
+                    });
+                }
+
+                function SDRMonth(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/MSR', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'DSRM';
+                            GlobalYear = rowLevel;
+                            D(chartDataMonth, "Revenue year" + " " + rl, SDRWeek);
+                        });
+                    }
+                }
+
+                function SDRWeek(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/WSR', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'DSRW';
+                            //GlobalYear = rowLevel;
+                            D(chartDataWeeks, "Revenue year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+                /*-------------------------PROFIT------------------------*/
+                function SDP() {
+                    $.ajax({
+                        url: 'Stats/YSP', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'DSP';
+                        //GlobalYear = rowLevel;
+                        D(chartDataYear, "Profit per year", SDPMonth);
+                    });
+                }
+
+                function SDPMonth(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/MSP', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'DSPM';
+                            GlobalYear = rowLevel;
+                            D(chartDataMonth, "Profit year" + " " + rl, SDPWeek);
+                        });
+                    }
+                }
+
+                function SDPWeek(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/WCP', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'DSPW';
+                            //GlobalYear = rowLevel;
+                            D(chartDataWeeks, "Profit year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+                /*-----------------------------------------------------------------------------------------------------------DIAGRAM-----------------------------------------------------------------------------------------------------------*/
+
+
+
+
+                /*----------------------------------------------------------------------------------------------------------LINECHART----------------------------------------------------------------------------------------------------------*/
+                /*----------------------------------------------------CATEGORY----------------------------------------------------*/
+                /*-------------------------SALES-------------------------*/
+                function CLS() {
+                    $.ajax({
+                        url: 'Stats/YCS', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'LCS';
+                        //GlobalYear = rowLevel;
+                        L(chartDataYear, "Sales per year", CLSMonth);
+                    });
+                }
+
+                function CLSMonth(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/MCS', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LCSM';
+                            GlobalYear = rowLevel;
+                            L(chartDataMonth, "Sales year" + " " + rl, CLSWeek);
+                        });
+                    }
+                }
+
+                function CLSWeek(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/WCS', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LCSW';
+                            //GlobalYear = rowLevel;
+                            L(chartDataWeeks, "Sales year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+                /*-------------------------REVENUE-----------------------*/
+                function CLR() {
+                    $.ajax({
+                        url: 'Stats/YCR', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'LCR';
+                        //GlobalYear = rowLevel;
+                        L(chartDataYear, "Revenue per year", CLRMonth);
+                    });
+                }
+
+                function CLRMonth(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/MCR', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LCRM';
+                            GlobalYear = rowLevel;
+                            L(chartDataMonth, "Revenue year" + " " + rl, CLRWeek);
+                        });
+                    }
+                }
+
+                function CLRWeek(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/WCR', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LCRW';
+                            //GlobalYear = rowLevel;
+                            L(chartDataWeeks, "Revenue year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+                /*-------------------------PROFIT------------------------*/
+                function CLP() {
+                    $.ajax({
+                        url: 'Stats/YCP', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'LCP';
+                        //GlobalYear = rowLevel;
+                        L(chartDataYear, "Profit per year", CLPMonth);
+                    });
+                }
+
+                function CLPMonth(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/MCP', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LCPM';
+                            GlobalYear = rowLevel;
+                            L(chartDataMonth, "Profit year" + " " + rl, CLPWeek);
+                        });
+                    }
+                }
+
+                function CLPWeek(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/WCP', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LCPW';
+                            //GlobalYear = rowLevel;
+                            L(chartDataWeeks, "Profit year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+                /*---------------------------------------------------SBCATEGORY---------------------------------------------------*/
+                /*-------------------------SALES-------------------------*/
+                function SLS() {
+                    $.ajax({
+                        url: 'Stats/YSS', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'LSS';
+                        //GlobalYear = rowLevel;
+                        L(chartDataYear, "Sales per year", SLSMonth);
+                    });
+                }
+
+                function SLSMonth(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/MSS', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LSSM';
+                            GlobalYear = rowLevel;
+                            L(chartDataMonth, "Sales year" + " " + rl, SLSWeek);
+                        });
+                    }
+                }
+
+                function SLSWeek(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/WSS', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LSSW';
+                            //GlobalYear = rowLevel;
+                            L(chartDataWeeks, "Sales year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+                /*-------------------------REVENUE-----------------------*/
+                function SLR() {
+                    $.ajax({
+                        url: 'Stats/YSR', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'LSR';
+                        //GlobalYear = rowLevel;
+                        L(chartDataYear, "Revenue per year", SLRMonth);
+                    });
+                }
+
+                function SLRMonth(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/MSR', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LSRM';
+                            GlobalYear = rowLevel;
+                            L(chartDataMonth, "Revenue year" + " " + rl, SLRWeek);
+                        });
+                    }
+                }
+
+                function SLRWeek(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/WSR', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LSRW';
+                            //GlobalYear = rowLevel;
+                            L(chartDataWeeks, "Revenue year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+                /*-------------------------PROFIT------------------------*/
+                function SLP() {
+                    $.ajax({
+                        url: 'Stats/YSP', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'LSP';
+                        //GlobalYear = rowLevel;
+                        L(chartDataYear, "Profit per year", SLPMonth);
+                    });
+                }
+
+                function SLPMonth(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/MSP', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LSPM';
+                            GlobalYear = rowLevel;
+                            L(chartDataMonth, "Profit year" + " " + rl, SLPWeek);
+                        });
+                    }
+                }
+
+                function SLPWeek(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/WCP', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LSPW';
+                            //GlobalYear = rowLevel;
+                            L(chartDataWeeks, "Profit year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+                /*----------------------------------------------------------------------------------------------------------LINECHART----------------------------------------------------------------------------------------------------------*/
+
+
+
+
+                /*-----------------------------------------------------------------------------------------------------------PIECHART----------------------------------------------------------------------------------------------------------*/
+                /*----------------------------------------------------CATEGORY----------------------------------------------------*/
+                /*-------------------------SALES-------------------------*/
+                function CPS() {
+                    $.ajax({
+                        url: 'Stats/PYCS', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'PS';
+                        //GlobalYear = rowLevel;
+                        P(chartDataYear, "Sales per year", CPSMonth);
+                    });
+                }
+
+                function CPSYearly(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PCS', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LCRM';
+                            GlobalYear = rowLevel;
+                            P(chartDataMonth, "Sales year" + " " + rl, CPSMonth);
+                        });
+                    }
+                }
+
+                function CPSMonth(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PMS', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'PSM';
+                            GlobalYear = rowLevel;
+                            P(chartDataMonth, "Sales year" + " " + rl, CPSWeek);
+                        });
+                    }
+                }
+
+                function CPSWeek(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PWS', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'PSW';
+                            //GlobalYear = rowLevel;
+                            P(chartDataWeeks, "Sales year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+
+                /*-------------------------REVENUE-----------------------*/
+                function CPR() {
+                    $.ajax({
+                        url: 'Stats/PYCR', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'PR';
+                        //GlobalYear = rowLevel;
+                        P(chartDataYear, "Revenue per year", CPRMonth);
+                    });
+                }
+
+                function CPRYearly(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PCR', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LCRM';
+                            GlobalYear = rowLevel;
+                            P(chartDataMonth, "Revenue year" + " " + rl, CPRMonth);
+                        });
+                    }
+                }
+
+                function CPRMonth(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PMR', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'PRM';
+                            GlobalYear = rowLevel;
+                            P(chartDataMonth, "Revenue year" + " " + rl, CPRWeek);
+                        });
+                    }
+                }
+
+                function CPRWeek(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PWR', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'PRW';
+                            //GlobalYear = rowLevel;
+                            P(chartDataWeeks, "Revenue year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+                /*-------------------------PROFIT------------------------*/
+                function CPP() {
+                    $.ajax({
+                        url: 'Stats/PYCP', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'PP';
+                        //GlobalYear = rowLevel;
+                        P(chartDataYear, "Profit per year", CPPMonth);
+                    });
+                }
+
+                function CPPYearly(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PCP', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LCRM';
+                            GlobalYear = rowLevel;
+                            p(chartDataMonth, "Profit year" + " " + rl, CPPMonth);
+                        });
+                    }
+                }
+
+                function CPPMonth(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PMP', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'PPM';
+                            GlobalYear = rowLevel;
+                            P(chartDataMonth, "Profit year" + " " + rl, CPPWeek);
+                        });
+                    }
+                }
+
+                function CPPWeek(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PWP', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'PPW';
+                            //GlobalYear = rowLevel;
+                            P(chartDataWeeks, "Profit year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+
+                /*---------------------------------------------------SBCATEGORY---------------------------------------------------*/
+                /*-------------------------SALES-------------------------*/
+                function SPS() {
+                    $.ajax({
+                        url: 'Stats/PYCS', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'LCR';
+                        //GlobalYear = rowLevel;
+                        p(chartDataYear, "Sales per year", SPSMonth);
+                    });
+                }
+
+                function SPSYearly(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PSS', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LCRM';
+                            GlobalYear = rowLevel;
+                            p(chartDataMonth, "Sales year" + " " + rl, SPSMonth);
+                        });
+                    }
+                }
+
+                function SPSMonth(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PMS', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LCRM';
+                            GlobalYear = rowLevel;
+                            p(chartDataMonth, "Sales year" + " " + rl, SLSWeek);
+                        });
+                    }
+                }
+
+                function SPSWeek(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PWS', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LCRW';
+                            //GlobalYear = rowLevel;
+                            p(chartDataWeeks, "Sales year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+
+                /*-------------------------REVENUE-----------------------*/
+                function SPR() {
+                    $.ajax({
+                        url: 'Stats/PYCR', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'LCR';
+                        //GlobalYear = rowLevel;
+                        p(chartDataYear, "Revenue per year", SPRMonth);
+                    });
+                }
+
+                function SPRYearly(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PSR', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LCRM';
+                            GlobalYear = rowLevel;
+                            p(chartDataMonth, "Revenue year" + " " + rl, SPRMonth);
+                        });
+                    }
+                }
+
+                function SPRMonth(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PMR', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LCRM';
+                            GlobalYear = rowLevel;
+                            p(chartDataMonth, "Revenue year" + " " + rl, SLRWeek);
+                        });
+                    }
+                }
+
+                function SPRWeek(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PWR', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LCRW';
+                            //GlobalYear = rowLevel;
+                            p(chartDataWeeks, "Revenue year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+                /*-------------------------PROFIT------------------------*/
+                function SPP() {
+                    $.ajax({
+                        url: 'Stats/PYCP', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'LCR';
+                        //GlobalYear = rowLevel;
+                        p(chartDataYear, "Profit per year", SPPMonth);
+                    });
+                }
+
+                function SPPYearly(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PSP', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LCRM';
+                            GlobalYear = rowLevel;
+                            p(chartDataMonth, "Profit year" + " " + rl, SPPMonth);
+                        });
+                    }
+                }
+
+                function SPPMonth(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PMP', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LCRM';
+                            GlobalYear = rowLevel;
+                            p(chartDataMonth, "Profit year" + " " + rl, SLPWeek);
+                        });
+                    }
+                }
+
+                function SPPWeek(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PWP', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'LCPW';
+                            //GlobalYear = rowLevel;
+                            p(chartDataWeeks, "Profit year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+                /*-----------------------------------------------------------------------------------------------------------PIECHART----------------------------------------------------------------------------------------------------------*/
+
+
+
+                function P(chartData, title, selectEvent) {
+                    var data = google.visualization.arrayToDataTable(chartData);
+
+                    var options = {
+                        title: title,
+                        pointSize: 5,
+                        focusTarget: "category",
+                        hAxis: { showTextEvery: 1 }
+                    }
+                    //ColumnChart
+                    var Piechart = new google.visualization.PieChart(document.getElementById('Pchart'));
+                    if (selectEvent != null) {
+                        google.visualization.events.addListener(Piechart, 'select', function () {
+                            selectEvent(Piechart, data);
+                        });
+                    }
+                    PB(CurrentReport);
+                    Piechart.draw(data, options);
+                }
+
+                function D(chartData, title, selectEvent) {
+                    var data = google.visualization.arrayToDataTable(chartData);
+
+                    var options = {
+                        title: title,
+                        pointSize: 5,
+                        focusTarget: "category",
+                        hAxis: { showTextEvery: 1 }
+                    }
+                    //ColumnChart
+                    var Piechart = new google.visualization.ColumnChart(document.getElementById('Dchart'));
+                    if (selectEvent != null) {
+                        google.visualization.events.addListener(Piechart, 'select', function () {
+                            selectEvent(Piechart, data);
+                        });
+                    }
+                    DB(CurrentReport);
+                    Piechart.draw(data, options);
+                }
+
+                function L(chartData, title, selectEvent) {
+                    var data = google.visualization.arrayToDataTable(chartData);
+
+                    var options = {
+                        title: title,
+                        pointSize: 5,
+                        focusTarget: "category",
+                        hAxis: { showTextEvery: 1 }
+                    }
+
+                    var lineChart = new google.visualization.LineChart(document.getElementById('Lchart'));
+                    if (selectEvent != null) {
+                        google.visualization.events.addListener(lineChart, 'select', function () {
+                            selectEvent(lineChart, data);
+                        });
+                    }
+                    LB(CurrentReport);
+                    lineChart.draw(data, options);
+                }
+
+                function PB(currentReport) {
+                    $('.backButtonContainer').remove();
+                    //Create new Back Button
+                    if (currentReport == 'DCSM' |
+                        currentReport == 'DCSW' |
+
+                        currentReport == 'DCRM' |
+                        currentReport == 'DCRW' |
+
+                        currentReport == 'DCPM' |
+                        currentReport == 'DCPW' |
+
+                        currentReport == 'DSSM' |
+                        currentReport == 'DSSW' |
+
+                        currentReport == 'DSRM' |
+                        currentReport == 'DSRW' |
+
+                        currentReport == 'DSPM' |
+                        currentReport == 'DSPW' |
+
+
+
+                        currentReport == 'LCSM' |
+                        currentReport == 'LCSW' |
+
+                        currentReport == 'LCRM' |
+                        currentReport == 'LCRW' |
+
+                        currentReport == 'LCPM' |
+                        currentReport == 'LCPW' |
+
+                        currentReport == 'LSSM' |
+                        currentReport == 'LSSW' |
+
+                        currentReport == 'LSRM' |
+                        currentReport == 'LSRW' |
+
+                        currentReport == 'LSPM' |
+                        currentReport == 'LSPW' |
+
+
+
+
+
+                        currentReport == 'PSM' |
+                        currentReport == 'PSW' |
+
+                        currentReport == 'PRM' |
+                        currentReport == 'PRW' |
+
+                        currentReport == 'PPM' |
+                        currentReport == 'PPW') { //back button except year
+                        var $back = $('<button/>')
+                            .text('Back')
+                            .addClass('reportBack')
+                            .click(function () {
+                                switch (currentReport) {
+                                    case 'DCSM':
+                                        CurrentReport = 'DCS';
+                                        D(chartDataYear, "Sales Report Data", CDS);
+                                        break;
+                                    case 'DCSW':
+                                        CurrentReport = 'DCS';
+                                        D(chartDataYear, "Sales Report Data", CDS);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'DCRM':
+                                        CurrentReport = 'DCR';
+                                        D(chartDataYear, "Sales Report Data", CDR);
+                                        break;
+                                    case 'DCRW':
+                                        CurrentReport = 'DCR';
+                                        D(chartDataYear, "Sales Report Data", CDR);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'DCPM':
+                                        CurrentReport = 'DCP';
+                                        D(chartDataYear, "Sales Report Data", CDP);
+                                        break;
+                                    case 'DCPW':
+                                        CurrentReport = 'DCP';
+                                        D(chartDataYear, "Sales Report Data", CDP);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'DSSM':
+                                        CurrentReport = 'DSS';
+                                        D(chartDataYear, "Sales Report Data", SDS);
+                                        break;
+                                    case 'DSSW':
+                                        CurrentReport = 'DSS';
+                                        D(chartDataYear, "Sales Report Data", SDS);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'DSRM':
+                                        CurrentReport = 'DSR';
+                                        D(chartDataYear, "Sales Report Data", SDR);
+                                        break;
+                                    case 'DSRW':
+                                        CurrentReport = 'DSR';
+                                        D(chartDataYear, "Sales Report Data", SDR);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'DSPM':
+                                        CurrentReport = 'DSP';
+                                        D(chartDataYear, "Sales Report Data", SDP);
+                                        break;
+                                    case 'DSPW':
+                                        CurrentReport = 'DSP';
+                                        D(chartDataYear, "Sales Report Data", SDP);
+                                        break;
+
+
+
+
+
+
+
+
+                                    //--------------------------------------------------------------//
+                                    case 'LCSM':
+                                        CurrentReport = 'LCS';
+                                        L(chartDataYear, "Sales Report Data", CLS);
+                                        break;
+                                    case 'LCSW':
+                                        CurrentReport = 'LCS';
+                                        L(chartDataYear, "Sales Report Data", CLS);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'LCRM':
+                                        CurrentReport = 'LCR';
+                                        L(chartDataYear, "Sales Report Data", CLR);
+                                        break;
+                                    case 'LCRW':
+                                        CurrentReport = 'LCR';
+                                        L(chartDataYear, "Sales Report Data", CLR);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'LCPM':
+                                        CurrentReport = 'LCP';
+                                        L(chartDataYear, "Sales Report Data", CLP);
+                                        break;
+                                    case 'LCPW':
+                                        CurrentReport = 'LCP';
+                                        L(chartDataYear, "Sales Report Data", CLP);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'LSSM':
+                                        CurrentReport = 'LSS';
+                                        L(chartDataYear, "Sales Report Data", SLS);
+                                        break;
+                                    case 'LSSW':
+                                        CurrentReport = 'LSS';
+                                        L(chartDataYear, "Sales Report Data", SLS);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'LSRM':
+                                        CurrentReport = 'LSR';
+                                        L(chartDataYear, "Sales Report Data", SLR);
+                                        break;
+                                    case 'LSRW':
+                                        CurrentReport = 'LSR';
+                                        L(chartDataYear, "Sales Report Data", SLR);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'LSPM':
+                                        CurrentReport = 'LSP';
+                                        L(chartDataYear, "Sales Report Data", SLP);
+                                        break;
+                                    case 'LSPW':
+                                        CurrentReport = 'LSP';
+                                        L(chartDataYear, "Sales Report Data", SLP);
+                                        break;
+
+
+
+
+
+
+
+
+
+                                    //--------------------------------------------------------------//
+                                    case 'PSM':
+                                        CurrentReport = 'PS';
+                                        P(chartDataYear, "Sales Report Data", CPS);
+                                        break;
+                                    case 'PSW':
+                                        CurrentReport = 'PS';
+                                        P(chartDataYear, "Sales Report Data", CPS);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'PRM':
+                                        CurrentReport = 'PR';
+                                        P(chartDataYear, "Sales Report Data", CPR);
+                                        break;
+                                    case 'PRW':
+                                        CurrentReport = 'R';
+                                        P(chartDataYear, "Sales Report Data", CPR);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'PPM':
+                                        CurrentReport = 'PP';
+                                        P(chartDataYear, "Sales Report Data", CPP);
+                                        break;
+                                    case 'PPW':
+                                        CurrentReport = 'PP';
+                                        P(chartDataYear, "Sales Report Data", CPP);
+                                        break;
+                                    //--------------------------------------------------------------//
+
+
+
+
+
+
+                                    default:
+
+                                }
+                                $(this).parent().remove();
+                            });
+                        var $div = $('<div/>')
+                            .addClass('backButtonContainer')
+                            .css({ 'width': '70%', 'text-align': 'right', 'padding': '5px' })
+                            .append($back);
+                        $('#Pchart').before($div);
+
+                    }
+                }
+
+                function DB(currentReport) {
+                    $('.backButtonContainer').remove();
+                    //Create new Back Button
+                    if (currentReport == 'DCSM' |
+                        currentReport == 'DCSW' |
+
+                        currentReport == 'DCRM' |
+                        currentReport == 'DCRW' |
+
+                        currentReport == 'DCPM' |
+                        currentReport == 'DCPW' |
+
+                        currentReport == 'DSSM' |
+                        currentReport == 'DSSW' |
+
+                        currentReport == 'DSRM' |
+                        currentReport == 'DSRW' |
+
+                        currentReport == 'DSPM' |
+                        currentReport == 'DSPW' |
+
+
+
+                        currentReport == 'LCSM' |
+                        currentReport == 'LCSW' |
+
+                        currentReport == 'LCRM' |
+                        currentReport == 'LCRW' |
+
+                        currentReport == 'LCPM' |
+                        currentReport == 'LCPW' |
+
+                        currentReport == 'LSSM' |
+                        currentReport == 'LSSW' |
+
+                        currentReport == 'LSRM' |
+                        currentReport == 'LSRW' |
+
+                        currentReport == 'LSPM' |
+                        currentReport == 'LSPW' |
+
+
+
+
+
+                        currentReport == 'PSM' |
+                        currentReport == 'PSW' |
+
+                        currentReport == 'PRM' |
+                        currentReport == 'PRW' |
+
+                        currentReport == 'PPM' |
+                        currentReport == 'PPW') { //back button except year
+                        var $back = $('<button/>')
+                            .text('Back')
+                            .addClass('reportBack')
+                            .click(function () {
+                                switch (currentReport) {
+                                    case 'DCSM':
+                                        CurrentReport = 'DCS';
+                                        D(chartDataYear, "Sales Report Data", CDS);
+                                        break;
+                                    case 'DCSW':
+                                        CurrentReport = 'DCS';
+                                        D(chartDataYear, "Sales Report Data", CDS);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'DCRM':
+                                        CurrentReport = 'DCR';
+                                        D(chartDataYear, "Sales Report Data", CDR);
+                                        break;
+                                    case 'DCRW':
+                                        CurrentReport = 'DCR';
+                                        D(chartDataYear, "Sales Report Data", CDR);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'DCPM':
+                                        CurrentReport = 'DCP';
+                                        D(chartDataYear, "Sales Report Data", CDP);
+                                        break;
+                                    case 'DCPW':
+                                        CurrentReport = 'DCP';
+                                        D(chartDataYear, "Sales Report Data", CDP);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'DSSM':
+                                        CurrentReport = 'DSS';
+                                        D(chartDataYear, "Sales Report Data", SDS);
+                                        break;
+                                    case 'DSSW':
+                                        CurrentReport = 'DSS';
+                                        D(chartDataYear, "Sales Report Data", SDS);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'DSRM':
+                                        CurrentReport = 'DSR';
+                                        D(chartDataYear, "Sales Report Data", SDR);
+                                        break;
+                                    case 'DSRW':
+                                        CurrentReport = 'DSR';
+                                        D(chartDataYear, "Sales Report Data", SDR);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'DSPM':
+                                        CurrentReport = 'DSP';
+                                        D(chartDataYear, "Sales Report Data", SDP);
+                                        break;
+                                    case 'DSPW':
+                                        CurrentReport = 'DSP';
+                                        D(chartDataYear, "Sales Report Data", SDP);
+                                        break;
+
+
+
+
+
+
+
+
+                                    //--------------------------------------------------------------//
+                                    case 'LCSM':
+                                        CurrentReport = 'LCS';
+                                        L(chartDataYear, "Sales Report Data", CLS);
+                                        break;
+                                    case 'LCSW':
+                                        CurrentReport = 'LCS';
+                                        L(chartDataYear, "Sales Report Data", CLS);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'LCRM':
+                                        CurrentReport = 'LCR';
+                                        L(chartDataYear, "Sales Report Data", CLR);
+                                        break;
+                                    case 'LCRW':
+                                        CurrentReport = 'LCR';
+                                        L(chartDataYear, "Sales Report Data", CLR);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'LCPM':
+                                        CurrentReport = 'LCP';
+                                        L(chartDataYear, "Sales Report Data", CLP);
+                                        break;
+                                    case 'LCPW':
+                                        CurrentReport = 'LCP';
+                                        L(chartDataYear, "Sales Report Data", CLP);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'LSSM':
+                                        CurrentReport = 'LSS';
+                                        L(chartDataYear, "Sales Report Data", SLS);
+                                        break;
+                                    case 'LSSW':
+                                        CurrentReport = 'LSS';
+                                        L(chartDataYear, "Sales Report Data", SLS);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'LSRM':
+                                        CurrentReport = 'LSR';
+                                        L(chartDataYear, "Sales Report Data", SLR);
+                                        break;
+                                    case 'LSRW':
+                                        CurrentReport = 'LSR';
+                                        L(chartDataYear, "Sales Report Data", SLR);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'LSPM':
+                                        CurrentReport = 'LSP';
+                                        L(chartDataYear, "Sales Report Data", SLP);
+                                        break;
+                                    case 'LSPW':
+                                        CurrentReport = 'LSP';
+                                        L(chartDataYear, "Sales Report Data", SLP);
+                                        break;
+
+
+
+
+
+
+
+
+
+                                    //--------------------------------------------------------------//
+                                    case 'PSM':
+                                        CurrentReport = 'PS';
+                                        P(chartDataYear, "Sales Report Data", CPS);
+                                        break;
+                                    case 'PSW':
+                                        CurrentReport = 'PS';
+                                        P(chartDataYear, "Sales Report Data", CPS);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'PRM':
+                                        CurrentReport = 'PR';
+                                        P(chartDataYear, "Sales Report Data", CPR);
+                                        break;
+                                    case 'PRW':
+                                        CurrentReport = 'R';
+                                        P(chartDataYear, "Sales Report Data", CPR);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'PPM':
+                                        CurrentReport = 'PP';
+                                        P(chartDataYear, "Sales Report Data", CPP);
+                                        break;
+                                    case 'PPW':
+                                        CurrentReport = 'PP';
+                                        P(chartDataYear, "Sales Report Data", CPP);
+                                        break;
+                                    //--------------------------------------------------------------//
+
+
+
+
+
+
+                                    default:
+
+                                }
+                                $(this).parent().remove();
+                            });
+                        var $div = $('<div/>')
+                            .addClass('backButtonContainer')
+                            .css({ 'width': '70%', 'text-align': 'right', 'padding': '5px' })
+                            .append($back);
+                        $('#Dchart').before($div);
+
+                    }
+                }
+
+                function LB(currentReport) {
+                    $('.backButtonContainer').remove();
+                    //Create new Back Button
+                    if (currentReport == 'DCSM' |
+                        currentReport == 'DCSW' |
+
+                        currentReport == 'DCRM' |
+                        currentReport == 'DCRW' |
+
+                        currentReport == 'DCPM' |
+                        currentReport == 'DCPW' |
+
+                        currentReport == 'DSSM' |
+                        currentReport == 'DSSW' |
+
+                        currentReport == 'DSRM' |
+                        currentReport == 'DSRW' |
+
+                        currentReport == 'DSPM' |
+                        currentReport == 'DSPW' |
+
+
+
+                        currentReport == 'LCSM' |
+                        currentReport == 'LCSW' |
+
+                        currentReport == 'LCRM' |
+                        currentReport == 'LCRW' |
+
+                        currentReport == 'LCPM' |
+                        currentReport == 'LCPW' |
+
+                        currentReport == 'LSSM' |
+                        currentReport == 'LSSW' |
+
+                        currentReport == 'LSRM' |
+                        currentReport == 'LSRW' |
+
+                        currentReport == 'LSPM' |
+                        currentReport == 'LSPW' |
+
+
+
+
+
+                        currentReport == 'PSM' |
+                        currentReport == 'PSW' |
+
+                        currentReport == 'PRM' |
+                        currentReport == 'PRW' |
+
+                        currentReport == 'PPM' |
+                        currentReport == 'PPW' ) { //back button except year
+                        var $back = $('<button/>')
+                            .text('Back')
+                            .addClass('reportBack')
+                            .click(function () {
+                                switch (currentReport) {
+                                    case 'DCSM':
+                                        CurrentReport = 'DCS';
+                                        D(chartDataYear, "Sales Report Data", CDS);
+                                        break;
+                                    case 'DCSW':
+                                        CurrentReport = 'DCS';
+                                        D(chartDataYear, "Sales Report Data", CDS);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'DCRM':
+                                        CurrentReport = 'DCR';
+                                        D(chartDataYear, "Sales Report Data", CDR);
+                                        break;
+                                    case 'DCRW':
+                                        CurrentReport = 'DCR';
+                                        D(chartDataYear, "Sales Report Data", CDR);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'DCPM':
+                                        CurrentReport = 'DCP';
+                                        D(chartDataYear, "Sales Report Data", CDP);
+                                        break;
+                                    case 'DCPW':
+                                        CurrentReport = 'DCP';
+                                        D(chartDataYear, "Sales Report Data", CDP);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'DSSM':
+                                        CurrentReport = 'DSS';
+                                        D(chartDataYear, "Sales Report Data", SDS);
+                                        break;
+                                    case 'DSSW':
+                                        CurrentReport = 'DSS';
+                                        D(chartDataYear, "Sales Report Data", SDS);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'DSRM':
+                                        CurrentReport = 'DSR';
+                                        D(chartDataYear, "Sales Report Data", SDR);
+                                        break;
+                                    case 'DSRW':
+                                        CurrentReport = 'DSR';
+                                        D(chartDataYear, "Sales Report Data", SDR);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'DSPM':
+                                        CurrentReport = 'DSP';
+                                        D(chartDataYear, "Sales Report Data", SDP);
+                                        break;
+                                    case 'DSPW':
+                                        CurrentReport = 'DSP';
+                                        D(chartDataYear, "Sales Report Data", SDP);
+                                        break;
+
+
+
+
+
+
+
+
+                                    //--------------------------------------------------------------//
+                                    case 'LCSM':
+                                        CurrentReport = 'LCS';
+                                        L(chartDataYear, "Sales Report Data", CLS);
+                                        break;
+                                    case 'LCSW':
+                                        CurrentReport = 'LCS';
+                                        L(chartDataYear, "Sales Report Data", CLS);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'LCRM':
+                                        CurrentReport = 'LCR';
+                                        L(chartDataYear, "Sales Report Data", CLR);
+                                        break;
+                                    case 'LCRW':
+                                        CurrentReport = 'LCR';
+                                        L(chartDataYear, "Sales Report Data", CLR);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'LCPM':
+                                        CurrentReport = 'LCP';
+                                        L(chartDataYear, "Sales Report Data", CLP);
+                                        break;
+                                    case 'LCPW':
+                                        CurrentReport = 'LCP';
+                                        L(chartDataYear, "Sales Report Data", CLP);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'LSSM':
+                                        CurrentReport = 'LSS';
+                                        L(chartDataYear, "Sales Report Data", SLS);
+                                        break;
+                                    case 'LSSW':
+                                        CurrentReport = 'LSS';
+                                        L(chartDataYear, "Sales Report Data", SLS);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'LSRM':
+                                        CurrentReport = 'LSR';
+                                        L(chartDataYear, "Sales Report Data", SLR);
+                                        break;
+                                    case 'LSRW':
+                                        CurrentReport = 'LSR';
+                                        L(chartDataYear, "Sales Report Data", SLR);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'LSPM':
+                                        CurrentReport = 'LSP';
+                                        L(chartDataYear, "Sales Report Data", SLP);
+                                        break;
+                                    case 'LSPW':
+                                        CurrentReport = 'LSP';
+                                        L(chartDataYear, "Sales Report Data", SLP);
+                                        break;
+
+
+
+
+
+
+
+
+
+                                    //--------------------------------------------------------------//
+                                    case 'PSM':
+                                        CurrentReport = 'PS';
+                                        P(chartDataYear, "Sales Report Data", CPS);
+                                        break;
+                                    case 'PSW':
+                                        CurrentReport = 'PS';
+                                        P(chartDataYear, "Sales Report Data", CPS);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'PRM':
+                                        CurrentReport = 'PR';
+                                        P(chartDataYear, "Sales Report Data", CPR);
+                                        break;
+                                    case 'PRW':
+                                        CurrentReport = 'R';
+                                        P(chartDataYear, "Sales Report Data", CPR);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'PPM':
+                                        CurrentReport = 'PP';
+                                        P(chartDataYear, "Sales Report Data", CPP);
+                                        break;
+                                    case 'PPW':
+                                        CurrentReport = 'PP';
+                                        P(chartDataYear, "Sales Report Data", CPP);
+                                        break;
+                                    //--------------------------------------------------------------//
+
+
+
+
+
+
+                                    default:
+
+                                }
+                                $(this).parent().remove();
+                            });
+                        var $div = $('<div/>')
+                            .addClass('backButtonContainer')
+                            .css({ 'width': '70%', 'text-align': 'right', 'padding': '5px' })
+                            .append($back);
+                        $('#Lchart').before($div);
+
+                    }
+                }
+
+                function B(currentReport) {
+                    $('.backButtonContainer').remove();
+                    //Create new Back Button
+                    if (currentReport != 'DCS' |
+                        currentReport != 'CDR' |
+                        currentReport != 'CDP' |
+
+                        currentReport != 'SDS' |
+                        currentReport != 'SDR' |
+                        currentReport != 'SDP' |
+
+                        currentReport != 'CLS' |
+                        currentReport != 'CLR' |
+                        currentReport != 'CLP' |
+
+                        currentReport != 'SLS' |
+                        currentReport != 'SLR' |
+                        currentReport != 'SLP' |
+
+                        currentReport != 'CPS' |
+                        currentReport != 'CPR' |
+                        currentReport != 'CPP') { //back button except year
+                        var $back = $('<button/>')
+                            .text('Back')
+                            .addClass('reportBack')
+                            .click(function () {
+                                switch (currentReport) {
+                                    case 'DCSM':
+                                        CurrentReport = 'DCS';
+                                        D(chartDataYear, "Sales Report Data", CDS);
+                                        break;
+                                    case 'DCSW':
+                                        CurrentReport = 'DCS';
+                                        D(chartDataYear, "Sales Report Data", CDS);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'DCRM':
+                                        CurrentReport = 'DCR';
+                                        D(chartDataYear, "Sales Report Data", CDR);
+                                        break;
+                                    case 'DCRW':
+                                        CurrentReport = 'DCR';
+                                        D(chartDataYear, "Sales Report Data", CDR);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'DCPM':
+                                        CurrentReport = 'DCP';
+                                        D(chartDataYear, "Sales Report Data", CDP);
+                                        break;
+                                    case 'DCPW':
+                                        CurrentReport = 'DCP';
+                                        D(chartDataYear, "Sales Report Data", CDP);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'DSSM':
+                                        CurrentReport = 'DSS';
+                                        D(chartDataYear, "Sales Report Data", SDS);
+                                        break;
+                                    case 'DSSW':
+                                        CurrentReport = 'DSS';
+                                        D(chartDataYear, "Sales Report Data", SDS);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'DSRM':
+                                        CurrentReport = 'DSR';
+                                        D(chartDataYear, "Sales Report Data", SDR);
+                                        break;
+                                    case 'DSRW':
+                                        CurrentReport = 'DSR';
+                                        D(chartDataYear, "Sales Report Data", SDR);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'DSPM':
+                                        CurrentReport = 'DSP';
+                                        D(chartDataYear, "Sales Report Data", SDP);
+                                        break;
+                                    case 'DSPW':
+                                        CurrentReport = 'DSP';
+                                        D(chartDataYear, "Sales Report Data", SDP);
+                                        break;
+
+
+
+
+
+
+
+
+                                    //--------------------------------------------------------------//
+                                    case 'LCSM':
+                                        CurrentReport = 'LCS';
+                                        L(chartDataYear, "Sales Report Data", CLS);
+                                        break;
+                                    case 'LCSW':
+                                        CurrentReport = 'LCS';
+                                        L(chartDataYear, "Sales Report Data", CLS);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'LCRM':
+                                        CurrentReport = 'LCR';
+                                        L(chartDataYear, "Sales Report Data", CLR);
+                                        break;
+                                    case 'LCRW':
+                                        CurrentReport = 'LCR';
+                                        L(chartDataYear, "Sales Report Data", CLR);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'LCPM':
+                                        CurrentReport = 'LCP';
+                                        L(chartDataYear, "Sales Report Data", CLP);
+                                        break;
+                                    case 'LCPW':
+                                        CurrentReport = 'LCP';
+                                        L(chartDataYear, "Sales Report Data", CLP);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'LSSM':
+                                        CurrentReport = 'LSS';
+                                        L(chartDataYear, "Sales Report Data", SLS);
+                                        break;
+                                    case 'LSSW':
+                                        CurrentReport = 'LSS';
+                                        L(chartDataYear, "Sales Report Data", SLS);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'LSRM':
+                                        CurrentReport = 'LSR';
+                                        L(chartDataYear, "Sales Report Data", SLR);
+                                        break;
+                                    case 'LSRW':
+                                        CurrentReport = 'LSR';
+                                        L(chartDataYear, "Sales Report Data", SLR);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'LSPM':
+                                        CurrentReport = 'LSP';
+                                        L(chartDataYear, "Sales Report Data", SLP);
+                                        break;
+                                    case 'LSPW':
+                                        CurrentReport = 'LSP';
+                                        L(chartDataYear, "Sales Report Data", SLP);
+                                        break;
+
+
+
+
+
+
+
+
+
+                                    //--------------------------------------------------------------//
+                                    case 'PSM':
+                                        CurrentReport = 'PS';
+                                        P(chartDataYear, "Sales Report Data", CPS);
+                                        break;
+                                    case 'PSW':
+                                        CurrentReport = 'PS';
+                                        P(chartDataYear, "Sales Report Data", CPS);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'PRM':
+                                        CurrentReport = 'PR';
+                                        P(chartDataYear, "Sales Report Data", CPR);
+                                        break;
+                                    case 'PRW':
+                                        CurrentReport = 'R';
+                                        P(chartDataYear, "Sales Report Data", CPR);
+                                        break;
+                                    //--------------------------------------------------------------//
+                                    case 'PPM':
+                                        CurrentReport = 'PP';
+                                        P(chartDataYear, "Sales Report Data", CPP);
+                                        break;
+                                    case 'PPW':
+                                        CurrentReport = 'PP';
+                                        P(chartDataYear, "Sales Report Data", CPP);
+                                        break;
+                                    //--------------------------------------------------------------//
+
+
+
+
+
+
+                                    default:
+
+                                }
+                                $(this).parent().remove();
+                            });
+                        var $div = $('<div/>')
+                            .addClass('backButtonContainer')
+                            .css({ 'width': '70%', 'text-align': 'right', 'padding': '5px' })
+                            .append($back);
+                        $('#chart').before($div);
+
+                    }
+                }
+
+
+
+
+
+
+                /*-----------------------------------------------------------------------------------------------------------EXPERIMENTS-------------------------------------------------------------------------------------------------------*/
+
+
+
+
+                function PCYT() {
+                    $.ajax({
+                        url: 'Stats/DYCVerkocht', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'year';
+                        //GlobalYear = rowLevel;
+                        DrawPC(chartDataYear, "chart year", LTW);
+                    });
+                }
+
+
+                /*-------------------------------------------------------------------------------------------------------------------------------------*/
+                /*--------------Total------------------*/
+                function DYT() {
+                    $.ajax({
+                        url: TUrl, //'Stats/DYCVerkocht', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'year';
+                        //GlobalYear = rowLevel;
+                        DrawD(chartDataYear, "Sales Report Data", DMT);
+                    });
+                }
+
+                function DMT(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/MCS', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'MDT';
+                            GlobalYear = rowLevel;
+                            DrawD(chartDataMonth, "chart year" + " " + rl, DWT);
+                        });
+                    }
+                }
+
+                function DWT(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/WCS', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'WDT';
+                            //GlobalYear = rowLevel;
+                            DrawD(chartDataWeeks, "chart year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+                /*--------------Profit-----------------*/
+
+                function DYP() {
+                    $.ajax({
+                        url: '/Stats/YCP', //Stats/SalesDataYearWise
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'year';
+                        //GlobalYear = rowLevel;
+                        DrawD(chartDataYear, "Sales Report Data", DMP);
+                    });
+                }
+
+                function DMP(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/MCP', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'MDP';
+                            GlobalYear = rowLevel;
+                            DrawD(chartDataMonth, "chart year" + " " + rl, DWP);
+                        });
+                    }
+                }
+
+                function DWP(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/WCP', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': GlobalYear },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'WDP';
+                            //GlobalYear = rowLevel;
+                            DrawD(chartDataWeeks, "chart year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+                /*--------------Revenue----------------*/
+                function DYR() {
+                    $.ajax({
+                        url: '/Stats/YCR', //Stats/SalesDataYearWise
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'year';
+                        //GlobalYear = rowLevel;
+                        DrawD(chartDataYear, "Sales Report Data", DMR);
+                    });
+                }
+
+                function DMR(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/MCR', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'MDR';
+                            GlobalYear = rowLevel;
+                            DrawD(chartDataMonth, "chart year" + " " + rl, DWR);
+                        });
+                    }
+                }
+
+                function DWR(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/WCR', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': GlobalYear },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'WDR';
+                            //GlobalYear = rowLevel;
+                            DrawD(chartDataWeeks, "chart year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+
+
+
+
+                /*-------------------------------------------------------------------------------------------------------------------------------------*/
+                /*--------------Total------------------*/
+                function LYT() {
+                    $.ajax({
+                        url: TUrl,// 'Stats/YCS', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'year';
+                        //GlobalYear = rowLevel;
+                        generateChart(chartDataYear, "Sales Report Data", LMT);
+                    });
+                }
+
+                function LMT(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/MCS', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'MLT';
+                            GlobalYear = rowLevel;
+                            generateChart(chartDataMonth, "chart year" + " " + rl, LWT);
+                        });
+                    }
+                }
+
+                function LWT(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/WCS', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': MY },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'WLT';
+                            //GlobalYear = rowLevel;
+                            generateChart(chartDataWeeks, "chart year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+                /*--------------Profit-----------------*/
+
+                function LYP() {
+                    $.ajax({
+                        url: /*TUrl//*/'/Stats/YCP', //Stats/SalesDataYearWise
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'year';
+                        //GlobalYear = rowLevel;
+                        generateChart(chartDataYear, "Sales Report Data", LMP);
+                    });
+                }
+
+                function LMP(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/MCP', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'MLP';
+                            GlobalYear = rowLevel;
+                            generateChart(chartDataMonth, "chart year" + " " + rl, LWP);
+                        });
+                    }
+                }
+
+                function LWP(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/WCP', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': GlobalYear },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'WLP';
+                            //GlobalYear = rowLevel;
+                            generateChart(chartDataWeeks, "chart year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+                /*--------------Revenue----------------*/
+                function LYR() {
+                    $.ajax({
+                        url: /*TUrl//*/'/Stats/YCR', //Stats/SalesDataYearWise
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'year';
+                        //GlobalYear = rowLevel;
+                        generateChart(chartDataYear, "Sales Report Data", LMR);
+                    });
+                }
+
+                function LMR(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/MCR', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'MLR';
+                            GlobalYear = rowLevel;
+                            generateChart(chartDataMonth, "chart year" + " " + rl, LWR);
+                        });
+                    }
+                }
+
+                function LWR(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/WCR', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': GlobalYear },
+                            success: function (d) {
+                                chartDataWeeks = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'WLR';
+                            //GlobalYear = rowLevel;
+                            generateChart(chartDataWeeks, "chart year" + " " + GlobalYear.toString(), null);
+                        });
+                    }
+                }
+
+
+
+
+
+                /*-------------------------------------------------------------------------------------------------------------------------------------*/
+                /*--------------Total------------------*/
+                function PYT() {
+                    $.ajax({
+                        url: 'Stats/PYCS', //Stats/SalesDataYearWise     //'Stats/DYCVerkocht'
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'year';
+                        //GlobalYear = rowLevel;
+                        DrawPC(chartDataYear, "Sales Report Data", PMT);
+                    });
+                }
+
+                function PMT(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        MY = parseInt(data.getValue(selectedItem.row, 0));
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PMCS', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'MLT';
+                            GlobalYear = rowLevel;
+                            DrawPC(chartDataMonth, "chart year" + " " + rl, null);
+                        });
+                    }
+                }
+
+
+
+                /*--------------Profit-----------------*/
+
+                function PYP() {
+                    $.ajax({
+                        url: '/Stats/PYCP', //Stats/SalesDataYearWise
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'year';
+                        //GlobalYear = rowLevel;
+                        DrawPC(chartDataYear, "Sales Report Data", PMP);
+                    });
+                }
+
+                function PMP(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PMCP', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'MLP';
+                            GlobalYear = rowLevel;
+                            DrawPC(chartDataMonth, "chart year" + " " + rl, null);
+                        });
+                    }
+                }
+
+                /*--------------Revenue----------------*/
+                function PYR() {
+                    $.ajax({
+                        url: '/Stats/PYCR', //Stats/SalesDataYearWise
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {},
+                        success: function (d) {
+                            chartDataYear = d;
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    }).done(function () {
+                        CurrentReport = 'year';
+                        //GlobalYear = rowLevel;
+                        DrawPC(chartDataYear, "Sales Report Data", PMR);
+                    });
+                }
+
+                function PMR(chart, data) {
+                    var selectedItem = chart.getSelection()[0];
+                    if (selectedItem) {
+                        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                        var rl = rowLevel.toString();
+                        //var year = new Date(rowLevel, 2)
+                        var chartData = null;
+                        $.ajax({
+                            url: '/Stats/PMCR', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                            type: 'get',
+                            dataType: 'json',
+                            data: { 'y': rowLevel },
+                            success: function (d) {
+                                chartDataMonth = d;
+                            },
+                            error: function () {
+                                alert("Error")
+                            }
+                        }).done(function () {
+                            CurrentReport = 'MLR';
+                            GlobalYear = rowLevel;
+                            DrawPC(chartDataMonth, "chart year" + " " + rl, null);
+                        });
+                    }
+                }
+
+
+                /*-------------------------------------------------------------------------------------------------------------------------------------*/
+
+                function generateChart(chartData, title, selectEvent) {
+                    var data = google.visualization.arrayToDataTable(chartData);
+
+                    var options = {
+                        title: title,
+                        pointSize: 5,
+                        focusTarget: "category",
+                        hAxis: { showTextEvery: 1 }
+                    }
+
+                    var lineChart = new google.visualization.LineChart(document.getElementById('chart'));
+                    if (selectEvent != null) {
+                        google.visualization.events.addListener(lineChart, 'select', function () {
+                            selectEvent(lineChart, data);
+                        });
+                    }
+                    GenerateBack(CurrentReport);
+                    lineChart.draw(data, options);
+                }
+
+                function DrawPC(chartData, title, selectEvent) {
+                    var data = google.visualization.arrayToDataTable(chartData);
+
+                    var options = {
+                        title: title,
+                        pointSize: 5,
+                        focusTarget: "category",
+                        hAxis: { showTextEvery: 1 }
+                    }
+                    //ColumnChart
+                    var Piechart = new google.visualization.PieChart(document.getElementById('chart'));
+                    if (selectEvent != null) {
+                        google.visualization.events.addListener(Piechart, 'select', function () {
+                            selectEvent(Piechart, data);
+                        });
+                    }
+                    GenerateBack(CurrentReport);
+                    Piechart.draw(data, options);
+                }
+
+                function DrawD(chartData, title, selectEvent) {
+                    var data = google.visualization.arrayToDataTable(chartData);
+
+                    var options = {
+                        title: title,
+                        pointSize: 5,
+                        focusTarget: "category",
+                        hAxis: { showTextEvery: 1 }
+                    }
+                    //ColumnChart
+                    var Piechart = new google.visualization.ColumnChart(document.getElementById('chart'));
+                    if (selectEvent != null) {
+                        google.visualization.events.addListener(Piechart, 'select', function () {
+                            selectEvent(Piechart, data);
+                        });
+                    }
+                    GenerateBack(CurrentReport);
+                    Piechart.draw(data, options);
+                }
+
+                function GenerateBack(currentReport) {
+                    $('.backButtonContainer').remove();
+                    //Create new Back Button
+                    if (currentReport != 'year') { //back button except year
+                        var $back = $('<button/>')
+                            .text('Back')
+                            .addClass('reportBack')
+                            .click(function () {
+                                switch (currentReport) {
+                                    case 'MLT':
+                                        CurrentReport = 'year';
+                                        generateChart(chartDataYear, "Sales Report Data", LYT);
+                                        break;
+                                    case 'MLP':
+                                        CurrentReport = 'year';
+                                        generateChart(chartDataYear, "Sales Report Data", LYP);
+                                        break;
+                                    case 'MLR':
+                                        CurrentReport = 'year';
+                                        generateChart(chartDataYear, "Sales Report Data", LYR);
+                                        break;
+                                    case 'WLT':
+                                        CurrentReport = 'year';
+                                        generateChart(chartDataYear, "Sales Report Data", LYT);
+                                        //generateChart(chartDataMonth, "Sales Report Data of year " + GlobalYear, LMT);
+                                        break;
+                                    case 'WLP':
+                                        CurrentReport = 'year';
+                                        generateChart(chartDataYear, "Sales Report Data", LYP);
+                                        //generateChart(chartDataMonth, "Sales Report Data of year " + GlobalYear, LMP);
+                                        break;
+                                    case 'WLR':
+                                        CurrentReport = 'year';
+                                        generateChart(chartDataYear, "Sales Report Data", LYR);
+                                        //generateChart(chartDataMonth, "Sales Report Data of year " + GlobalYear, LMR);
+                                        break;
+
+
+
+
+                                    case 'MDT':
+                                        CurrentReport = 'year';
+                                        DrawD(chartDataYear, "Sales Report Data", DYT);
+                                        break;
+                                    case 'MDP':
+                                        CurrentReport = 'year';
+                                        DrawD(chartDataYear, "Sales Report Data", DYP);
+                                        break;
+                                    case 'MDR':
+                                        CurrentReport = 'year';
+                                        DrawD(chartDataYear, "Sales Report Data", DYR);
+                                        break;
+                                    case 'WDT':
+                                        CurrentReport = 'year';
+                                        DrawD(chartDataYear, "Sales Report Data", DYT);
+                                        //generateChart(chartDataMonth, "Sales Report Data of year " + GlobalYear, LMT);
+                                        break;
+                                    case 'WDP':
+                                        CurrentReport = 'year';
+                                        DrawD(chartDataYear, "Sales Report Data", DYP);
+                                        //generateChart(chartDataMonth, "Sales Report Data of year " + GlobalYear, LMP);
+                                        break;
+                                    case 'WDR':
+                                        CurrentReport = 'year';
+                                        DrawD(chartDataYear, "Sales Report Data", DYR);
+                                        //generateChart(chartDataMonth, "Sales Report Data of year " + GlobalYear, LMR);
+                                        break;
+
+
+
+
+
+
+
+                                    default:
+
+                                }
+                                $(this).parent().remove();
+                            });
+                        var $div = $('<div/>')
+                            .addClass('backButtonContainer')
+                            .css({ 'width': '70%', 'text-align': 'right', 'padding': '5px' })
+                            .append($back);
+                        $('#chart').before($div);
+
+                    }
+                }
+
+                    //function selectYear(chart, data) {
+                    //    var selectedItem = chart.getSelection()[0];
+                    //    if (selectedItem) {
+                    //        var rowLevel = parseInt(data.getValue(selectedItem.row, 0));
+                    //        var rl = rowLevel.toString();
+                    //        //var year = new Date(rowLevel, 2)
+                    //        var chartData = null;
+                    //        $.ajax({
+                    //            url: '/Stats/DWCVerkocht', //DataWeekWise//SalesDataMonthWise//DWC//DWCVerkocht //'/Stats/DWCVerkocht'
+                    //            type: 'get',
+                    //            dataType: 'json',
+                    //            data: { 'y': rowLevel },
+                    //            success: function (d) {
+                    //                chartDataMonth = d;
+                    //            },
+                    //            error: function () {
+                    //                alert("Error")
+                    //            }
+                    //        }).done(function () {
+                    //            CurrentReport = 'month';
+                    //            GlobalYear = rowLevel;
+                    //            generateChart(chartDataMonth, "chart year" + " " + rl, selectMonth);
+                    //        });
+                    //    }
+                    //}
+
+                    //function selectMonth(chart, data) {
+                    //    //month event(after select month data from chart)
+                    //    var selectedItem = chart.getSelection()[0];
+                    //    if (selectedItem) {
+                    //        var rowLevel = data.getValue(selectedItem.row, 0);
+                    //        $.ajax({
+                    //            url: '/Stats/SalesDataDayWise',
+                    //            type: 'get',
+                    //            dataType: 'json',
+                    //            data: { 'y': GlobalYear, 'm': rowLevel },
+                    //            succes: function (d) {
+                    //                chartDataDays = d
+                    //            },
+                    //            error: function () {
+                    //                alert("error!")
+                    //            }
+                    //        }).done(function () {
+                    //            CurrentReport = "days";
+                    //            generateChart(chartDataDays, "Chart" + rowLevel + " " + GlobalYear, null);
+                    //        });
+                    //    }
+                    //}
+
+            </script>
+            </div>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
