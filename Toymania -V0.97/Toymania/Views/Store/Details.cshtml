@@ -14,40 +14,44 @@
 </head>
 <body>
     <div class="container container-bodystore">
-        <h2>@Model.t.ToysName</h2>
-        <p>
-            <img src="@Url.Content("~/Content/img/"+Model.t.ItemArtUrl)" />
-        </p>
-        <p>
-            <em>Producer:</em>
-            @Model.t.Producers.Name
-        </p>
-        <p>
-            <em>Price:</em>
-            @String.Format("€{0:F}", Model.t.Price)
-        </p>
-        <p>
-            <em>Category:</em>
-            @Model.t.Categories.CName
-        </p>
-        <p>
-            <em>Subcategory:</em>
-            @Model.t.SubCategories.SCName
-        </p>
-        <div id="item-details">
-
-
+        <div class="col-md-4">
+            <p>
+                <img src="@Url.Content("~/Content/img/"+Model.t.ItemArtUrl)" class="product_foto_detail"/>
+            </p>
         </div>
-        <p class="button">
-            <a href="#" class="btn" onclick="AddToCart(@Model.t.ToysId)">Add to cart</a>
-            @*@Html.ActionLink("Add to cart", "ATC", "ShoppingCart", new { id = Model.t.ToysId }, "")*@
-        </p>
+        <div class="col-md-8">
+            <h2>@Model.t.ToysName</h2>
 
-        <p class="button">
-            <a href="#" class="btn" onclick="AddToWishlist(@Model.t.ToysId)">Add to wishlist</a>
-            @*@Html.ActionLink("Add to wishlist", "ATW", "WishlistManager", new { id = Model.t.ToysId }, "")*@
-        </p>
+            <p>
+                <em>Producer:</em>
+                @Model.t.Producers.Name
+            </p>
+            <p>
+                <em>Price:</em>
+                @String.Format("€{0:F}", Model.t.Price)
+            </p>
+            <p>
+                <em>Category:</em>
+                @Model.t.Categories.CName
+            </p>
+            <p>
+                <em>Subcategory:</em>
+                @Model.t.SubCategories.SCName
+            </p>
+            <div id="item-details">
 
+
+            </div>
+            <p class="button">
+                <a href="#" class="btn" onclick="AddToCart(@Model.t.ToysId)">Add to cart</a>
+                @*@Html.ActionLink("Add to cart", "ATC", "ShoppingCart", new { id = Model.t.ToysId }, "")*@
+            </p>
+
+            <p class="button">
+                <a href="#" class="btn" onclick="AddToWishlist(@Model.t.ToysId)">Add to wishlist</a>
+                @*@Html.ActionLink("Add to wishlist", "ATW", "WishlistManager", new { id = Model.t.ToysId }, "")*@
+            </p>
+        </div>
 
 
 
@@ -55,34 +59,35 @@
 
         @if (Model.lt != null)
         {
-            <p>Other customers also order:</p>
-            <div class=" toymenu col-md-8">
-                @foreach (var item in Model.lt)
-                {
-                    <div class="col-md-4">
-                        <p>
+            
+        <div class=" toymenu col-md-12">
+            <p><b>Other customers also order:</b></p>
+            @foreach (var item in Model.lt)
+            {
+                <div class="col-md-4">
+                    <p>
 
-                            <img src="@Url.Content("~/Content/img/"+item.ItemArtUrl)" />
-                        </p>
-                        <p>
-                            @Html.ActionLink(item.ToysName, "Details", new { id = item.ToysId })
-                        </p>
-                        <p>
-                            <strong>Price:</strong>
-                            @String.Format("€{0:F}", item.Price)
-                        </p>
-                        <p>
-                            <a href="#" class="btn" onclick="AddToCart(@item.ToysId)">Add to cart</a>
-                            @*@Html.ActionLink("Add to cart", "ATC", "ShoppingCart", new { id = item.ToysId }, null)*@
-                        </p>
-                        <p>
-                            <a href="#" class="btn" onclick="AddToWishlist(@item.ToysId)">Add to wishlist</a>
-                            @*@Html.ActionLink("Add to wishlist", "ATW", "WishlistManager", new { id = item.ToysId }, "")*@
-                        </p>
+                        <img src="@Url.Content("~/Content/img/"+item.ItemArtUrl)" />
+                    </p>
+                    <p>
+                        @Html.ActionLink(item.ToysName, "Details", new { id = item.ToysId })
+                    </p>
+                    <p>
+                        <strong>Price:</strong>
+                        @String.Format("€{0:F}", item.Price)
+                    </p>
+                    <p>
+                        <a href="#" class="btn" onclick="AddToCart(@item.ToysId)">Add to cart</a>
+                        @*@Html.ActionLink("Add to cart", "ATC", "ShoppingCart", new { id = item.ToysId }, null)*@
+                    </p>
+                    <p>
+                        <a href="#" class="btn" onclick="AddToWishlist(@item.ToysId)">Add to wishlist</a>
+                        @*@Html.ActionLink("Add to wishlist", "ATW", "WishlistManager", new { id = item.ToysId }, "")*@
+                    </p>
 
-                    </div>
-                }
-            </div>
+                </div>
+            }
+        </div>
         }
 
 

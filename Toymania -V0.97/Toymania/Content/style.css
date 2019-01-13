@@ -34,6 +34,7 @@ body {
     padding-top: 10px;
     padding-bottom: 10px;
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    border: 2px solid black;
 }
 
 .navbar-default {
@@ -297,6 +298,20 @@ a.cart_img {
     margin-top: 20px;
 }
 
+.store_toy_naam {
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.product_foto_detail{
+    width:100%;
+    
+}
+
+.btn {
+    border: 2px solid black;
+}
 /*ul.tabs {
     margin: 0px;
     /*padding: opx;
