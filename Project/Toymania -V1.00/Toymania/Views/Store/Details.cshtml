@@ -1,0 +1,123 @@
+﻿@*@model Toymania.Models.Toy*@
+@model Toymania.ViewModels.Recommended
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container container-bodystore">
+        <div class="col-md-4">
+            <p>
+                <img src="@Url.Content("~/Content/img/"+Model.t.ItemArtUrl)" class="product_foto_detail"/>
+            </p>
+        </div>
+        <div class="col-md-8">
+            <h2>@Model.t.ToysName</h2>
+
+            <p>
+                <em>Producer:</em>
+                @Model.t.Producers.Name
+            </p>
+            <p>
+                <em>Price:</em>
+                @String.Format("€{0:F}", Model.t.Price)
+            </p>
+            <p>
+                <em>Category:</em>
+                @Model.t.Categories.CName
+            </p>
+            <p>
+                <em>Subcategory:</em>
+                @Model.t.SubCategories.SCName
+            </p>
+            <div id="item-details">
+
+
+            </div>
+            <p class="button">
+                <a href="#" class="btn" onclick="AddToCart(@Model.t.ToysId)">Add to cart</a>
+                @*@Html.ActionLink("Add to cart", "ATC", "ShoppingCart", new { id = Model.t.ToysId }, "")*@
+            </p>
+
+            <p class="button">
+                <a href="#" class="btn" onclick="AddToWishlist(@Model.t.ToysId)">Add to wishlist</a>
+                @*@Html.ActionLink("Add to wishlist", "ATW", "WishlistManager", new { id = Model.t.ToysId }, "")*@
+            </p>
+        </div>
+
+
+
+
+
+        @if (Model.lt != null)
+        {
+            
+        <div class=" toymenu col-md-12">
+            <p><b>Other customers also order:</b></p>
+            @foreach (var item in Model.lt)
+            {
+                <div class="col-md-4">
+                    <p>
+
+                        <img src="@Url.Content("~/Content/img/"+item.ItemArtUrl)" />
+                    </p>
+                    <p>
+                        @Html.ActionLink(item.ToysName, "Details", new { id = item.ToysId })
+                    </p>
+                    <p>
+                        <strong>Price:</strong>
+                        @String.Format("€{0:F}", item.Price)
+                    </p>
+                    <p>
+                        <a href="#" class="btn" onclick="AddToCart(@item.ToysId)">Add to cart</a>
+                        @*@Html.ActionLink("Add to cart", "ATC", "ShoppingCart", new { id = item.ToysId }, null)*@
+                    </p>
+                    <p>
+                        <a href="#" class="btn" onclick="AddToWishlist(@item.ToysId)">Add to wishlist</a>
+                        @*@Html.ActionLink("Add to wishlist", "ATW", "WishlistManager", new { id = item.ToysId }, "")*@
+                    </p>
+
+                </div>
+            }
+        </div>
+        }
+
+
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+        <script>
+            var AddToCart = function (id) {
+                var i = id;
+                $.ajax({
+                    type: "POST",
+                    url: "/ShoppingCart/AddPartial",
+                    data: { id: i },
+                    //success: function (r) {
+                    //}
+                })
+            }
+
+            var AddToWishlist = function (id) {
+                var i = id;
+                $.ajax({
+                    type: "POST",
+                    url: "/WishlistManager/AddPartial",
+                    data: { id: i },
+                    //success: function (r) {
+                    //}
+                })
+            }
+
+        </script>
+
+
+    </div>
+</body>
+</html>
