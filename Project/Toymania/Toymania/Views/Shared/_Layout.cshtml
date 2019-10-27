@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Toymania</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body style="padding-top:0px;">
+    <div class="navbar-default">
+        <ul class="nav">
+            <li style="padding-top:0px; padding-right:20px;">@Html.ActionLink("Home", "Index", "Home", null, new { @class = "logo_img" })</li>
+            <li>@Html.ActionLink("Store", "Index", "store")</li>
+            <li>@Html.ActionLink("Wishlist", "Index", "WishlistManager")</li>
+            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+            <li>@Html.ActionLink("About", "About", "Home")</li>
+            <li>@Html.ActionLink("Help", "Help", "Home")</li>
+            <li>@{Html.RenderAction("CartSummary", "ShoppingCart");}</li>
+            @Html.Partial("_LoginPartial")
+        </ul>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Toymania</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    @Styles.Render("~/Content/style.css")
+    @Scripts.Render("~/Content/bootstrapJ.css")
+</body>
+</html>
