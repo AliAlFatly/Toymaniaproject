@@ -12,6 +12,10 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="utf-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 </head>
 <body>
     <div class="container container-body">
@@ -24,38 +28,41 @@
 
 
         <div class="col-md-12 categorien">
-            @foreach (var item in Model.C)
+            @foreach (var item in Model.Categories)
             {
 
                 <ul>
-                    <li> @Html.ActionLink(item.CName, "index", new { C = item.CName, PC = ViewData["PriceCategory"], ps = ViewData["PageSize"] }) </li>
+                    <li> @Html.ActionLink(item.CategoryName, "index", new { category = item.CategoryName, PC = ViewData["PriceCategory"], ps = ViewData["PageSize"] }) </li>
 
                 </ul>
             }
         </div>
 
         @*pagination met behulp van viewdata(default wordt geset op 30-> vervolgens bij verandering de viewdata aanpassen);*@
-        <div class="Sidebar" style="display:inline-block">
-            <div class="filters col-md-12 PCT1" >
+        <div style="display:inline-block">
+            <div class="filters col-md-12 PCT1">
                 <p><strong>Prijsfilters</strong></p>
-                <li style="list-style:none">
-                    @Html.ActionLink("00.01 - 9,99 euro", "Index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PC = 1, ps = ViewData["PageSize"] }) <br />
-                    @Html.ActionLink("10,00 - 19,99 euro", "index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PC = 2, ps = ViewData["PageSize"] }) <br />
-                    @Html.ActionLink("20,00 - 49,99 euro", "index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PC = 3, ps = ViewData["PageSize"] }) <br />
-                    @Html.ActionLink("50,00 - 99,99 euro", "index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PC = 4, ps = ViewData["PageSize"] }) <br />
-                    @Html.ActionLink("100,00 - 499,99 euro", "index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PC = 5, ps = ViewData["PageSize"] }) <br />
-                    @Html.ActionLink("500,00+ euro", "index", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PC = 6, ps = ViewData["PageSize"] }) <br />
-                </li>
+                <ul>
+                    <li style="list-style:none">
+                        @Html.ActionLink("00.01 - 9,99 euro", "Index", new { category = Model.SelectedCategory, subCategory = Model.SelectedSubCategory, maxPrice = 10, pageSize = Model.PageSize }) <br />
+                        @Html.ActionLink("10,00 - 19,99 euro", "index", new { category = Model.SelectedCategory, subCategory = Model.SelectedSubCategory, minPrice = 10, maxPrice = 20, pageSize = Model.PageSize }) <br />
+                        @Html.ActionLink("20,00 - 49,99 euro", "index", new { category = Model.SelectedCategory, subCategory = Model.SelectedSubCategory, minPrice = 20, maxPrice = 50, pageSize = Model.PageSize }) <br />
+                        @Html.ActionLink("50,00 - 99,99 euro", "index", new { category = Model.SelectedCategory, subCategory = Model.SelectedSubCategory, minPrice = 50, maxPrice = 100, pageSize = Model.PageSize }) <br />
+                        @Html.ActionLink("100,00 - 499,99 euro", "index", new { category = Model.SelectedCategory, subCategory = Model.SelectedSubCategory, minPrice = 100, maxPrice = 500, pageSize = Model.PageSize }) <br />
+                        @Html.ActionLink("500,00+ euro", "index", new { category = Model.SelectedCategory, subCategory = Model.SelectedSubCategory, minPrice = 500, pageSize = Model.PageSize }) <br />
+                    </li>
+                </ul>
+
             </div>
             <div class="col-md-12 SCT1">
                 <p><strong>Subcategorieën</strong></p>
-                @if (Model.SC != null)
+                @if (Model.SubCategories != null)
                 {
                     <div class="categorie">
-                        @foreach (var item in Model.SC)
+                        @foreach (var item in Model.SubCategories)
                         {
                             <div class="filters">
-                                @Html.ActionLink(item.SCName, "index", new { C = ViewData["Category"], SC = item.SCName, PC = ViewData["PriceCategory"], ps = ViewData["PageSize"] })
+                                @Html.ActionLink(item.SubCategoryName, "index", new { category = Model.SelectedCategory, subCategory = item.SubCategoryName, minPrice = Model.MinPrice, maxPrice = Model.MaxPrice, pageSize = Model.PageSize })
                             </div>
                         }
                     </div>
@@ -63,10 +70,10 @@
 
             </div>
         </div>
-        @if (Model.T != null)
+        @if (Model.Toys != null)
         {
             <div class=" toymenu col-md-8">
-                @foreach (var item in Model.T)
+                @foreach (var item in Model.Toys)
                 {
                     <div class="col-md-4" style="display:inline-block; width:300px;">
                         <p>
@@ -94,16 +101,15 @@
                 }
             </div>
         }
-
-        @Html.PagedListPager(Model.T, P => Url.Action("Index", new { P, C = ViewData["Category"], SC = ViewData["SubCategory"], PC = ViewData["PriceCategory"], PS = ViewData["PageSize"] }),
+        @Html.PagedListPager(Model.Toys, P => Url.Action("Index", new { currentPage = P, category = Model.SelectedCategory, subCategory = Model.SelectedSubCategory, minPrice = Model.MinPrice, maxPrice = Model.MaxPrice, search = Model.Search, pageSize = Model.PageSize }),
 new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true, DisplayItemSliceAndTotal = true }
 )
 
         <div style="display:block; width:100%">
 
-            @using (@Html.BeginForm("Index", "Store", new { C = ViewData["Category"], SC = ViewData["SubCategory"], PC = ViewData["PriceCategory"] }, FormMethod.Post))
+            @using (@Html.BeginForm("Index", "Store", new { category = Model.SelectedCategory, subCategory = Model.SelectedSubCategory, minPrice = Model.MinPrice, maxPrice = Model.MaxPrice, search = Model.Search }, FormMethod.Post))
             {
-                @Html.DropDownList("PS", new List<SelectListItem>
+                @Html.DropDownList("pageSize", new List<SelectListItem>
                 {
                     new SelectListItem{Text = "30", Value = "30", Selected = true},
                     new SelectListItem{Text = "60", Value = "60"},
@@ -132,6 +138,20 @@ new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayP
         </script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
         <script>
+            $(function () {
+                priceSlider();
+            })
+
+            var priceSlider = $("#slider-range").slider({
+                range: true,
+                min: Model.minPrice,
+                max: Model.maxPrice,
+                values: [Model.minPrice, Model.maxPrice],
+                slide: function (event, ui) {
+                    $("#amount").val("$" + ui.values[0] + " - " + "$" + ui.values[1]);
+                }
+            })
+
             var AddToCart = function (id) {
                 var i = id;
                 $.ajax({
@@ -140,6 +160,14 @@ new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayP
                     data: { id: i },
                     //success: function (r) {
                     //}
+                })
+            }
+
+            var PriceCategoryChange = function (min, max) {
+                $.ajax({
+                    type: "GET",
+                    url: "/Store/index",
+                    data: { category: , subCategory: , minPrice: min, maxPrice: max, pageSize:}
                 })
             }
 
@@ -167,6 +195,8 @@ new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayP
             })
         </script>*@
     </div>
+
 </body>
+
 </html>
 

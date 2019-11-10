@@ -34,29 +34,29 @@
                                 <table class="table Createmarg">
                                     <tr>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.t[1].ToysName)
+                                            @Html.DisplayNameFor(model => model.toys[1].ToysName)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.t[1].Price)
+                                            @Html.DisplayNameFor(model => model.toys[1].Price)
                                         </th>
                                         <th style="display:none">
-                                            @Html.DisplayNameFor(model => model.t[1].Counter)
+                                            @Html.DisplayNameFor(model => model.toys[1].Counter)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.t[1].MinimumAge)
+                                            @Html.DisplayNameFor(model => model.toys[1].MinimumAge)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.t[1].SubCategoryId)
+                                            @Html.DisplayNameFor(model => model.toys[1].SubCategoryId)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.t[1].Categories.CName)
+                                            @Html.DisplayNameFor(model => model.toys[1].CategoryId)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.t[1].Producers.Name)
+                                            @Html.DisplayNameFor(model => model.toys[1].Producers.Name)
                                         </th>
                                         <th></th>
                                     </tr>
-                                    @foreach (var item in Model.t)
+                                    @foreach (var item in Model.toys)
                                     {
                                         <tr>
                                             <td>
@@ -72,10 +72,10 @@
                                                 @Html.DisplayFor(modelItem => item.MinimumAge)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.SubCategories.SCName)
+                                                @Html.DisplayFor(modelItem => item.SubCategories.SubCategoryName)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.Categories.CName)
+                                                @Html.DisplayFor(modelItem => item.Categories.CategoryName)
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Producers.Name)
@@ -98,29 +98,29 @@
                                 <table class="table Createmarg">
                                     <tr>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.d[1].ToysName)
+                                            @Html.DisplayNameFor(model => model.deleted[1].ToysName)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.d[1].Price)
+                                            @Html.DisplayNameFor(model => model.deleted[1].Price)
                                         </th>
                                         <th style="display:none">
-                                            @Html.DisplayNameFor(model => model.d[1].Counter)
+                                            @Html.DisplayNameFor(model => model.deleted[1].Counter)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.d[1].MinimumAge)
+                                            @Html.DisplayNameFor(model => model.deleted[1].MinimumAge)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.d[1].SubCategoryId)
+                                            @Html.DisplayNameFor(model => model.deleted[1].SubCategoryId)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.d[1].Categories.CName)
+                                            @Html.DisplayNameFor(model => model.deleted[1].CategoryId)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.d[1].Producers.Name)
+                                            @Html.DisplayNameFor(model => model.deleted[1].Producers.Name)
                                         </th>
                                         <th></th>
                                     </tr>
-                                    @foreach (var item in Model.d)
+                                    @foreach (var item in Model.deleted)
                                     {
                                         <tr>
                                             <td>
@@ -136,10 +136,10 @@
                                                 @Html.DisplayFor(modelItem => item.MinimumAge)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.SubCategories.SCName)
+                                                @Html.DisplayFor(modelItem => item.SubCategories.SubCategoryName)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.Categories.CName)
+                                                @Html.DisplayFor(modelItem => item.Categories.CategoryName)
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Producers.Name)

@@ -33,7 +33,7 @@ namespace Toymania.Models
         //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CategoryId { get; set; }
         [DisplayName("Category")]
-        public string CName { get; set; }
+        public string CategoryName { get; set; }
         public string Description { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -118,9 +118,9 @@ namespace Toymania.Models
         public Nullable<decimal> UnitPrice { get; set; }
         public string Status { get; set; }
         [ScaffoldColumn(false)]
-        public string CName { get; set; }
+        public string CategoryName { get; set; }
         [ScaffoldColumn(false)]
-        public string SCName { get; set; }
+        public string SubCategoryName { get; set; }
         public Nullable<int> Week { get; set; }
         public Nullable<int> Month { get; set; }
         public Nullable<int> year { get; set; }
@@ -162,7 +162,7 @@ namespace Toymania.Models
 
         public int SubCategoryId { get; set; }
         [DisplayName("Subcategory")]
-        public string SCName { get; set; }
+        public string SubCategoryName { get; set; }
         public string Description { get; set; }
         public Nullable<int> CategoryId { get; set; }
 

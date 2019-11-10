@@ -15,14 +15,14 @@
 
 <body>
 
-    @if (Model.CT.Count() == 0)
+    @if (Model.CartToy.Count() == 0)
     {
         <div class="container container-body2">
             <p>Your cart is empty</p>
         </div>
     }
 
-    @if (Model.CT.Count() != 0)
+    @if (Model.CartToy.Count() != 0)
     {
 
 
@@ -50,7 +50,7 @@
                     <th>Quantity</th>
                     <th></th>
                 </tr>
-                @foreach (var item in Model.CT)
+                @foreach (var item in Model.CartToy)
                 {
                     <tr id="row_@item.RecordId">
                         <td>@Html.ActionLink(item.Toy.ToysName, "Details", "Store", new { id = item.ToyId }, null)</td>

@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Toymania.Controllers;
 using System.Web.Mvc.Ajax;
+using Toymania.Services;
 
 namespace Toymania.Controllers
 {
@@ -19,43 +20,35 @@ namespace Toymania.Controllers
         ApplicationDbContext db = new ApplicationDbContext();
         public ActionResult Index()
         {
-            Orders o = new Orders();
-            List<Order> O = o.GO(this.HttpContext);
-            List<Order> IP = o.GOS(this.HttpContext, "In Progress");
-            List<Order> C = o.GOS(this.HttpContext, "Completed");
-
-
-            var OVM = new OrdersViewModel
+            OrdersService OrderService = new OrdersService();
+            var Model = new OrdersViewModel
             {
-                O = O,
-                IP = IP,
-                C = C
+                AllOrders = OrderService.GetOrders(this.HttpContext),
+                InProgressOrders = OrderService.GetOrders(this.HttpContext, "In Progress"),
+                CompletedOrders = OrderService.GetOrders(this.HttpContext, "Completed")
             };
 
-            return View(OVM);
+            return View(Model);
         }
 
-        public ActionResult Detail(int id, string S)
+        public ActionResult Detail(int id, string Status)
         {
-            var o = new Orders();
-
-            if( S != null)
+            var OrderService = new OrdersService();
+            if(Status != null)
             {
-                var ODTemp = o.GDS(id, S);
-                var ODVM = new OrderDetailViewModel
+                var Model = new OrderDetailViewModel
                 {
-                    OD = ODTemp
+                    OrderDetails = OrderService.GetOrderDetails(id, Status)
                 };
-                return View(ODVM);
+                return View(Model);
             }
             else
             {
-                var ODTemp = o.GD(id);
-                var ODVM = new OrderDetailViewModel
+                var Model = new OrderDetailViewModel
                 {
-                    OD = ODTemp
+                    OrderDetails = OrderService.GetOrderDetails(id)
                 };
-                return View(ODVM);
+                return View(Model);
             }
 
         }

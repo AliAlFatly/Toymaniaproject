@@ -27,7 +27,7 @@
             </th>
             <th></th>
         </tr>
-        @foreach (var item in Model.CT)
+        @foreach (var item in Model.CartToy)
         {
             <tr>
                 <td>
@@ -44,7 +44,7 @@
                     @*<a href="#" class="RemoveLink" data-id="@item.RecordId">
                             Remove from cart
                         </a>*@
-                    @Html.ActionLink("Remove from cart", "RFC", new { id = item.RecordId })
+                    @Html.ActionLink("Remove from cart", "RemoveFromCart", new { id = item.RecordId })
                 </td>
             </tr>
 

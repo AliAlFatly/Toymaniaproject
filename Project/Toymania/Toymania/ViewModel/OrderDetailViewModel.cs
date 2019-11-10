@@ -13,6 +13,6 @@ namespace Toymania.ViewModels
 {
     public class OrderDetailViewModel
     {
-        public ICollection<OrderDetails> OD { get; set; }
+        public ICollection<OrderDetails> OrderDetails { get; set; }
     }
 }

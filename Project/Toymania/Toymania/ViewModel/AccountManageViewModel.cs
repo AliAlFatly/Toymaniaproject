@@ -9,7 +9,7 @@ namespace Toymania.ViewModels
 {
     public class AccountManageViewModel
     {
-        public List<ApplicationUser> c { get; set; }
-        public List<ApplicationUser> a { get; set; }
+        public List<ApplicationUser> Customer { get; set; }
+        public List<ApplicationUser> Admin { get; set; }
     }
 }

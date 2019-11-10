@@ -1,0 +1,21 @@
+﻿@model Toymania.Models.Coupon
+
+@{
+    //ViewBag.Title = "UB";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<body>
+        <div class="container container-body2">
+            <p></p>
+            <p>@ViewBag.message</p>
+            @using (@Html.BeginForm("UpdateBalancePost", "Coupon", FormMethod.Get))
+            {
+
+                @Html.TextBox("coupon") <input type="submit" value="Sumbit" />
+
+            }
+            </div>
+    </body>
+
+    @*<h2>UB</h2>*@

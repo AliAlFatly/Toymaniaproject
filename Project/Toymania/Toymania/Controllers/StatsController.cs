@@ -90,11 +90,11 @@ namespace Toymania.Controllers
 
         /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-        public int TCY(int Y, string CName) //get total category(sales)
+        public int TCY(int Y, string CategoryName) //get total category(sales)
         {
-            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            //returnt lijst met alle records waarbij de week en de CategoryName zoals assignd is
             var T = (from od in db.OrderDetails
-                     where od.year == Y && od.CName == CName
+                     where od.year == Y && od.CategoryName == CategoryName
                      select (int)od.Quantity).ToList();
 
             var R = 0;
@@ -120,11 +120,11 @@ namespace Toymania.Controllers
             }
         }
 
-        public decimal? PCY(int Y, string CName) //get total winst category
+        public decimal? PCY(int Y, string CategoryName) //get total winst category
         {
-            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            //returnt lijst met alle records waarbij de week en de CategoryName zoals assignd is
             var T = (from od in db.OrderDetails
-                     where od.year == Y && od.CName == CName
+                     where od.year == Y && od.CategoryName == CategoryName
                      select od.Quantity * od.UnitPrice).ToList();
             //functie die toy, quantity, prijs neemt en totaal uitrekent
 
@@ -151,11 +151,11 @@ namespace Toymania.Controllers
             }
         }
 
-        public decimal? RCY(int Y, string CName) //get total omzet category
+        public decimal? RCY(int Y, string CategoryName) //get total omzet category
         {
-            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            //returnt lijst met alle records waarbij de week en de CategoryName zoals assignd is
             var T = from od in db.OrderDetails
-                    where od.year == Y && od.CName == CName
+                    where od.year == Y && od.CategoryName == CategoryName
                     select od;
             //functie die toy, quantity, prijs neemt en totaal uitrekent
 
@@ -211,8 +211,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
-                                T = TCY((int)i, c.CName)
+                                C = c.CategoryName,
+                                T = TCY((int)i, c.CategoryName)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -232,7 +232,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
+                                C = c.CategoryName,
                                 T = 0
                             };
                             TEMPCT.Add(T2);
@@ -341,8 +341,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
-                                t = PCY((int)i, c.CName)
+                                C = c.CategoryName,
+                                t = PCY((int)i, c.CategoryName)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -362,7 +362,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
+                                C = c.CategoryName,
                                 t = 0
                             };
                             TEMPCT.Add(T2);
@@ -471,8 +471,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
-                                t = RCY((int)i, c.CName)
+                                C = c.CategoryName,
+                                t = RCY((int)i, c.CategoryName)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -492,7 +492,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
+                                C = c.CategoryName,
                                 t = 0
                             };
                             TEMPCT.Add(T2);
@@ -569,11 +569,11 @@ namespace Toymania.Controllers
             };
         }
         /*-------------------------------------------------------------------------------------------------*/
-        public int TCM(int Y, string CName, int M) //get total category(sales)
+        public int TCM(int Y, string CategoryName, int M) //get total category(sales)
         {
-            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            //returnt lijst met alle records waarbij de week en de CategoryName zoals assignd is
             var T = (from od in db.OrderDetails
-                     where od.year == Y && od.CName == CName && od.Month == M
+                     where od.year == Y && od.CategoryName == CategoryName && od.Month == M
                      select (int)od.Quantity).ToList();
 
             var R = 0;
@@ -599,11 +599,11 @@ namespace Toymania.Controllers
             }
         }
 
-        public decimal? WCM(int Y, string CName, int M) //get total winst category
+        public decimal? WCM(int Y, string CategoryName, int M) //get total winst category
         {
-            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            //returnt lijst met alle records waarbij de week en de CategoryName zoals assignd is
             var T = (from od in db.OrderDetails
-                     where od.year == Y && od.CName == CName && od.Month == M
+                     where od.year == Y && od.CategoryName == CategoryName && od.Month == M
                      select od.Quantity * od.UnitPrice).ToList();
             //functie die toy, quantity, prijs neemt en totaal uitrekent
 
@@ -630,11 +630,11 @@ namespace Toymania.Controllers
             }
         }
 
-        public decimal? OCM(int Y, string CName, int M) //get total omzet category
+        public decimal? OCM(int Y, string CategoryName, int M) //get total omzet category
         {
-            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            //returnt lijst met alle records waarbij de week en de CategoryName zoals assignd is
             var T = (from od in db.OrderDetails
-                     where od.year == Y && od.CName == CName && od.Month == M
+                     where od.year == Y && od.CategoryName == CategoryName && od.Month == M
                      select od.Quantity * od.UnitPrice).ToList();
             //functie die toy, quantity, prijs neemt en totaal uitrekent
 
@@ -682,8 +682,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
-                                T = TCM(y, c.CName, i)
+                                C = c.CategoryName,
+                                T = TCM(y, c.CategoryName, i)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -703,7 +703,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
+                                C = c.CategoryName,
                                 T = 0
                             };
                             TEMPCT.Add(T2);
@@ -801,8 +801,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
-                                t = WCM(y, c.CName, i)
+                                C = c.CategoryName,
+                                t = WCM(y, c.CategoryName, i)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -822,7 +822,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
+                                C = c.CategoryName,
                                 t = 0m
                             };
                             TEMPCT.Add(T2);
@@ -920,8 +920,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
-                                t = OCM(y, c.CName, i)
+                                C = c.CategoryName,
+                                t = OCM(y, c.CategoryName, i)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -941,7 +941,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
+                                C = c.CategoryName,
                                 t = 0m
                             };
                             TEMPCT.Add(T2);
@@ -1021,11 +1021,11 @@ namespace Toymania.Controllers
 
 
         /*-------------------------------------------------------------------------------------------------*/
-        public int GTC(int W, string CName, int y) //get total category(sales)
+        public int GTC(int W, string CategoryName, int y) //get total category(sales)
         {
-            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            //returnt lijst met alle records waarbij de week en de CategoryName zoals assignd is
             var T = (from od in db.OrderDetails
-                     where od.Week == W && od.CName == CName && od.year == y
+                     where od.Week == W && od.CategoryName == CategoryName && od.year == y
                      select (int)od.Quantity).ToList();
             var R = 0;
             if (T != null)
@@ -1050,11 +1050,11 @@ namespace Toymania.Controllers
             }
         }
 
-        public decimal? GTWC(int W, string CName, int y) //get total winst category
+        public decimal? GTWC(int W, string CategoryName, int y) //get total winst category
         {
-            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            //returnt lijst met alle records waarbij de week en de CategoryName zoals assignd is
             var T = (from od in db.OrderDetails
-                     where od.Week == W && od.CName == CName && od.year == y
+                     where od.Week == W && od.CategoryName == CategoryName && od.year == y
                      select od.Quantity * (decimal?)od.UnitPrice).ToList();
             //functie die toy, quantity, prijs neemt en totaal uitrekent
 
@@ -1081,11 +1081,11 @@ namespace Toymania.Controllers
             }
         }
 
-        public decimal? GTOC(int W, string CName, int y) //get total omzet category
+        public decimal? GTOC(int W, string CategoryName, int y) //get total omzet category
         {
-            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            //returnt lijst met alle records waarbij de week en de CategoryName zoals assignd is
             var T = (from od in db.OrderDetails
-                     where od.Week == W && od.CName == CName && od.year == y
+                     where od.Week == W && od.CategoryName == CategoryName && od.year == y
                      select od.Quantity * od.UnitPrice).ToList();
             //functie die toy, quantity, prijs neemt en totaal uitrekent
 
@@ -1136,8 +1136,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
-                                T = GTC(i, c.CName, y)
+                                C = c.CategoryName,
+                                T = GTC(i, c.CategoryName, y)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -1157,7 +1157,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
+                                C = c.CategoryName,
                                 T = 0
                             };
                             TEMPCT.Add(T2);
@@ -1252,8 +1252,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
-                                t = GTWC(i, c.CName, y) //deze functie is anders dan DWCVerkocht(enige wat verandert wordt/ winst ipv sum)
+                                C = c.CategoryName,
+                                t = GTWC(i, c.CategoryName, y) //deze functie is anders dan DWCVerkocht(enige wat verandert wordt/ winst ipv sum)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -1273,7 +1273,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
+                                C = c.CategoryName,
                                 t = 0m
                             };
                             TEMPCT.Add(T2);
@@ -1368,8 +1368,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
-                                t = GTOC(i, c.CName, y) //deze functie is anders dan DWCVerkocht(enige wat verandert wordt/ omzet ipv sum)
+                                C = c.CategoryName,
+                                t = GTOC(i, c.CategoryName, y) //deze functie is anders dan DWCVerkocht(enige wat verandert wordt/ omzet ipv sum)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -1389,7 +1389,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
+                                C = c.CategoryName,
                                 t = 0m
                             };
                             TEMPCT.Add(T2);
@@ -1725,7 +1725,7 @@ namespace Toymania.Controllers
         public int PCSc(int Y, string CN)
         {
             var T = (from od in db.OrderDetails
-                     where od.year == Y && od.CName == CN
+                     where od.year == Y && od.CategoryName == CN
                      select (int)od.Quantity).ToList();
             var R = 0;
             if (T != null)
@@ -1753,7 +1753,7 @@ namespace Toymania.Controllers
         public decimal? PCRc(int Y, string CN)
         {
             var T = (from od in db.OrderDetails
-                     where od.year == Y && od.CName == CN
+                     where od.year == Y && od.CategoryName == CN
                      select (int)od.Quantity * (decimal?)od.UnitPrice).ToList();
             decimal? R = 0.00m;
             if (T != null)
@@ -1781,7 +1781,7 @@ namespace Toymania.Controllers
         public decimal? PCPc(int Y, string CN)
         {
             var T = (from od in db.OrderDetails
-                     where od.year == Y && od.CName == CN
+                     where od.year == Y && od.CategoryName == CN
                      select (int)od.Quantity * (decimal?)od.UnitPrice).ToList();
             decimal? R = 0.00m;
             if (T != null)
@@ -1811,7 +1811,7 @@ namespace Toymania.Controllers
         public int PSSc(int Y, string SCN)
         {
             var T = (from od in db.OrderDetails
-                     where od.year == Y && od.SCName == SCN
+                     where od.year == Y && od.SubCategoryName == SCN
                      select (int)od.Quantity).ToList();
             var R = 0;
             if (T != null)
@@ -1839,7 +1839,7 @@ namespace Toymania.Controllers
         public decimal? PSRc(int Y, string SCN)
         {
             var T = (from od in db.OrderDetails
-                     where od.year == Y && od.SCName == SCN
+                     where od.year == Y && od.SubCategoryName == SCN
                      select (int)od.Quantity * (decimal?)od.UnitPrice).ToList();
             decimal? R = 0.00m;
             if (T != null)
@@ -1867,7 +1867,7 @@ namespace Toymania.Controllers
         public decimal? PSPc(int Y, string SCN)
         {
             var T = (from od in db.OrderDetails
-                     where od.year == Y && od.SCName == SCN
+                     where od.year == Y && od.SubCategoryName == SCN
                      select (int)od.Quantity * (decimal?)od.UnitPrice).ToList();
             decimal? R = 0.00m;
             if (T != null)
@@ -2606,8 +2606,8 @@ namespace Toymania.Controllers
                 {
                     var T2 = new CT
                     {
-                        C = c.CName,
-                        T = PCSc(Y, c.CName)
+                        C = c.CategoryName,
+                        T = PCSc(Y, c.CategoryName)
                     };
                     ODCL.Add(T2);
                 }
@@ -2668,8 +2668,8 @@ namespace Toymania.Controllers
                 {
                     var T2 = new CT
                     {
-                        C = c.CName,
-                        t = PCRc(Y, c.CName)
+                        C = c.CategoryName,
+                        t = PCRc(Y, c.CategoryName)
                     };
                     ODCL.Add(T2);
                 }
@@ -2730,8 +2730,8 @@ namespace Toymania.Controllers
                 {
                     var T2 = new CT
                     {
-                        C = c.CName,
-                        t = PCPc(Y, c.CName)
+                        C = c.CategoryName,
+                        t = PCPc(Y, c.CategoryName)
                     };
                     ODCL.Add(T2);
                 }
@@ -2794,8 +2794,8 @@ namespace Toymania.Controllers
                 {
                     var T2 = new CT
                     {
-                        C = c.SCName,
-                        T = PSSc(Y, c.SCName)
+                        C = c.SubCategoryName,
+                        T = PSSc(Y, c.SubCategoryName)
                     };
                     ODCL.Add(T2);
                 }
@@ -2856,8 +2856,8 @@ namespace Toymania.Controllers
                 {
                     var T2 = new CT
                     {
-                        C = c.SCName,
-                        t = PSRc(Y, c.SCName)
+                        C = c.SubCategoryName,
+                        t = PSRc(Y, c.SubCategoryName)
                     };
                     ODCL.Add(T2);
                 }
@@ -2918,8 +2918,8 @@ namespace Toymania.Controllers
                 {
                     var T2 = new CT
                     {
-                        C = c.SCName,
-                        t = PSPc(Y, c.SCName)
+                        C = c.SubCategoryName,
+                        t = PSPc(Y, c.SubCategoryName)
                     };
                     ODCL.Add(T2);
                 }
@@ -2969,11 +2969,11 @@ namespace Toymania.Controllers
 
         /*----------------------------------------------------------------------------------------------------SC----------------------------------------------------------------------------------------------------*/
 
-        public int TSY(int Y, string SCName) //get total category(sales)
+        public int TSY(int Y, string SubCategoryName) //get total category(sales)
         {
             //returnt lijst met alle records waarbij de week en de cname zoals assignd is
             var T = (from od in db.OrderDetails
-                     where od.year == Y && od.SCName == SCName
+                     where od.year == Y && od.SubCategoryName == SubCategoryName
                      select (int)od.Quantity).ToList();
 
             var R = 0;
@@ -2999,11 +2999,11 @@ namespace Toymania.Controllers
             }
         }
 
-        public decimal? PSY(int Y, string SCName) //get total winst category
+        public decimal? PSY(int Y, string SubCategoryName) //get total winst category
         {
-            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            //returnt lijst met alle records waarbij de week en de CategoryName zoals assignd is
             var T = (from od in db.OrderDetails
-                     where od.year == Y && od.SCName == SCName
+                     where od.year == Y && od.SubCategoryName == SubCategoryName
                      select od.Quantity * od.UnitPrice).ToList();
             //functie die toy, quantity, prijs neemt en totaal uitrekent
 
@@ -3030,11 +3030,11 @@ namespace Toymania.Controllers
             }
         }
 
-        public decimal? RSY(int Y, string SCName) //get total omzet category
+        public decimal? RSY(int Y, string SubCategoryName) //get total omzet category
         {
-            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            //returnt lijst met alle records waarbij de week en de CategoryName zoals assignd is
             var T = from od in db.OrderDetails
-                    where od.year == Y && od.SCName == SCName
+                    where od.year == Y && od.SubCategoryName == SubCategoryName
                     select od;
             //functie die toy, quantity, prijs neemt en totaal uitrekent
 
@@ -3090,8 +3090,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.SCName,
-                                T = TSY((int)i, c.SCName)
+                                C = c.SubCategoryName,
+                                T = TSY((int)i, c.SubCategoryName)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -3111,7 +3111,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.SCName,
+                                C = c.SubCategoryName,
                                 T = 0
                             };
                             TEMPCT.Add(T2);
@@ -3266,8 +3266,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.SCName,
-                                t = PSY((int)i, c.SCName)
+                                C = c.SubCategoryName,
+                                t = PSY((int)i, c.SubCategoryName)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -3287,7 +3287,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.SCName,
+                                C = c.SubCategoryName,
                                 t = 0
                             };
                             TEMPCT.Add(T2);
@@ -3442,8 +3442,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.SCName,
-                                t = RSY((int)i, c.SCName)
+                                C = c.SubCategoryName,
+                                t = RSY((int)i, c.SubCategoryName)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -3463,7 +3463,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.SCName,
+                                C = c.SubCategoryName,
                                 t = 0
                             };
                             TEMPCT.Add(T2);
@@ -3586,11 +3586,11 @@ namespace Toymania.Controllers
             };
         }
         /*-------------------------------------------------------------------------------------------------*/
-        public int TSM(int Y, string SCName, int M) //get total category(sales)
+        public int TSM(int Y, string SubCategoryName, int M) //get total category(sales)
         {
-            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            //returnt lijst met alle records waarbij de week en de CategoryName zoals assignd is
             var T = (from od in db.OrderDetails
-                     where od.year == Y && od.SCName == SCName && od.Month == M
+                     where od.year == Y && od.SubCategoryName == SubCategoryName && od.Month == M
                      select (int)od.Quantity).ToList();
 
             var R = 0;
@@ -3616,11 +3616,11 @@ namespace Toymania.Controllers
             }
         }
 
-        public decimal? WSM(int Y, string SCName, int M) //get total winst category
+        public decimal? WSM(int Y, string SubCategoryName, int M) //get total winst category
         {
-            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            //returnt lijst met alle records waarbij de week en de CategoryName zoals assignd is
             var T = (from od in db.OrderDetails
-                     where od.year == Y && od.SCName == SCName && od.Month == M
+                     where od.year == Y && od.SubCategoryName == SubCategoryName && od.Month == M
                      select od.Quantity * od.UnitPrice).ToList();
             //functie die toy, quantity, prijs neemt en totaal uitrekent
 
@@ -3647,11 +3647,11 @@ namespace Toymania.Controllers
             }
         }
 
-        public decimal? OSM(int Y, string SCName, int M) //get total omzet category
+        public decimal? OSM(int Y, string SubCategoryName, int M) //get total omzet category
         {
-            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            //returnt lijst met alle records waarbij de week en de CategoryName zoals assignd is
             var T = (from od in db.OrderDetails
-                     where od.year == Y && od.SCName == SCName && od.Month == M
+                     where od.year == Y && od.SubCategoryName == SubCategoryName && od.Month == M
                      select od.Quantity * od.UnitPrice).ToList();
             //functie die toy, quantity, prijs neemt en totaal uitrekent
 
@@ -3699,8 +3699,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.SCName,
-                                T = TSM(y, c.SCName, i)
+                                C = c.SubCategoryName,
+                                T = TSM(y, c.SubCategoryName, i)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -3720,7 +3720,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.SCName,
+                                C = c.SubCategoryName,
                                 T = 0
                             };
                             TEMPCT.Add(T2);
@@ -3866,8 +3866,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.SCName,
-                                t = WSM(y, c.SCName, i)
+                                C = c.SubCategoryName,
+                                t = WSM(y, c.SubCategoryName, i)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -3887,7 +3887,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.SCName,
+                                C = c.SubCategoryName,
                                 t = 0m
                             };
                             TEMPCT.Add(T2);
@@ -4033,8 +4033,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.SCName,
-                                t = OSM(y, c.SCName, i)
+                                C = c.SubCategoryName,
+                                t = OSM(y, c.SubCategoryName, i)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -4054,7 +4054,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.SCName,
+                                C = c.SubCategoryName,
                                 t = 0m
                             };
                             TEMPCT.Add(T2);
@@ -4182,11 +4182,11 @@ namespace Toymania.Controllers
 
 
         /*-------------------------------------------------------------------------------------------------*/
-        public int GTS(int W, string SCName, int y) //get total category(sales)
+        public int GTS(int W, string SubCategoryName, int y) //get total category(sales)
         {
-            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            //returnt lijst met alle records waarbij de week en de CategoryName zoals assignd is
             var T = (from od in db.OrderDetails
-                     where od.Week == W && od.SCName == SCName && od.year == y
+                     where od.Week == W && od.SubCategoryName == SubCategoryName && od.year == y
                      select (int)od.Quantity).ToList();
             var R = 0;
             if (T != null)
@@ -4211,11 +4211,11 @@ namespace Toymania.Controllers
             }
         }
 
-        public decimal? GTWS(int W, string SCName, int y) //get total winst category
+        public decimal? GTWS(int W, string SubCategoryName, int y) //get total winst category
         {
-            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            //returnt lijst met alle records waarbij de week en de CategoryName zoals assignd is
             var T = (from od in db.OrderDetails
-                     where od.Week == W && od.SCName == SCName && od.year == y
+                     where od.Week == W && od.SubCategoryName == SubCategoryName && od.year == y
                      select od.Quantity * (decimal?)od.UnitPrice).ToList();
             //functie die toy, quantity, prijs neemt en totaal uitrekent
 
@@ -4242,11 +4242,11 @@ namespace Toymania.Controllers
             }
         }
 
-        public decimal? GTOS(int W, string SCName, int y) //get total omzet category
+        public decimal? GTOS(int W, string SubCategoryName, int y) //get total omzet category
         {
-            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            //returnt lijst met alle records waarbij de week en de CategoryName zoals assignd is
             var T = (from od in db.OrderDetails
-                     where od.Week == W && od.SCName == SCName && od.year == y
+                     where od.Week == W && od.SubCategoryName == SubCategoryName && od.year == y
                      select od.Quantity * od.UnitPrice).ToList();
             //functie die toy, quantity, prijs neemt en totaal uitrekent
 
@@ -4297,8 +4297,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.SCName,
-                                T = GTS(i, c.SCName, y)
+                                C = c.SubCategoryName,
+                                T = GTS(i, c.SubCategoryName, y)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -4318,7 +4318,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.SCName,
+                                C = c.SubCategoryName,
                                 T = 0
                             };
                             TEMPCT.Add(T2);
@@ -4461,8 +4461,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.SCName,
-                                t = GTWS(i, c.SCName, y) //deze functie is anders dan DWCVerkocht(enige wat verandert wordt/ winst ipv sum)
+                                C = c.SubCategoryName,
+                                t = GTWS(i, c.SubCategoryName, y) //deze functie is anders dan DWCVerkocht(enige wat verandert wordt/ winst ipv sum)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -4482,7 +4482,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.SCName,
+                                C = c.SubCategoryName,
                                 t = 0m
                             };
                             TEMPCT.Add(T2);
@@ -4625,8 +4625,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.SCName,
-                                t = GTOS(i, c.SCName, y) //deze functie is anders dan DWCVerkocht(enige wat verandert wordt/ omzet ipv sum)
+                                C = c.SubCategoryName,
+                                t = GTOS(i, c.SubCategoryName, y) //deze functie is anders dan DWCVerkocht(enige wat verandert wordt/ omzet ipv sum)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -4646,7 +4646,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.SCName,
+                                C = c.SubCategoryName,
                                 t = 0m
                             };
                             TEMPCT.Add(T2);
@@ -4841,7 +4841,7 @@ namespace Toymania.Controllers
                       where t.ToysId == id
                       select t.Categories;
             var c = CIQ.FirstOrDefault();
-            return c.CName;
+            return c.CategoryName;
         }
 
         public string GSCategory(int id)
@@ -4850,7 +4850,7 @@ namespace Toymania.Controllers
                       where t.ToysId == id
                       select t.SubCategories;
             var c = CIQ.FirstOrDefault();
-            return c.SCName;
+            return c.SubCategoryName;
         }
 
         public class weeksT
@@ -4957,8 +4957,8 @@ namespace Toymania.Controllers
                                 {
                                     var T2 = new CT
                                     {
-                                        C = c.CName,
-                                        T = TCY((int)i, c.CName)
+                                        C = c.CategoryName,
+                                        T = TCY((int)i, c.CategoryName)
                                     };
                                     TEMPCT.Add(T2);
                                 }
@@ -4978,7 +4978,7 @@ namespace Toymania.Controllers
                                 {
                                     var T2 = new CT
                                     {
-                                        C = c.CName,
+                                        C = c.CategoryName,
                                         T = 0
                                     };
                                     TEMPCT.Add(T2);
@@ -5066,8 +5066,8 @@ namespace Toymania.Controllers
                                 {
                                     var T2 = new CT
                                     {
-                                        C = c.CName,
-                                        t = PCY((int)i, c.CName)
+                                        C = c.CategoryName,
+                                        t = PCY((int)i, c.CategoryName)
                                     };
                                     TEMPCT.Add(T2);
                                 }
@@ -5087,7 +5087,7 @@ namespace Toymania.Controllers
                                 {
                                     var T2 = new CT
                                     {
-                                        C = c.CName,
+                                        C = c.CategoryName,
                                         t = 0
                                     };
                                     TEMPCT.Add(T2);
@@ -5179,8 +5179,8 @@ namespace Toymania.Controllers
                                 {
                                     var T2 = new CT
                                     {
-                                        C = c.CName,
-                                        t = RCY((int)i, c.CName)
+                                        C = c.CategoryName,
+                                        t = RCY((int)i, c.CategoryName)
                                     };
                                     TEMPCT.Add(T2);
                                 }
@@ -5200,7 +5200,7 @@ namespace Toymania.Controllers
                                 {
                                     var T2 = new CT
                                     {
-                                        C = c.CName,
+                                        C = c.CategoryName,
                                         t = 0
                                     };
                                     TEMPCT.Add(T2);
@@ -5295,8 +5295,8 @@ namespace Toymania.Controllers
                                 {
                                     var T2 = new CT
                                     {
-                                        C = c.CName,
-                                        T = TCY((int)i, c.CName)
+                                        C = c.CategoryName,
+                                        T = TCY((int)i, c.CategoryName)
                                     };
                                     TEMPCT.Add(T2);
                                 }
@@ -5316,7 +5316,7 @@ namespace Toymania.Controllers
                                 {
                                     var T2 = new CT
                                     {
-                                        C = c.CName,
+                                        C = c.CategoryName,
                                         T = 0
                                     };
                                     TEMPCT.Add(T2);
@@ -5405,8 +5405,8 @@ namespace Toymania.Controllers
                                 {
                                     var T2 = new CT
                                     {
-                                        C = c.CName,
-                                        t = PCY((int)i, c.CName)
+                                        C = c.CategoryName,
+                                        t = PCY((int)i, c.CategoryName)
                                     };
                                     TEMPCT.Add(T2);
                                 }
@@ -5426,7 +5426,7 @@ namespace Toymania.Controllers
                                 {
                                     var T2 = new CT
                                     {
-                                        C = c.CName,
+                                        C = c.CategoryName,
                                         t = 0
                                     };
                                     TEMPCT.Add(T2);
@@ -5518,8 +5518,8 @@ namespace Toymania.Controllers
                                 {
                                     var T2 = new CT
                                     {
-                                        C = c.CName,
-                                        t = RCY((int)i, c.CName)
+                                        C = c.CategoryName,
+                                        t = RCY((int)i, c.CategoryName)
                                     };
                                     TEMPCT.Add(T2);
                                 }
@@ -5539,7 +5539,7 @@ namespace Toymania.Controllers
                                 {
                                     var T2 = new CT
                                     {
-                                        C = c.CName,
+                                        C = c.CategoryName,
                                         t = 0
                                     };
                                     TEMPCT.Add(T2);
@@ -5628,11 +5628,11 @@ namespace Toymania.Controllers
 
 
         /*-------------------Day-------------------*/
-        public int TCD(int Y, string CName, int M, int D) //get total category(sales)                   //////////////IIIIIIIIIII check
+        public int TCD(int Y, string CategoryName, int M, int D) //get total category(sales)                   //////////////IIIIIIIIIII check
         {
-            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            //returnt lijst met alle records waarbij de week en de CategoryName zoals assignd is
             var T = (from od in db.OrderDetails
-                     where od.year == Y && od.CName == CName && od.Month == M && od.Day == D
+                     where od.year == Y && od.CategoryName == CategoryName && od.Month == M && od.Day == D
                      select od.Quantity).Sum(); // ToList(); ///? quantity.sum != quantity * sum
 
             if (T != null)
@@ -5652,11 +5652,11 @@ namespace Toymania.Controllers
             }
         }
 
-        public decimal? WCD(int Y, string CName, int M, int D) //get total winst category
+        public decimal? WCD(int Y, string CategoryName, int M, int D) //get total winst category
         {
-            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            //returnt lijst met alle records waarbij de week en de CategoryName zoals assignd is
             var T = from od in db.OrderDetails
-                    where od.year == Y && od.CName == CName && od.Month == M && od.Day == D
+                    where od.year == Y && od.CategoryName == CategoryName && od.Month == M && od.Day == D
                     select od;
             //functie die toy, quantity, prijs neemt en totaal uitrekent
 
@@ -5678,11 +5678,11 @@ namespace Toymania.Controllers
             }
         }
 
-        public decimal? OCD(int Y, string CName, int M, int D) //get total omzet category
+        public decimal? OCD(int Y, string CategoryName, int M, int D) //get total omzet category
         {
-            //returnt lijst met alle records waarbij de week en de cname zoals assignd is
+            //returnt lijst met alle records waarbij de week en de CategoryName zoals assignd is
             var T = from od in db.OrderDetails
-                    where od.year == Y && od.CName == CName && od.Month == M && od.Day == D
+                    where od.year == Y && od.CategoryName == CategoryName && od.Month == M && od.Day == D
                     select od;
             //functie die toy, quantity, prijs neemt en totaal uitrekent
 
@@ -5730,8 +5730,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
-                                T = TCD(y, c.CName, M, i)
+                                C = c.CategoryName,
+                                T = TCD(y, c.CategoryName, M, i)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -5751,7 +5751,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
+                                C = c.CategoryName,
                                 T = 0
                             };
                             TEMPCT.Add(T2);
@@ -5851,8 +5851,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
-                                t = WCD(y, c.CName, M, i)
+                                C = c.CategoryName,
+                                t = WCD(y, c.CategoryName, M, i)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -5872,7 +5872,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
+                                C = c.CategoryName,
                                 t = 0m
                             };
                             TEMPCT.Add(T2);
@@ -5972,8 +5972,8 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
-                                t = OCD(y, c.CName, M, i)
+                                C = c.CategoryName,
+                                t = OCD(y, c.CategoryName, M, i)
                             };
                             TEMPCT.Add(T2);
                         }
@@ -5993,7 +5993,7 @@ namespace Toymania.Controllers
                         {
                             var T2 = new CT
                             {
-                                C = c.CName,
+                                C = c.CategoryName,
                                 t = 0m
                             };
                             TEMPCT.Add(T2);

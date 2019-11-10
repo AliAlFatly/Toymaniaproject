@@ -15,30 +15,11 @@ namespace Toymania.Controllers
 
     public class CouponController : Controller
     {
-
-        //private ApplicationUserManager c;
-        //private readonly ApplicationUserManager _userManager;
-
-        //public HttpContextBase c;
-
         ApplicationDbContext db = new ApplicationDbContext();
-        ApplicationDbContext d = new ApplicationDbContext();
         private const string L = "abcdefghijklmnopqrstuvwxyz";
         private readonly char[] A = (L + L.ToUpper() + "123456789").ToCharArray();
 
-
-        //public CouponController(HttpContextBase _c)
-        //{
-        //    c = _c;
-        //}
-
-        //public CouponController()
-        //{
-        //    c = UserManager<ApplicationUser>;
-        //}
-
-
-        public int LID()
+        public int LastRecord()
         {
             if (db.Coupon.Find(0) == null)
             {
@@ -46,18 +27,15 @@ namespace Toymania.Controllers
             }
             else
             {
-                IQueryable<int> IQ = db.Coupon.Select(x => x.Id); //recordid list IQueryable
-                List<int> i = new List<int> { };   //record list
+                IQueryable<int> IQ = db.Coupon.Select(x => x.Id);
+                List<int> i = new List<int> { };
                 foreach (int I in IQ)
                 {
                     i.Add(I);
                 }
 
                 int r = i.Last();
-                //if(db.Coupon.Find(r + 1) == null)
-                //{
-                //    return r + 1;
-                //}
+
                 return r + 1;
             }
 
@@ -70,7 +48,7 @@ namespace Toymania.Controllers
             return View();
         }
 
-        public string GCoupon(int l)
+        public string GetCoupon(int l)
         {
             StringBuilder r = new StringBuilder();
             Random rn = new Random();
@@ -86,8 +64,8 @@ namespace Toymania.Controllers
             var len = 16;
             var C = new Coupon
             {
-                Id = LID(),
-                Code = GCoupon(len),
+                Id = LastRecord(),
+                Code = GetCoupon(len),
                 Used = false,
                 Value = v
             };
@@ -97,35 +75,34 @@ namespace Toymania.Controllers
             return View(C);
         }
         
-        public ActionResult UB()
+        public ActionResult UpdateBalance()
         {
 
             return View();
         }
 
-
-        public ActionResult UBP(string C/*, HttpContextBase c*/)
+        public ActionResult UpdateBalancePost(string coupon/*, HttpContextBase c*/)
         {
             var c = this.HttpContext;
-            var Co = db.Coupon.Where(P => P.Code == C).FirstOrDefault();
+            var Co = db.Coupon.Where(P => P.Code == coupon).FirstOrDefault();
             //var a = db.Coupon.Find(Co.Id);
             if (Co != null)
             {
                 if (!Co.Used)
                 {
-                    var v = (from co in db.Coupon
-                             where co.Code == C
-                             select co.Value).ToList().FirstOrDefault();
+                    var CouponValue = (from co in db.Coupon
+                             where co.Code == coupon
+                                       select co.Value).ToList().FirstOrDefault();
 
-                    var user = d.Users.SingleOrDefault(n => n.Email == c.User.Identity.Name);
-                    var Coupon = db.Coupon.SingleOrDefault(x => x.Code == C);
-                    user.balance += v;
-                    d.SaveChanges();
+                    var user = db.Users.SingleOrDefault(n => n.Email == c.User.Identity.Name);
+                    var Coupon = db.Coupon.SingleOrDefault(x => x.Code == coupon);
+                    user.balance += CouponValue;
+                    db.SaveChanges();
 
                     Coupon.Used = true;
                     db.SaveChanges();
 
-                    var b = (from u in d.Users
+                    var UserBalance = (from u in db.Users
                              where c.User.Identity.Name == u.Email
                              select (decimal)u.balance).FirstOrDefault();
 

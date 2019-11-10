@@ -26,12 +26,10 @@ namespace Toymania.Controllers
         // GET: ApplicationUsers
         public ActionResult Index()
         {
-            var dbC = db.Users.Where(c => c.Role == "Customer").ToList();
-            var dbA = db.Users.Where(a => a.Role == "Admin").ToList();
             var r = new AccountManageViewModel
             {
-                c = dbC,
-                a = dbA
+                Customer = db.Users.Where(c => c.Role == "Customer").ToList(),
+                Admin = db.Users.Where(a => a.Role == "Admin").ToList()
             };
             return View(r /*db.Users.ToList()*/);
             
@@ -39,12 +37,10 @@ namespace Toymania.Controllers
 
         public ActionResult IndexA()
         {
-            var dbC = db.Users.Where(c => c.Role == "Customer").ToList();
-            var dbA = db.Users.Where(a => a.Role == "Admin").ToList();
             var r = new AccountManageViewModel
             {
-                c = dbC,
-                a = dbA
+                Customer = db.Users.Where(c => c.Role == "Customer").ToList(),
+                Admin = db.Users.Where(a => a.Role == "Admin").ToList()
             };
             return View(r /*db.Users.ToList()*/);
 
@@ -52,12 +48,10 @@ namespace Toymania.Controllers
 
         public ActionResult IndexAd()
         {
-            var dbC = db.Users.Where(c => c.Role == "Customer").ToList();
-            var dbA = db.Users.Where(a => a.Role == "Admin").ToList();
             var r = new AccountManageViewModel
             {
-                c = dbC,
-                a = dbA
+                Customer = db.Users.Where(c => c.Role == "Customer").ToList(),
+                Admin = db.Users.Where(a => a.Role == "Admin").ToList()
             };
             return View(r /*db.Users.ToList()*/);
 
@@ -65,36 +59,28 @@ namespace Toymania.Controllers
 
         public ActionResult IndexAdA()
         {
-            var dbC = db.Users.Where(c => c.Role == "Customer").ToList();
-            var dbA = db.Users.Where(a => a.Role == "Admin").ToList();
             var r = new AccountManageViewModel
             {
-                c = dbC,
-                a = dbA
+                Customer = db.Users.Where(c => c.Role == "Customer").ToList(),
+                Admin = db.Users.Where(a => a.Role == "Admin").ToList()
             };
             return View(r /*db.Users.ToList()*/);
 
         }
 
-        public ActionResult SUC(string id) //set completed
+        public ActionResult SetUserCustomer(string id) 
         {
-            //var u = db.Users.SingleOrDefault(c => c.Email == id);
-
             var u = db.Users.Find(id);
             u.Role = "Customer";
             db.SaveChanges();
-
             return RedirectToAction("IndexA");
         }
 
-        public ActionResult SUA(string id) //set completed
+        public ActionResult SetUserAdmin(string id)
         {
-            //var u = db.Users.SingleOrDefault(c => c.Email == id);
-
             var u = db.Users.Find(id);
             u.Role = "Admin";
             db.SaveChanges();
-
             return RedirectToAction("Index");
         }
 

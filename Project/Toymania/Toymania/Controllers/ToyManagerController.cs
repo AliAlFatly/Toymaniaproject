@@ -25,26 +25,22 @@ namespace Toymania.Controllers
 
         public ActionResult Index()
         {
-            var toy = db.Toy.Include(t => t.Categories).Include(t => t.Producers).Where(t => t.ToysName != "Deleted Toy").ToList();
-            var dtoy = db.Toy.Include(t => t.Categories).Include(t => t.Producers).Where(t => t.ToysName == "Deleted Toy").ToList();
-            var T = new Toymanager
+            var Model = new Toymanager
             {
-                t = toy,
-                d = dtoy
+                toys = db.Toy.Include(t => t.Categories).Include(t => t.Producers).Where(t => t.ToysName != "Deleted Toy").ToList(),
+                deleted = db.Toy.Include(t => t.Categories).Include(t => t.Producers).Where(t => t.ToysName == "Deleted Toy").ToList()
             };
-            return View(T);
+            return View(Model);
         }
 
         public ActionResult IndexD()
         {
-            var toy = db.Toy.Include(t => t.Categories).Include(t => t.Producers).Where(t => t.ToysName != "Deleted Toy").ToList();
-            var dtoy = db.Toy.Include(t => t.Categories).Include(t => t.Producers).Where(t => t.ToysName == "Deleted Toy").ToList();
-            var T = new Toymanager
+            var Model = new Toymanager
             {
-                t = toy,
-                d = dtoy
+                toys = db.Toy.Include(t => t.Categories).Include(t => t.Producers).Where(t => t.ToysName != "Deleted Toy").ToList(),
+                deleted = db.Toy.Include(t => t.Categories).Include(t => t.Producers).Where(t => t.ToysName == "Deleted Toy").ToList()
             };
-            return View(T);
+            return View(Model);
         }
 
         // GET: ToyManager/Details/5
@@ -65,29 +61,29 @@ namespace Toymania.Controllers
         // GET: ToyManager/Create
         public ActionResult Create()
         {
-            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "CName");
+            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "CategoryName");
             ViewBag.ProducerId = new SelectList(db.Producers, "ProducerId", "Name");
-            ViewBag.SubCategoryId = new SelectList(db.SubCategories, "SubCategoryId", "SCName");
+            ViewBag.SubCategoryId = new SelectList(db.SubCategories, "SubCategoryId", "SubCategoryName");
             return View();
         }
 
 
 
-        public int LTI()   // last toy id
+        public int LastRecord()   // last toy id
         {
-            IQueryable<int> TILIQ = db.Toy.Select(x => x.ToysId); //recordid list IQueryable
-            List<int> RL = new List<int> { };   //record list
-            foreach (int LOI in TILIQ)
+            IQueryable<int> ToysIdIQueryable = db.Toy.Select(x => x.ToysId); //recordid list IQueryable
+            List<int> RecordList = new List<int> { };   //record list
+            foreach (int Id in ToysIdIQueryable)
             {
-                RL.Add(LOI);
+                RecordList.Add(Id);
             }
             //for (int i = 0; i < db.Cart.Single(x=>x.RecordId), i++ ){}
 
             //var RIL = db.Cart.ToLookup(e => e.RecordId);
 
 
-            int LR = RL.Last();
-            return LR;
+            int LastId = RecordList.Last();
+            return LastId;
         }
 
 
@@ -101,7 +97,7 @@ namespace Toymania.Controllers
         {
             Toy T = new Toy
             {
-                ToysId = LTI() + 1,
+                ToysId = LastRecord() + 1,
                 ToysName = toy.ToysName,
                 CategoryId = toy.CategoryId,
                 ProducerId = toy.ProducerId,
@@ -123,9 +119,9 @@ namespace Toymania.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "CName", T.CategoryId);
+            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "CategoryName", T.CategoryId);
             ViewBag.ProducerId = new SelectList(db.Producers, "ProducerId", "Name", T.ProducerId);
-            ViewBag.SubCategoryId = new SelectList(db.SubCategories, "SubCategoryId", "SCName", toy.SubCategoryId);
+            ViewBag.SubCategoryId = new SelectList(db.SubCategories, "SubCategoryId", "SubCategoryName", toy.SubCategoryId);
             return View(T);
         }
 
@@ -141,9 +137,9 @@ namespace Toymania.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "CName", toy.CategoryId);
+            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "CategoryName", toy.CategoryId);
             ViewBag.ProducerId = new SelectList(db.Producers, "ProducerId", "Name", toy.ProducerId);
-            ViewBag.SubCategoryId = new SelectList(db.SubCategories, "SubCategoryId", "SCName", toy.SubCategoryId);
+            ViewBag.SubCategoryId = new SelectList(db.SubCategories, "SubCategoryId", "SubCategoryName", toy.SubCategoryId);
             return View(toy);
         }
 
@@ -160,9 +156,9 @@ namespace Toymania.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "CName", toy.CategoryId);
+            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "CategoryName", toy.CategoryId);
             ViewBag.ProducerId = new SelectList(db.Producers, "ProducerId", "Name", toy.ProducerId);
-            ViewBag.SubCategoryId = new SelectList(db.SubCategories, "SubCategoryId", "SCName", toy.SubCategoryId);
+            ViewBag.SubCategoryId = new SelectList(db.SubCategories, "SubCategoryId", "SubCategoryName", toy.SubCategoryId);
             return View(toy);
         }
 

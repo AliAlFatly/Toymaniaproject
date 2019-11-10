@@ -39,7 +39,7 @@
 
                                 </th>
                             </tr>
-                            @foreach (var item in Model.O)
+                            @foreach (var item in Model.AllOrders)
                             {
                                 <tr id="row-@item.OrderId">
                                     <td>
@@ -63,11 +63,11 @@
 
                                 </th>
                             </tr>
-                            @foreach (var item in Model.IP)
+                            @foreach (var item in Model.InProgressOrders)
                             {
                                 <tr id="row-@item.OrderId">
                                     <td>
-                                        @Html.ActionLink(item.OrderId.ToString(), "Detail", new { id = item.OrderId, S = "In Progress" })
+                                        @Html.ActionLink(item.OrderId.ToString(), "Detail", new { id = item.OrderId, Status = "In Progress" })
                                     </td>
                                     <td>
                                         @item.Total
@@ -87,11 +87,11 @@
 
                                 </th>
                             </tr>
-                            @foreach (var item in Model.C)
+                            @foreach (var item in Model.CompletedOrders)
                             {
                                 <tr id="row-@item.OrderId">
                                     <td>
-                                        @Html.ActionLink(item.OrderId.ToString(), "Detail", new { id = item.OrderId, S = "Completed" })
+                                        @Html.ActionLink(item.OrderId.ToString(), "Detail", new { id = item.OrderId, Status = "Completed" })
                                     </td>
                                     <td>
                                         @item.Total

@@ -18,30 +18,22 @@ namespace Toymania.Controllers
         // GET: OrderDetails
         public ActionResult Index()
         {
-            //var orderDetails = db.OrderDetails.Include(o => o.History).Include(o => o.Order).Include(o => o.Toy);
-            var OO = db.OrderDetails.Where(d => d.Status == "In Progress").Include(o => o.Order).Include(o => o.Toy);
-            var OH = db.OrderDetails.Where(d => d.Status == "Completed").Include(o => o.Order).Include(o => o.Toy);
-            var ODVM = new HistoryViewModel
+            var Model = new HistoryViewModel
             {
-                IPOO = OO.ToList(),
-                COO = OH.ToList()
+                InProgressOrderDetails = db.OrderDetails.Where(d => d.Status == "In Progress").Include(o => o.Order).Include(o => o.Toy).ToList(),
+                CompletedOrderDetails = db.OrderDetails.Where(d => d.Status == "Completed").Include(o => o.Order).Include(o => o.Toy).ToList()
             };
-            //return View(orderDetails.ToList());
-            return View(ODVM);
+            return View(Model);
         }
        
         public ActionResult IndexC()
         {
-            //var orderDetails = db.OrderDetails.Include(o => o.History).Include(o => o.Order).Include(o => o.Toy);
-            var OO = db.OrderDetails.Where(d => d.Status == "In Progress").Include(o => o.Order).Include(o => o.Toy);
-            var OH = db.OrderDetails.Where(d => d.Status == "Completed").Include(o => o.Order).Include(o => o.Toy);
-            var ODVM = new HistoryViewModel
+            var Model = new HistoryViewModel
             {
-                IPOO = OO.ToList(),
-                COO = OH.ToList()
+                InProgressOrderDetails = db.OrderDetails.Where(d => d.Status == "In Progress").Include(o => o.Order).Include(o => o.Toy).ToList(),
+                CompletedOrderDetails = db.OrderDetails.Where(d => d.Status == "Completed").Include(o => o.Order).Include(o => o.Toy).ToList()
             };
-            //return View(orderDetails.ToList());
-            return View(ODVM);
+            return View(Model);
         }
 
 
@@ -108,21 +100,21 @@ namespace Toymania.Controllers
             return View(orderDetails);
         }
 
-        public ActionResult SC(int? id) //set completed
+        public ActionResult SetCompleted(int? id) //set completed
         {
-            OrderDetails OD = db.OrderDetails.Find(id);
+            OrderDetails OrderDetail = db.OrderDetails.Find(id);
 
-            OD.Status = "Completed";
+            OrderDetail.Status = "Completed";
             db.SaveChanges();
 
             return RedirectToAction("Index");
         }
 
-        public ActionResult SIP(int? id) //set in progress
+        public ActionResult SetInProgress(int? id) //set in progress
         {
-            OrderDetails OD = db.OrderDetails.Find(id);
+            OrderDetails OrderDetail = db.OrderDetails.Find(id);
 
-            OD.Status = "In Progress";
+            OrderDetail.Status = "In Progress";
             db.SaveChanges();
 
             return RedirectToAction("IndexC");

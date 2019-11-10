@@ -8,7 +8,7 @@ namespace Toymania.ViewModels
 {
     public class Recommended
     {
-        public Toy t { get; set; }
-        public List<Toy> lt { get; set; }
+        public Toy Toy { get; set; }
+        public List<Toy> RecommendedToys { get; set; }
     }
 }

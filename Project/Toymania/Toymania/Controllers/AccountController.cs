@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Toymania.Models;
+using Toymania.Services;
 //hoi
 namespace Toymania.Controllers
 {
@@ -47,27 +48,27 @@ namespace Toymania.Controllers
         private void MigrateShoppingCart(string Email)
         {
             //associate shopping cart item with logged in user
-            var cart = ShoppingCart.GC(this.HttpContext);
+            var cart = ShoppingCartService.GetCart(this.HttpContext);
 
             cart.MigrateCart(Email);
-            Session[ShoppingCart.CartSessionKey] = Email;
+            Session[ShoppingCartService.CartSessionKey] = Email;
         }
 
         private void MW(string Email)
         {
             //associate shopping cart item with logged in user
-            var W = WishlistManager.GW(this.HttpContext);
+            var wishlist = WishlistService.GetWishlist(this.HttpContext);
 
-            W.MigrateWishlist(Email);
-            Session[WishlistManager.WishlistSessionKey] = Email;
+            wishlist.MigrateWishlist(Email);
+            Session[WishlistService.WishlistSessionKey] = Email;
         }
 
         private void RS(string Email)
         {
             //associate shopping cart item with logged in user
             Guid tempCartId = Guid.NewGuid();
-            Session[ShoppingCart.CartSessionKey] = tempCartId.ToString();
-            Session[WishlistManager.WishlistSessionKey] = tempCartId.ToString();
+            Session[ShoppingCartService.CartSessionKey] = tempCartId.ToString();
+            Session[WishlistService.WishlistSessionKey] = tempCartId.ToString();
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)

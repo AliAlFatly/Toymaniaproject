@@ -18,45 +18,37 @@ namespace Toymania.Controllers
         // GET: Tracker
         public ActionResult Index()
         {
-            var OIS = db.OrderDetails.Where(d => d.tracker == "In the storage").Include(o => o.Order).Include(o => o.Toy);
-            var OS = db.OrderDetails.Where(d => d.tracker == "Being deliverd").Include(o => o.Order).Include(o => o.Toy);
-            var OC = db.OrderDetails.Where(d => d.tracker =="Completed").Include(o => o.Order).Include(o => o.Toy);
-            var ODVM = new TrackerViewModel
+            //add accessable value to viewmodel to set default tab.
+            var Model = new TrackerViewModel
             {
-                IS = OIS.ToList(),
-                S = OS.ToList(),
-                C = OC.ToList()
+                InStorage = db.OrderDetails.Where(d => d.tracker == "In the storage").Include(o => o.Order).Include(o => o.Toy).ToList(),
+                Delivering = db.OrderDetails.Where(d => d.tracker == "Being deliverd").Include(o => o.Order).Include(o => o.Toy).ToList(),
+                Completed = db.OrderDetails.Where(d => d.tracker == "Completed").Include(o => o.Order).Include(o => o.Toy).ToList()
             };
-            return View(ODVM);
+            return View(Model);
         }
 
         public ActionResult IndexC()
         {
-            var OIS = db.OrderDetails.Where(d => d.tracker == "In the storage").Include(o => o.Order).Include(o => o.Toy);
-            var OS = db.OrderDetails.Where(d => d.tracker == "Being deliverd").Include(o => o.Order).Include(o => o.Toy);
-            var OC = db.OrderDetails.Where(d => d.tracker == "Completed").Include(o => o.Order).Include(o => o.Toy);
-            var ODVM = new TrackerViewModel
+            var Model = new TrackerViewModel
             {
-                IS = OIS.ToList(),
-                S = OS.ToList(),
-                C = OC.ToList()
+                InStorage = db.OrderDetails.Where(d => d.tracker == "In the storage").Include(o => o.Order).Include(o => o.Toy).ToList(),
+                Delivering = db.OrderDetails.Where(d => d.tracker == "Being deliverd").Include(o => o.Order).Include(o => o.Toy).ToList(),
+                Completed = db.OrderDetails.Where(d => d.tracker == "Completed").Include(o => o.Order).Include(o => o.Toy).ToList()
             };
-            return View(ODVM);
+            return View(Model);
         }
 
 
         public ActionResult IndexD()
         {
-            var OIS = db.OrderDetails.Where(d => d.tracker == "In the storage").Include(o => o.Order).Include(o => o.Toy);
-            var OS = db.OrderDetails.Where(d => d.tracker == "Being deliverd").Include(o => o.Order).Include(o => o.Toy);
-            var OC = db.OrderDetails.Where(d => d.tracker == "Completed").Include(o => o.Order).Include(o => o.Toy);
-            var ODVM = new TrackerViewModel
+            var Model = new TrackerViewModel
             {
-                IS = OIS.ToList(),
-                S = OS.ToList(),
-                C = OC.ToList()
+                InStorage = db.OrderDetails.Where(d => d.tracker == "In the storage").Include(o => o.Order).Include(o => o.Toy).ToList(),
+                Delivering = db.OrderDetails.Where(d => d.tracker == "Being deliverd").Include(o => o.Order).Include(o => o.Toy).ToList(),
+                Completed = db.OrderDetails.Where(d => d.tracker == "Completed").Include(o => o.Order).Include(o => o.Toy).ToList()
             };
-            return View(ODVM);
+            return View(Model);
         }
 
         // GET: OrderDetails/Details/5
@@ -75,12 +67,12 @@ namespace Toymania.Controllers
         }
 
 
-        public ActionResult C(int? id, string d) //set completed
+        public ActionResult SetCompleted(int? id, string d) //set completed
         {
-            OrderDetails OD = db.OrderDetails.Find(id);
+            OrderDetails OrderDetail = db.OrderDetails.Find(id);
 
-            OD.tracker = "Completed";
-            OD.Status = "Completed";
+            OrderDetail.tracker = "Completed";
+            OrderDetail.Status = "Completed";
             db.SaveChanges();
 
             if (d == "D")
@@ -98,12 +90,12 @@ namespace Toymania.Controllers
             //return RedirectToAction("IndexD");
         }
 
-        public ActionResult S(int? id, string d) //set in progress
+        public ActionResult SetBeingDeliverd(int? id, string d) //set in progress
         {
-            OrderDetails OD = db.OrderDetails.Find(id);
+            OrderDetails OrderDetail = db.OrderDetails.Find(id);
 
-            OD.tracker = "Being deliverd";
-            OD.Status = "In progress";
+            OrderDetail.tracker = "Being deliverd";
+            OrderDetail.Status = "In progress";
             db.SaveChanges();
 
             if (d == "D")
@@ -122,12 +114,12 @@ namespace Toymania.Controllers
 
         }
 
-        public ActionResult IS(int? id, string d) //set in progress
+        public ActionResult SetInProgress(int? id, string d) //set in progress
         {
-            OrderDetails OD = db.OrderDetails.Find(id);
+            OrderDetails OrderDetail = db.OrderDetails.Find(id);
 
-            OD.tracker = "In the storage";
-            OD.Status = "In progress";
+            OrderDetail.tracker = "In the storage";
+            OrderDetail.Status = "In progress";
             db.SaveChanges();
 
             if (d == "D")

@@ -9,7 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Toymania.Controllers;
-
+using Toymania.Services;
 
 namespace Toymania.Controllers
 {
@@ -27,70 +27,49 @@ namespace Toymania.Controllers
         public ActionResult Index()
         {
 
-            var cart = ShoppingCart.GC(this.HttpContext);
-            var a = true;
-            var u = HttpContext.User.Identity.Name;
-            var A = db.Users.Select(e => e.Email == u) == null;
-            if (!A)
+            var cart = ShoppingCartService.GetCart(this.HttpContext);
+            var UserEmail = HttpContext.User.Identity.Name;
+            var Model = new ShoppingCartViewModel
             {
-                a = false;
-            }
-            
-            var viewModel = new ShoppingCartViewModel
-            {
-                CT = cart.GCT(),
-                CartTotal = cart.GT(),
-                U = a
+                CartToy = cart.GetCartToys(),
+                CartTotal = cart.GetTotalPrice(),
+                U = db.Users.Select(e => e.Email == UserEmail) == null
             };
 
-            return View(viewModel);
+            return View(Model);
         }
 
         public ActionResult IndexE()
         {
 
-            var cart = ShoppingCart.GC(this.HttpContext);
-            var a = true;
-            var u = HttpContext.User.Identity.Name;
-            var A = db.Users.Select(e => e.Email == u) == null;
-            if (!A)
+            var cart = ShoppingCartService.GetCart(this.HttpContext);
+            var UserEmail = HttpContext.User.Identity.Name;
+            var Model = new ShoppingCartViewModel
             {
-                a = false;
-            }
-
-            var viewModel = new ShoppingCartViewModel
-            {
-                CT = cart.GCT(),
-                CartTotal = cart.GT(),
-                U = a
+                CartToy = cart.GetCartToys(),
+                CartTotal = cart.GetTotalPrice(),
+                U = db.Users.Select(e => e.Email == UserEmail) == null
             };
 
-            return View(viewModel);
+            return View(Model);
         }
 
         public ActionResult IndexR(int RecordToRemoveId)
         {
             try
             {
-                RFC(RecordToRemoveId);
+                RemoveFromCart(RecordToRemoveId);
 
-                var cart = ShoppingCart.GC(this.HttpContext);
-                var a = true;
-                var u = HttpContext.User.Identity.Name;
-                var A = db.Users.Select(e => e.Email == u) == null;
-                if (!A)
+                var cart = ShoppingCartService.GetCart(this.HttpContext);
+                var UserEmail = HttpContext.User.Identity.Name;
+                var Model = new ShoppingCartViewModel
                 {
-                    a = false;
-                }
-
-                var viewModel = new ShoppingCartViewModel
-                {
-                    CT = cart.GCT(),
-                    CartTotal = cart.GT(),
-                    U = a
+                    CartToy = cart.GetCartToys(),
+                    CartTotal = cart.GetTotalPrice(),
+                    U = db.Users.Select(e => e.Email == UserEmail) == null
                 };
 
-                return View(viewModel);
+                return View(Model);
             }
             catch
             {
@@ -100,49 +79,26 @@ namespace Toymania.Controllers
 
         }
 
-        public ActionResult ATC(int id)
+        public ActionResult AddToCart(int id)
         {
             var addedItem = db.Toy.Single(t => t.ToysId == id);
-            var cart = ShoppingCart.GC(this.HttpContext);
+            var cart = ShoppingCartService.GetCart(this.HttpContext);
 
-            cart.ATC(addedItem, id);
+            cart.AddToCart(addedItem);
 
             return RedirectToAction("index");
         }
-        //a
-        //[HttpPost]
-        //public ActionResult RFC(int id)
-        //{
-        //    var cart = ShoppingCart.GC(this.HttpContext);
-
-        //    string toyName = db.Cart.Single(t => t.RecordId == id).Toy.ToysName;
-
-        //    int toyCount = cart.RFC(id);
-
-        //    var results = new ShoppingCartRemoveViewModel
-        //    {
-        //        Message = Server.HtmlEncode(toyName) + " has been removed from your shopping cart.",
-        //        CartTotal = cart.GT(),
-        //        CartCount = cart.GCount(),
-        //        ToyCount = toyCount,
-        //        DeleteId = id
-
-        //    };
-
-        //    ActionResult a = Index();
-        //    return Json(results);
-        //}
 
         //[HttpPost]
-        public JsonResult RFC(int id)
+        public JsonResult RemoveFromCart(int id)
         {
-            var cart = ShoppingCart.GC(this.HttpContext);
+            var cart = ShoppingCartService.GetCart(this.HttpContext);
             string toyName = db.Cart.Single(t => t.RecordId == id).Toy.ToysName;
             var c = db.Cart.SingleOrDefault(i => i.RecordId == id);
             bool result = false;
             if(c != null)
             {
-                cart.RFC(id);
+                cart.RemoveFromCart(id);
                 result = true;
             }
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -154,18 +110,18 @@ namespace Toymania.Controllers
         [ChildActionOnly]
         public ActionResult CartSummary()
         {
-            var cart = ShoppingCart.GC(this.HttpContext);
+            var cart = ShoppingCartService.GetCart(this.HttpContext);
 
-            ViewData["CartCount"] = cart.GCount();
+            ViewData["CartCount"] = cart.GetCount();
             return PartialView("CartSummary");
         }
 
         public void AddPartial(int id)
         {
             var addedItem = db.Toy.Single(t => t.ToysId == id);
-            var cart = ShoppingCart.GC(this.HttpContext);
+            var cart = ShoppingCartService.GetCart(this.HttpContext);
 
-            cart.ATC(addedItem, id);
+            cart.AddToCart(addedItem);
             //return PartialView("CartSummary");
         }
 

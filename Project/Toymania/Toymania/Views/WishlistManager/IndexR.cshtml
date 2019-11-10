@@ -38,17 +38,17 @@
 
 
         </table>*@
-        @if (Model.WT.Count() == 0)
+        @if (Model.Wishlist.Count() == 0)
         {
             <div>
                 <p>Your wishlist is empty</p>
             </div>
 
         }
-        @if (Model.WT != null)
+        @if (Model.Wishlist != null)
         {
             <div class=" toymenu col-md-8">
-                @foreach (var item in Model.WT)
+                @foreach (var item in Model.Wishlist)
                 {
                     <div class="col-md-4">
                         <p>

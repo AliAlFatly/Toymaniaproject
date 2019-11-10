@@ -16,39 +16,39 @@
     <div class="container container-bodystore">
         <div class="col-md-4">
             <p>
-                <img src="@Url.Content("~/Content/img/"+Model.t.ItemArtUrl)" class="product_foto_detail"/>
+                <img src="@Url.Content("~/Content/img/"+Model.Toy.ItemArtUrl)" class="product_foto_detail"/>
             </p>
         </div>
         <div class="col-md-8">
-            <h2>@Model.t.ToysName</h2>
+            <h2>@Model.Toy.ToysName</h2>
 
             <p>
                 <em>Producer:</em>
-                @Model.t.Producers.Name
+                @Model.Toy.Producers.Name
             </p>
             <p>
                 <em>Price:</em>
-                @String.Format("€{0:F}", Model.t.Price)
+                @String.Format("€{0:F}", Model.Toy.Price)
             </p>
             <p>
                 <em>Category:</em>
-                @Model.t.Categories.CName
+                @Model.Toy.Categories.CategoryName
             </p>
             <p>
                 <em>Subcategory:</em>
-                @Model.t.SubCategories.SCName
+                @Model.Toy.SubCategories.SubCategoryName
             </p>
             <div id="item-details">
 
 
             </div>
             <p class="button">
-                <a href="#" class="btn" onclick="AddToCart(@Model.t.ToysId)">Add to cart</a>
+                <a href="#" class="btn" onclick="AddToCart(@Model.Toy.ToysId)">Add to cart</a>
                 @*@Html.ActionLink("Add to cart", "ATC", "ShoppingCart", new { id = Model.t.ToysId }, "")*@
             </p>
 
             <p class="button">
-                <a href="#" class="btn" onclick="AddToWishlist(@Model.t.ToysId)">Add to wishlist</a>
+                <a href="#" class="btn" onclick="AddToWishlist(@Model.Toy.ToysId)">Add to wishlist</a>
                 @*@Html.ActionLink("Add to wishlist", "ATW", "WishlistManager", new { id = Model.t.ToysId }, "")*@
             </p>
         </div>
@@ -57,12 +57,12 @@
 
 
 
-        @if (Model.lt != null)
+        @if (Model.RecommendedToys != null)
         {
             
         <div class=" toymenu col-md-12">
             <p><b>Other customers also order:</b></p>
-            @foreach (var item in Model.lt)
+            @foreach (var item in Model.RecommendedToys)
             {
                 <div class="col-md-4">
                     <p>

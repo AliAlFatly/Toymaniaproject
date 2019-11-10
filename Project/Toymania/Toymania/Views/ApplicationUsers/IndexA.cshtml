@@ -38,29 +38,29 @@
                                     <tr>
                                         <th>
                                             @*@Html.DisplayNameFor(model => model.c.Email)*@
-                                            @Html.DisplayNameFor(model => model.c[1].Email)
+                                            @Html.DisplayNameFor(model => model.Customer[1].Email)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.c[1].EmailConfirmed)
+                                            @Html.DisplayNameFor(model => model.Customer[1].EmailConfirmed)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.c[1].LockoutEndDateUtc)
+                                            @Html.DisplayNameFor(model => model.Customer[1].LockoutEndDateUtc)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.c[1].LockoutEnabled)
+                                            @Html.DisplayNameFor(model => model.Customer[1].LockoutEnabled)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.c[1].AccessFailedCount)
+                                            @Html.DisplayNameFor(model => model.Customer[1].AccessFailedCount)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.c[1].UserName)
+                                            @Html.DisplayNameFor(model => model.Customer[1].UserName)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.c[1].Role)
+                                            @Html.DisplayNameFor(model => model.Customer[1].Role)
                                         </th>
                                         <th></th>
                                     </tr>
-                                    @foreach (var item in Model.c)
+                                    @foreach (var item in Model.Customer)
                                     {
                                         <tr>
                                             <td>
@@ -85,7 +85,7 @@
                                                 @Html.DisplayFor(modelItem => item.Role)
                                             </td>
                                             <td>
-                                                @Html.ActionLink("Set user as Admin", "SUA", new { id = item.Id }) |
+                                                @Html.ActionLink("Set user as Admin", "SetUserAdmin", new { id = item.Id }) |
                                                 @Html.ActionLink("Details", "Details", new { id = item.Id }) |
                                                 @Html.ActionLink("ban", "ban", new { id = item.Id })
                                                 @if (item.LockoutEndDateUtc != null)
@@ -102,29 +102,29 @@
                                     <tr>
                                         <th>
                                             @*@Html.DisplayNameFor(model => model.c.Email)*@
-                                            @Html.DisplayNameFor(model => model.c[1].Email)
+                                            @Html.DisplayNameFor(model => model.Customer[1].Email)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.c[1].EmailConfirmed)
+                                            @Html.DisplayNameFor(model => model.Customer[1].EmailConfirmed)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.c[1].LockoutEndDateUtc)
+                                            @Html.DisplayNameFor(model => model.Customer[1].LockoutEndDateUtc)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.c[1].LockoutEnabled)
+                                            @Html.DisplayNameFor(model => model.Customer[1].LockoutEnabled)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.c[1].AccessFailedCount)
+                                            @Html.DisplayNameFor(model => model.Customer[1].AccessFailedCount)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.c[1].UserName)
+                                            @Html.DisplayNameFor(model => model.Customer[1].UserName)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.c[1].Role)
+                                            @Html.DisplayNameFor(model => model.Customer[1].Role)
                                         </th>
                                         <th></th>
                                     </tr>
-                                    @foreach (var item in Model.a)
+                                    @foreach (var item in Model.Admin)
                                     {
                                         <tr>
                                             <td>
@@ -149,7 +149,7 @@
                                                 @Html.DisplayFor(modelItem => item.Role)
                                             </td>
                                             <td>
-                                                @Html.ActionLink("Set user as Customer", "SUC", new { id = item.Id }) |
+                                                @Html.ActionLink("Set user as Customer", "SetUserCustomer", new { id = item.Id }) |
                                                 @Html.ActionLink("Details", "Details", new { id = item.Id }) |
                                                 @Html.ActionLink("ban", "ban", new { id = item.Id })
                                                 @if (item.LockoutEndDateUtc != null)

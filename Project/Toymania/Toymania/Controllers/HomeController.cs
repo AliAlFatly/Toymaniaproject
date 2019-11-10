@@ -32,7 +32,7 @@ namespace Toymania.Controllers
         }
 
 
-        public int? LROD()
+        public int? LastRecordOrderDetail()
         {
             if(db.OrderDetails.Find(0) != null)
             {
@@ -49,10 +49,7 @@ namespace Toymania.Controllers
             else
             {
                 return 0;
-            }
-            //var O = from oo in db.OrderDetails
-            //        orderby oo.OrderId ascending
-            //        select oo.OrderDetailId;           
+            }          
         }
 
         public class top
@@ -61,7 +58,7 @@ namespace Toymania.Controllers
             public Toy t;
         }
 
-        public int TC(List<top> t)
+        public int TenCounts(List<top> t)
         {
             if (t.Count() >= 10)
             {
@@ -73,10 +70,10 @@ namespace Toymania.Controllers
             }
         }
 
-        public List<Toy> TTL() //Top Ten List
+        public List<Toy> TopTenList()
         {
             var r = new List<top>();
-            for(int i = 0; i <= 150/*LROD()*/; i++)
+            for(int i = 0; i <= 150/*LastRecordOrderDetail()*/; i++)
             {
                 if(db.OrderDetails.Find(i) != null && db.OrderDetails.Find(i).Toy.ToysName != "Deleted Toy" /*&& db.OrderDetails.Find(i).year == DateTime.Now.Year*/)
                 {
@@ -93,21 +90,21 @@ namespace Toymania.Controllers
             }
 
             var Res = r.OrderByDescending(o => o.c).ToList();
-            var TTen = new List<Toy>();
-            var tp = TC(Res);
-            for(int i = 0; i < tp; i++)
+            var TopTen = new List<Toy>();
+            var TopCount = TenCounts(Res);
+            for(int i = 0; i < TopCount; i++)
             {
-                TTen.Add(Res[i].t);
+                TopTen.Add(Res[i].t);
             }
 
-            return TTen;
+            return TopTen;
         }
 
         public ActionResult Index()
         {
             //ViewBag.userId = _userManager.GetEmail(HttpContext.User);
-            var TL = TTL();
-            return View(TL);
+            var TopToysList = TopTenList();
+            return View(TopToysList);
         }
 
         public ActionResult About()

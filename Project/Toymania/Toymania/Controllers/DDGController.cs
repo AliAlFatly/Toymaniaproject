@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System.Globalization;
+using Toymania.Services;
 
 namespace Toymania.Controllers
 {
@@ -69,7 +70,7 @@ namespace Toymania.Controllers
                                 var con = this.HttpContext;
                                 //var u = db.Users.Find("9653b74e-16fe-4738-b3f9-818e5166e741");
                                 var order = new Order();
-                                var OI = new Orders();
+                                var OI = new OrdersService();
                                 var date = new DateTime(y, m, d, h, m, s);
                                 double we = dayofyear / 7;
                                 var w = (int)Math.Ceiling(we);
@@ -80,7 +81,7 @@ namespace Toymania.Controllers
                                 }
                                 var u = "toymaniat1@gmail.com";
 
-                                order.OrderId = OI.LastRecordO();
+                                order.OrderId = OI.LastRecord();
                                 order.Username = u;
                                 order.OrderDate = new DateTime(y, m, d, h, m, s);
                                 order.year = y;
@@ -113,7 +114,7 @@ namespace Toymania.Controllers
         {
             var date = new DateTime(y, m, d, h, min, s);
             decimal orderTotal = 0;
-            Orders O = new Orders();
+            OrdersService O = new OrdersService();
             //var TL = new List<Cart>();
 
             foreach (var T in TL)
@@ -135,8 +136,8 @@ namespace Toymania.Controllers
                     Hour = h,
                     Minute = min,
                     Status = "Completed",
-                    CName = T.Toy.Categories.CName,
-                    SCName = T.Toy.SubCategories.SCName
+                    CategoryName = T.Toy.Categories.CategoryName,
+                    SubCategoryName = T.Toy.SubCategories.SubCategoryName
                 };
 
                 o.Total += (T.Count * T.Toy.Price);

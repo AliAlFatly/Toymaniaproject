@@ -12,7 +12,7 @@ namespace Toymania.ViewModels
     public class ShoppingCartViewModel
     {
         [Key]
-        public List<Cart> CT { get; set; } //cart items
+        public List<Cart> CartToy { get; set; } //cart items
         public bool U { get; set; }
         public decimal CartTotal { get; set; }
     }

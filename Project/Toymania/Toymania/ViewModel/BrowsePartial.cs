@@ -14,10 +14,18 @@ namespace Toymania.ViewModels
     public class BrowsePartial
     {
         [Key]
-        public List<Categories> C { get; set; }
-        public ICollection<SubCategories> SC { get; set; }
+        public List<Categories> Categories { get; set; }
+        public List<SubCategories> SubCategories { get; set; }
+
+        public string SelectedCategory { get; set; }
+        public string SelectedSubCategory { get; set; }
+        public string Search { get; set; }
+
+        public int MinPrice { get; set; }
+        public int MaxPrice { get; set; }
+        public int PageSize { get; set; }
+
         //public ICollection<Toy> T { get; set; }
-        public IPagedList<Toy> T { get; set; }
-        public int? PC { get; set; }
+        public IPagedList<Toy> Toys { get; set; }
     }
 }

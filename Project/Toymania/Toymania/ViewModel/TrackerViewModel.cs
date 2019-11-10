@@ -11,8 +11,8 @@ namespace Toymania.ViewModels
 {
     public class TrackerViewModel
     {
-        public List<OrderDetails> IS { get; set; }
-        public List<OrderDetails> S { get; set; }
-        public List<OrderDetails> C { get; set; }
+        public List<OrderDetails> InStorage { get; set; }
+        public List<OrderDetails> Delivering { get; set; }
+        public List<OrderDetails> Completed { get; set; }
     }
 }

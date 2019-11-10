@@ -32,31 +32,31 @@
                                 <tr>
                                     <th>
                                         @*@Html.DisplayNameFor(model => model.Quantity)*@
-                                        @Html.DisplayNameFor(model => model.IPOO[0].Quantity)
+                                        @Html.DisplayNameFor(model => model.InProgressOrderDetails[0].Quantity)
 
                                     </th>
                                     <th>
                                         @*@Html.DisplayNameFor(model => model.UnitPrice)*@
-                                        @Html.DisplayNameFor(model => model.IPOO[0].UnitPrice)
+                                        @Html.DisplayNameFor(model => model.InProgressOrderDetails[0].UnitPrice)
                                     </th>
                                     <th>
                                         @*@Html.DisplayNameFor(model => model.Status)*@
-                                        @Html.DisplayNameFor(model => model.IPOO[0].Status)
+                                        @Html.DisplayNameFor(model => model.InProgressOrderDetails[0].Status)
                                     </th>
                                     @*<th>
                                             @Html.DisplayNameFor(model => model.History.Email)
                                         </th>*@
                                     <th>
                                         @*@Html.DisplayNameFor(model => model.Order.Username)*@
-                                        @Html.DisplayNameFor(model => model.IPOO[0].Order.Username)
+                                        @Html.DisplayNameFor(model => model.InProgressOrderDetails[0].Order.Username)
                                     </th>
                                     <th>
                                         @*@Html.DisplayNameFor(model => model.Toy.ToysName)*@
-                                        @Html.DisplayNameFor(model => model.IPOO[0].Toy.ToysName)
+                                        @Html.DisplayNameFor(model => model.InProgressOrderDetails[0].Toy.ToysName)
                                     </th>
                                     <th></th>
                                 </tr>
-                                @foreach (var item in Model.IPOO)
+                                @foreach (var item in Model.InProgressOrderDetails)
                                 {
                                     <tr>
                                         <td>
@@ -78,7 +78,7 @@
                                             @Html.DisplayFor(modelItem => item.Toy.ToysName)
                                         </td>
                                         <td>
-                                            @Html.ActionLink("Set Completed", "SC", new { id = item.OrderDetailId }) @*|
+                                            @Html.ActionLink("Set Completed", "SetCompleted", new { id = item.OrderDetailId }) @*|
                                                 @Html.ActionLink("Details", "Details", new { id = item.OrderDetailId }) |
                                                 @Html.ActionLink("Delete", "Delete", new { id = item.OrderDetailId })*@
                                         </td>
@@ -91,30 +91,30 @@
                                 <tr>
                                     <th>
                                         @*@Html.DisplayNameFor(model => model.Quantity)*@
-                                        @Html.DisplayNameFor(model => model.IPOO[0].Quantity)
+                                        @Html.DisplayNameFor(model => model.InProgressOrderDetails[0].Quantity)
                                     </th>
                                     <th>
                                         @*@Html.DisplayNameFor(model => model.UnitPrice)*@
-                                        @Html.DisplayNameFor(model => model.IPOO[0].UnitPrice)
+                                        @Html.DisplayNameFor(model => model.InProgressOrderDetails[0].UnitPrice)
                                     </th>
                                     <th>
                                         @*@Html.DisplayNameFor(model => model.Status)*@
-                                        @Html.DisplayNameFor(model => model.IPOO[0].Status)
+                                        @Html.DisplayNameFor(model => model.InProgressOrderDetails[0].Status)
                                     </th>
                                     @*<th>
                                             @Html.DisplayNameFor(model => model.History.Email)
                                         </th>*@
                                     <th>
                                         @*@Html.DisplayNameFor(model => model.Order.Username)*@
-                                        @Html.DisplayNameFor(model => model.IPOO[0].Order.Username)
+                                        @Html.DisplayNameFor(model => model.InProgressOrderDetails[0].Order.Username)
                                     </th>
                                     <th>
                                         @*@Html.DisplayNameFor(model => model.Toy.ToysName)*@
-                                        @Html.DisplayNameFor(model => model.IPOO[0].Toy.ToysName)
+                                        @Html.DisplayNameFor(model => model.InProgressOrderDetails[0].Toy.ToysName)
                                     </th>
                                     <th></th>
                                 </tr>
-                                @foreach (var item in Model.COO)
+                                @foreach (var item in Model.CompletedOrderDetails)
                                 {
                                     <tr>
                                         <td>
@@ -136,7 +136,7 @@
                                             @Html.DisplayFor(modelItem => item.Toy.ToysName)
                                         </td>
                                         <td>
-                                            @Html.ActionLink("Set in progress", "SIP", new { id = item.OrderDetailId }) @*|
+                                            @Html.ActionLink("Set in progress", "SetInProgress", new { id = item.OrderDetailId }) @*|
                                                 @Html.ActionLink("Details", "Details", new { id = item.OrderDetailId }) |
                                                 @Html.ActionLink("Delete", "Delete", new { id = item.OrderDetailId })*@
                                         </td>

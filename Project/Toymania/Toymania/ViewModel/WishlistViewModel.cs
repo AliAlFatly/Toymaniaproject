@@ -11,6 +11,6 @@ namespace Toymania.ViewModels
 {
     public class WishlistViewModel
     {
-        public List<Wishlist> WT { get; set; } //get wishlist in a list to print in a table as a wishlist toy
+        public List<Wishlist> Wishlist { get; set; } //get wishlist in a list to print in a table as a wishlist toy
     }
 }

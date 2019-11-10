@@ -9,7 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Toymania.Controllers;
-
+using Toymania.Services;
 
 namespace Toymania.Controllers
 {
@@ -21,32 +21,26 @@ namespace Toymania.Controllers
 
         public ActionResult Index()
         {
-            var w = WishlistManager.GW(this.HttpContext);
-            var viewModel = new WishlistViewModel
+            var Wishlist = WishlistService.GetWishlist(this.HttpContext);
+            var Model = new WishlistViewModel
             {
-                WT = w.GWT()
+                Wishlist = Wishlist.GetToys()
             };
-            return View(viewModel);
+            return View(Model);
         }
 
         public ActionResult IndexR(int r)
         {
             try
             {
-                var w = WishlistManager.GW(this.HttpContext);
-                //var identity = w.RWID();
-                //var toyexist = !w.ToyDontExist(db.Toy.Find(r), identity);
-                //if (toyexist)
-                //{
-                //    RFW(r);
-                //}
-                RFW(r);
+                var Wishlist = WishlistService.GetWishlist(this.HttpContext);
+                RemoveFromWishlist(r);
 
-                var viewModel = new WishlistViewModel
+                var Model = new WishlistViewModel
                 {
-                    WT = w.GWT()
+                    Wishlist = Wishlist.GetToys()
                 };
-                return View(viewModel);
+                return View(Model);
             }
             catch
             {
@@ -61,24 +55,16 @@ namespace Toymania.Controllers
             try
             {
                 var addedItem = db.Toy.Single(t => t.ToysId == i);
-                var cart = ShoppingCart.GC(this.HttpContext);
-                //var w = WishlistManager.GW(this.HttpContext);
-                //var identity = w.RWID();
-                //var toyexist = !w.ToyDontExist(db.Toy.Find(r), identity);
-                //if (toyexist)
-                //{
-                //    cart.ATC(addedItem, i);
-                //    RFW(r);
-                //}
+                var cart = ShoppingCartService.GetCart(this.HttpContext);
 
-                cart.ATC(addedItem, i);
-                RFW(r);
-                var w = WishlistManager.GW(this.HttpContext);
-                var viewModel = new WishlistViewModel
+                cart.AddToCart(addedItem);
+                RemoveFromWishlist(r);
+                var Wishlist = WishlistService.GetWishlist(this.HttpContext);
+                var Model = new WishlistViewModel
                 {
-                    WT = w.GWT()
+                    Wishlist = Wishlist.GetToys()
                 };
-                return View(viewModel);
+                return View(Model);
             }
             catch
             {
@@ -87,23 +73,23 @@ namespace Toymania.Controllers
 
         }
 
-        public ActionResult ATW(int id)
+        public ActionResult AddToWishlist(int id)
         {
             var addedItem = db.Toy.Single(t => t.ToysId == id);
-            var w = WishlistManager.GW(this.HttpContext);
-            w.ATW(addedItem, id);
+            var Wishlist = WishlistService.GetWishlist(this.HttpContext);
+            Wishlist.AddToWishlist(addedItem, id);
             
             return RedirectToAction("index");
         }
 
         [HttpPost]
-        public void RFW(int id)
+        public void RemoveFromWishlist(int id)
         {
             if(id != null)
             {
-                var w = WishlistManager.GW(this.HttpContext);
+                var w = WishlistService.GetWishlist(this.HttpContext);
                 string toyName = db.Wishlist.Single(t => t.WishlistId == id).Toy.ToysName;
-                w.RFW(id);
+                w.DeleteFromWishlist(id);
             }
 
         }
@@ -111,9 +97,8 @@ namespace Toymania.Controllers
         public void AddPartial(int id)
         {
             var addedItem = db.Toy.Single(t => t.ToysId == id);
-            var w = WishlistManager.GW(this.HttpContext);
-            w.ATW(addedItem, id);
-            //return PartialView("CartSummary");
+            var Wishlist = WishlistService.GetWishlist(this.HttpContext);
+            Wishlist.AddToWishlist(addedItem, id);
         }
 
     }

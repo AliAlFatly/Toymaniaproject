@@ -32,26 +32,26 @@
                             <table class="table">
                                 <tr>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.IS[0].Quantity)
+                                        @Html.DisplayNameFor(model => model.InStorage[0].Quantity)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.IS[0].UnitPrice)
+                                        @Html.DisplayNameFor(model => model.InStorage[0].UnitPrice)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.IS[0].Status)
+                                        @Html.DisplayNameFor(model => model.InStorage[0].Status)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.IS[0].tracker)
+                                        @Html.DisplayNameFor(model => model.InStorage[0].tracker)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.IS[0].Order.Username)
+                                        @Html.DisplayNameFor(model => model.InStorage[0].Order.Username)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.IS[0].Toy.ToysName)
+                                        @Html.DisplayNameFor(model => model.InStorage[0].Toy.ToysName)
                                     </th>
                                     <th></th>
                                 </tr>
-                                @foreach (var item in Model.IS)
+                                @foreach (var item in Model.InStorage)
                                 {
                                     <tr>
                                         <td>
@@ -73,8 +73,8 @@
                                             @Html.DisplayFor(modelItem => item.Toy.ToysName)
                                         </td>
                                         <td>
-                                            @Html.ActionLink("Set Being deliverd", "S", new { id = item.OrderDetailId, d = "I" }) |
-                                            @Html.ActionLink("Set Completed", "C", new { id = item.OrderDetailId, d = "I" })
+                                            @Html.ActionLink("Set Being deliverd", "SetBeingDeliverd", new { id = item.OrderDetailId, d = "I" }) |
+                                            @Html.ActionLink("Set Completed", "SetCompleted", new { id = item.OrderDetailId, d = "I" })
                                         </td>
                                     </tr>
                                 }
@@ -84,26 +84,26 @@
                             <table class="table">
                                 <tr>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.S[0].Quantity)
+                                        @Html.DisplayNameFor(model => model.Delivering[0].Quantity)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.S[0].UnitPrice)
+                                        @Html.DisplayNameFor(model => model.Delivering[0].UnitPrice)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.S[0].Status)
+                                        @Html.DisplayNameFor(model => model.Delivering[0].Status)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.IS[0].tracker)
+                                        @Html.DisplayNameFor(model => model.Delivering[0].tracker)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.S[0].Order.Username)
+                                        @Html.DisplayNameFor(model => model.Delivering[0].Order.Username)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.S[0].Toy.ToysName)
+                                        @Html.DisplayNameFor(model => model.Delivering[0].Toy.ToysName)
                                     </th>
                                     <th></th>
                                 </tr>
-                                @foreach (var item in Model.S)
+                                @foreach (var item in Model.Delivering)
                                 {
                                     <tr>
                                         <td>
@@ -125,8 +125,8 @@
                                             @Html.DisplayFor(modelItem => item.Toy.ToysName)
                                         </td>
                                         <td>
-                                            @Html.ActionLink("Set In the storage", "IS", new { id = item.OrderDetailId, d = "D" }) |
-                                            @Html.ActionLink("Set Being deliverd", "S", new { id = item.OrderDetailId, d = "D" })
+                                            @Html.ActionLink("Set In the storage", "SetInProgress", new { id = item.OrderDetailId, d = "D" }) |
+                                            @Html.ActionLink("Set Completed", "SetCompleted", new { id = item.OrderDetailId, d = "D" })
                                         </td>
                                     </tr>
                                 }
@@ -136,26 +136,26 @@
                             <table class="table">
                                 <tr>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.C[0].Quantity)
+                                        @Html.DisplayNameFor(model => model.Completed[0].Quantity)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.C[0].UnitPrice)
+                                        @Html.DisplayNameFor(model => model.Completed[0].UnitPrice)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.C[0].Status)
+                                        @Html.DisplayNameFor(model => model.Completed[0].Status)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.IS[0].tracker)
+                                        @Html.DisplayNameFor(model => model.Completed[0].tracker)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.C[0].Order.Username)
+                                        @Html.DisplayNameFor(model => model.Completed[0].Order.Username)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.C[0].Toy.ToysName)
+                                        @Html.DisplayNameFor(model => model.Completed[0].Toy.ToysName)
                                     </th>
                                     <th></th>
                                 </tr>
-                                @foreach (var item in Model.C)
+                                @foreach (var item in Model.Completed)
                                 {
                                     <tr>
                                         <td>
@@ -177,8 +177,8 @@
                                             @Html.DisplayFor(modelItem => item.Toy.ToysName)
                                         </td>
                                         <td>
-                                            @Html.ActionLink("Set In the storage", "IS", new { id = item.OrderDetailId, d = "C" }) |
-                                            @Html.ActionLink("Set Being deliverd", "S", new { id = item.OrderDetailId, d = "C" })
+                                            @Html.ActionLink("Set In the storage", "SetInProgress", new { id = item.OrderDetailId, d = "C" }) |
+                                            @Html.ActionLink("Set Being deliverd", "SetBeingDeliverd", new { id = item.OrderDetailId, d = "C" })
                                         </td>
                                     </tr>
                                 }
